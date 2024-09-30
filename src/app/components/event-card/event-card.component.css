@@ -1,0 +1,150 @@
+@import url("https://fonts.cdnfonts.com/css/cabinet-grotesk");
+.event-card {
+  width: 300px;
+  height: 150px;
+  border-radius: 15px;
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+  background-color: #f5f5f5;
+}
+.event-card img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 15px;
+}
+.event-card h4 {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 1.2rem;
+  font-family: "cabinet-grotesk", sans-serif;
+  font-weight: bold;
+  z-index: 1;
+}
+.event-card p {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  font-size: 0.9rem;
+  width: 80%;
+  line-height: 1.3rem;
+  z-index: 1;
+}
+
+.event-card-2 {
+  width: 250px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  background-color: #fff;
+  margin: 10px;
+}
+.event-card-2 .card-title {
+  display: flex;
+  padding-left: 10px;
+  align-items: center;
+}
+.event-card-2 .card-title img {
+  width: 30px;
+  height: 30px;
+  border-radius: 3px;
+  margin-right: 10px;
+}
+.event-card-2 .card-title h4 {
+  font-family: "Irish Grover", system-ui;
+  font-size: 1.2em;
+  margin: 10px 0;
+  color: #000;
+}
+.event-card-2 .event-image {
+  width: 100%;
+  height: 130px;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.event-card-2 h6 {
+  font-size: 16px;
+  margin: 10px 15px;
+}
+.event-card-2 p {
+  font-family: "Arial", sans-serif;
+  font-size: 12px;
+  margin: 10px 15px;
+}
+.event-card-2 .event-card-2-date {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 5px;
+}
+.event-card-2 .price {
+  background-color: #fff1ec;
+  padding: 5px;
+  border-radius: 5px;
+  color: #ff773d;
+  font-weight: bold;
+  width: -moz-fit-content;
+  width: fit-content;
+  left: 0;
+}
+
+.event-card-3 {
+  width: 250px;
+  height: 300px;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  /* box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); */
+  margin: 10px;
+}
+.event-card-3 .event-image-container {
+  position: relative;
+}
+.event-card-3 .event-image-container .event-image {
+  width: 100%;
+  height: 300px;
+  -o-object-fit: cover;
+  object-fit: cover;
+  border-radius: 12px 12px 0 0;
+}
+.event-card-3 .event-image-container .event-label {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 0.7em;
+  color: #fff;
+  font-weight: bold;
+}
+.event-card-3 .event-details {
+  position: absolute;
+  padding: 10px;
+  /* z-index: 1; */
+  background: white;
+  border-radius: 5px;
+  opacity: 0.9;
+  bottom: 5%;
+  right: 50%;
+  transform: translateX(50%);
+  width: 80%;
+}
+.event-card-3 .event-details h4 {
+  font-size: 1.2em;
+  margin: 0;
+}
+.event-card-3 .event-details p {
+  font-size: 8px;
+  color: #666;
+  margin: 5px 0;
+}
+.event-card-3 .event-details .lieu {
+  color: #f55437;
+}/*# sourceMappingURL=event-card.component.css.map */
