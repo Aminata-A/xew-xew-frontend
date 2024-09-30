@@ -1,3 +1,9 @@
-<p>
-  ticket-card works!
-</p>
+<div class="ticket" *ngIf="selectedEvent">
+  <h5>{{ selectedEvent.name }}</h5>
+  <h6>{{ selectedEvent.organizer_id }}</h6>
+  <div class="info">
+      <p><span class="icon">📅</span> {{ selectedEvent.date | date: 'longDate' }} à {{ selectedEvent.time }}</p>
+      <p><span class="icon">📍</span> Lieu : {{ selectedEvent.location }}</p>
+  </div>
+  <p class="price">{{ selectedEvent.ticket_price | currency: 'XOF' }}</p>
+</div>
