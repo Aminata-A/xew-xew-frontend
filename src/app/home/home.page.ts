@@ -5,13 +5,20 @@ import { EventService } from '../services/event.service';
 import { Event } from '../services/interfaces';
 import { EventCardComponent } from '../components/event-card/event-card.component';
 import { TicketCardComponent } from '../components/ticket-card/ticket-card.component';
+import { TransactionComponent } from '../components/transaction/transaction.component';
+import { TransactionService } from '../services/transaction.service';
+import { Transaction } from '../services/interfaces';
+import { NgFor } from '@angular/common';
+import { RegisterComponent } from '../components/register/register.component';
+import { LoginComponent } from '../components/login/login.component';
+
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent, EventCardComponent, TicketCardComponent],
+  imports: [IonHeader, IonToolbar, IonTitle, IonContent, NgFor, EventCardComponent, TicketCardComponent, TransactionComponent, RegisterComponent, LoginComponent],
 })
 export class HomePage {
 
@@ -19,16 +26,22 @@ export class HomePage {
 
   private ticketservice = inject(TicketService);
 
+  private transactionservice = inject(TransactionService);
+
+
   events: Event[] = <Event[]>[];
 
   tickets: Event[] = <Event[]>[];
 
+  transactions: Transaction[] = <Transaction[]>[];
+
   constructor() {
-    this.loadEvents();
+    this.mokEvents();
     this.loadTicket();
+    this.loadTransactions();
   }
 
-  loadEvents() {
+  mokEvents() {
     this.eventservice.getEvents().subscribe({
       next: (data) => {
         this.events = data;
@@ -40,6 +53,14 @@ export class HomePage {
     this.ticketservice.getTickets().subscribe({
       next: (data) => {
         // this.tickets = data;
+      }
+    })
+  }
+
+  loadTransactions() {
+    this.transactionservice.getTransactions().subscribe({
+      next: (data) => {
+        this.transactions = data;
       }
     })
   }

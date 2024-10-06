@@ -1,0 +1,197 @@
+// @font-face {
+//   font-family: 'cabinet-grotesk';
+//   src: url(/font/Cabinet-Grotesk.ttf) format('opentype');
+// }
+// @font-face {
+//   font-family: 'clash-display';
+//   src: url(/font/ClashDisplay-Variable.ttf) format('opentype');
+// }
+
+/* General styles */
+:host {
+  font-family: 'Cabinet-Grotesk', sans-serif;
+  margin: 0;
+  padding: 0;
+
+  // Uncomment the background if needed
+  // background-color: #f7f7f7;
+}
+
+.purchase-container {
+  color: #1b1b1b;
+  background-color: white;
+  overflow: hidden;
+  position: absolute;
+  bottom: 0;
+  font-family: 'cabinet-grotesk', sans-serif;
+  font-size: 1.2em;
+
+  .purchase-header {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      background-color: #f7f7f7;
+      border-bottom: 1px solid #ddd;
+
+      h1 {
+          margin: 0 auto;
+          font-size: 1.5em;
+          text-align: center;
+          font-family: 'clash-display', sans-serif;
+      }
+
+      .back-button {
+          background: none;
+          border: none;
+          font-size: 1.5em;
+          cursor: pointer;
+      }
+  }
+
+  .event-summary {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+
+      .event-image {
+          width: 100%;
+          height: auto;
+          border-radius: 10px;
+      }
+
+      .event-details {
+          margin-top: 10px;
+          width: 100%;
+
+          h2 {
+              font-family: 'clash-display', sans-serif;
+              margin: 0;
+              margin-bottom: 1em;
+          }
+
+          div {
+            font-size: 1.2em;
+            display: flex;
+            justify-content: space-between;
+
+              p {
+                  display: flex;
+                  align-items: center;
+
+                  svg {
+                      margin-right: 5px;
+                  }
+              }
+          }
+      }
+  }
+
+  /* Form styles */
+  form {
+    display: flex;
+    flex-direction: column;
+    width: 88%;
+    /* margin: 0 auto; */
+    margin-top: 1em;
+    padding: 15px;
+
+      label {
+          font-size: 1.1rem;
+          font-weight: bold;
+          margin-bottom: 8px;
+      }
+
+      input,
+      select {
+          width: 100%;
+          padding: 15px;
+          border-radius: 10px;
+          border: none;
+          background-color: #f5f5f5;
+          font-size: 1rem;
+          color: #333;
+          outline: none;
+          margin-bottom: 20px;
+
+          &::placeholder {
+              color: #bbb;
+          }
+      }
+  }
+
+  .event-details p {
+      margin: 5px 0;
+  }
+
+  .ticket-info {
+      padding: 15px;
+      border-top: 1px solid #eee;
+
+      .ticket-details {
+          display: flex;
+          justify-content: space-between;
+          font-size: 1.2em;
+          font-weight: bold;
+          margin-bottom: 1em;
+
+          .info-item {
+              display: flex;
+              flex-direction: column;
+              margin: 10px 0;
+              font-size: 1em;
+          }
+      }
+
+      .total-amount {
+          display: flex;
+          justify-content: space-between;
+          font-size: 1.2em;
+          font-weight: bold;
+          color: #FF773D;
+      }
+  }
+
+  .additional-info {
+      padding: 15px;
+      background: rgba(255, 87, 34, 0.1);
+      margin: 15px;
+      border-radius: 10px;
+      color: #FF773D;
+      font-size: 0.9em;
+  }
+
+  .action-buttons {
+      flex-direction: column;
+      display: flex;
+      padding: 15px;
+
+      .confirm-button {
+          background-color: #FF773D;
+          color: white;
+          border: none;
+          border-radius: 5px;
+          padding: 10px 20px;
+          font-size: 1em;
+          margin-bottom: 1em;
+          cursor: pointer;
+
+          &:hover {
+              background-color: #e64a19;
+          }
+      }
+
+      .cancel-button {
+          background-color: #e0e0e0;
+          color: #333;
+          border: none;
+          border-radius: 5px;
+          padding: 10px 20px;
+          font-size: 1em;
+          cursor: pointer;
+
+          &:hover {
+              background-color: #bdbdbd;
+          }
+      }
+  }
+}

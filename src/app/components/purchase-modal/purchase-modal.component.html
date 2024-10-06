@@ -1,0 +1,62 @@
+<div class="purchase-container">
+  <header class="purchase-header">
+    <button class="back-button" (click)="close()">&larr;</button>
+    <h1>Votre achat</h1>
+  </header>
+
+  <div class="event-summary">
+    <div class="event-details">
+      <h2>{{ event.name }}</h2>
+      <div>
+        <p>
+          <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 50 50">
+            <path fill="currentColor" d="m25 42.5l-.8-.9C23.7 41.1 12 27.3 12 19c0-7.2 5.8-13 13-13s13 5.8 13 13c0 8.3-11.7 22.1-12.2 22.7zM25 8c-6.1 0-11 4.9-11 11c0 6.4 8.4 17.2 11 20.4c2.6-3.2 11-14 11-20.4c0-6.1-4.9-11-11-11" />
+          </svg>{{ event.location }}
+        </p>
+        <p>
+          <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 15 15">
+            <path fill="currentColor" fill-rule="evenodd" d="M4.5 1a.5.5 0 0 1 .5.5V2h5v-.5a.5.5 0 0 1 1 0V2h1.5A1.5 1.5 0 0 1 14 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-10A1.5 1.5 0 0 1 1 12.5v-9A1.5 1.5 0 0 1 2.5 2H4v-.5a.5.5 0 0 1 .5-.5M10 3v.5a.5.5 0 0 0 1 0V3h1.5a.5.5 0 0 1 .5.5V5H2V3.5a.5.5 0 0 1 .5-.5H4v.5a.5.5 0 0 0 1 0V3zM2 6v6.5a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5V6zm5 1.5a.5.5 0 1 1 1 0a.5.5 0 0 1-1 0M9.5 7a.5.5 0 1 0 0 1a.5.5 0 0 0 0-1m1.5.5a.5.5 0 1 1 1 0a.5.5 0 0 1-1 0m.5 1.5a.5.5 0 1 0 0 1a.5.5 0 0 0 0-1M9 9.5a.5.5 0 1 1 1 0a.5.5 0 0 1-1 0M7.5 9a.5.5 0 1 0 0 1a.5.5 0 0 0 0-1M5 9.5a.5.5 0 1 1 1 0a.5.5 0 0 1-1 0" />
+          </svg>{{ event.date }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="ticket-info">
+    <div class="ticket-details">
+      <div class="info-item">
+        <h4>Montant</h4>
+        <span>{{ event.ticket_price | currency: 'XOF' }}</span>
+      </div>
+      <div class="info-item">
+        <h4>Quantité</h4>
+        <span>x {{ quantity }}</span>
+      </div>
+    </div>
+    <div class="total-amount">
+      <span>Montant total</span>
+      <span class="total-price">{{ totalAmount | currency: 'XOF' }}</span>
+    </div>
+  </div>
+
+  <form>
+    <div class="input-group">
+      <label for="name">Nom & Prénom</label>
+      <input type="name" id="name" placeholder="xew xew" required>
+    </div>
+
+    <div class="input-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" placeholder="xew2@exemple.com" required>
+    </div>
+  </form>
+
+  <div class="additional-info">
+    <p>Lorem Ipsum has been the industry's standard dummy text since the 1500s.</p>
+  </div>
+
+  <div class="action-buttons">
+    <button class="confirm-button">Confirmer</button>
+    <button class="cancel-button" (click)="close()">Annuler</button>
+  </div>
+</div>

@@ -1,0 +1,137 @@
+<div class="container">
+  <!-- Affichage du message d'erreur -->
+  <div *ngIf="errorMessage" class="error-message">
+    <p>{{ errorMessage }}</p>
+  </div>
+
+  <!-- Étape 1: Email -->
+  <div *ngIf="!emailSent && !emailVerified">
+    <form (ngSubmit)="sendVerificationEmail()">
+      <div class="input-group">
+        <label for="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          [(ngModel)]="formData.email"
+          name="email"
+          placeholder="exemple@domaine.com"
+          required
+        />
+      </div>
+      <button type="submit" class="submit-btn">Envoyer le code de vérification</button>
+    </form>
+    <!-- Si l'email existe déjà, afficher le message et un lien pour se connecter -->
+    <div *ngIf="emailExists">
+      <p>Vous avez déjà un compte ? <a href="/login">Connectez-vous ici</a>.</p>
+    </div>
+  </div>
+
+  <!-- Étape 2: Code de vérification avec compte à rebours -->
+  <div *ngIf="emailSent && !emailVerified" class="email-verification">
+    <h2>Vérification email</h2>
+    <p class="info">Nous vous avons envoyé un code de vérification sur <span>{{ formData.email }}</span></p>
+    <form (ngSubmit)="verifyCode()">
+      <div class="input-group">
+        <input
+          type="text"
+          id="verificationCode"
+          [(ngModel)]="verificationCode"
+          name="verificationCode"
+          placeholder="Entrez votre code de vérification"
+          required
+        />
+      </div>
+
+      <!-- Compte à rebours affiché -->
+      <p class="countdown">Temps restant : <span>{{ countdownMinutes }} : {{ countdownSeconds }} </span></p>
+
+      <button type="submit" class="submit-btn">Vérifier le code</button>
+    </form>
+  </div>
+
+  <!-- Étape 3: Nom, Téléphone, Rôle, Photo de profil (après vérification du code) -->
+  <div *ngIf="emailVerified && !additionalInfoProvided">
+    <h1>Inscription</h1>
+
+    <form (ngSubmit)="submitAdditionalInfo()">
+      <div class="input-group">
+        <label for="name">Nom & Prénom</label>
+        <input
+          type="text"
+          id="name"
+          [(ngModel)]="formData.name"
+          name="name"
+          placeholder="Votre nom complet"
+          required
+        />
+      </div>
+
+      <div class="input-group">
+        <label for="phone">Numéro de téléphone</label>
+        <input
+          type="text"
+          id="phone"
+          [(ngModel)]="formData.phone"
+          name="phone"
+          placeholder="77 000 00 00"
+          required
+        />
+      </div>
+
+      <div class="input-group">
+        <label for="role">Rôle</label>
+        <select id="role" [(ngModel)]="formData.role" name="role" required>
+          <option value="" disabled selected>Sélectionnez un rôle</option>
+          <option value="organizer">Organisateur</option>
+          <option value="participant">Participant</option>
+        </select>
+      </div>
+
+      <!-- Photo de profil (optionnelle) -->
+      <div class="input-group">
+        <label for="profilePic">Photo de profil (optionnel)</label>
+        <div class="profile-pic-upload">
+          <input type="file" id="profilePic" name="profilePic" (change)="onFileSelected($event)" />
+          <label for="profilePic">
+            <span>📤 Téléverser votre photo de profil</span>
+          </label>
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn">Suivant</button>
+    </form>
+  </div>
+
+  <!-- Étape 4: Mot de passe (après avoir soumis les informations supplémentaires) -->
+  <div *ngIf="additionalInfoProvided">
+    <h1>Inscription</h1>
+
+    <form (ngSubmit)="register()">
+      <div class="input-group">
+        <label for="password">Mot de passe</label>
+        <input
+          type="password"
+          id="password"
+          [(ngModel)]="formData.password"
+          name="password"
+          placeholder="*******"
+          required
+        />
+      </div>
+
+      <div class="input-group">
+        <label for="password-confirm">Confirmation mot de passe</label>
+        <input
+          type="password"
+          id="password-confirm"
+          [(ngModel)]="formData.password_confirmation"
+          name="password_confirmation"
+          placeholder="*******"
+          required
+        />
+      </div>
+
+      <button type="submit" class="submit-btn">S'inscrire</button>
+    </form>
+  </div>
+</div>

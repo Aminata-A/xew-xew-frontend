@@ -1,4 +1,3 @@
-@import url("https://fonts.cdnfonts.com/css/cabinet-grotesk");
 .event-card {
   width: 300px;
   height: 150px;
@@ -7,12 +6,13 @@
   position: relative;
   text-align: center;
   background-color: #f5f5f5;
+  margin: 20px;
 }
 .event-card img {
   width: 100%;
   height: 100%;
   -o-object-fit: cover;
-     object-fit: cover;
+  object-fit: cover;
   border-radius: 15px;
 }
 .event-card h4 {
@@ -20,7 +20,7 @@
   top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: #000;
+  color: white;
   font-size: 1.2rem;
   font-family: "cabinet-grotesk", sans-serif;
   font-weight: bold;
@@ -68,14 +68,14 @@
   width: 100%;
   height: 130px;
   -o-object-fit: cover;
-     object-fit: cover;
+  object-fit: cover;
 }
 .event-card-2 h6 {
   font-size: 16px;
   margin: 10px 15px;
+  color: #000;
 }
 .event-card-2 p {
-  font-family: "Arial", sans-serif;
   font-size: 12px;
   margin: 10px 15px;
 }
@@ -139,6 +139,7 @@
 .event-card-3 .event-details h4 {
   font-size: 1.2em;
   margin: 0;
+  color: #000;
 }
 .event-card-3 .event-details p {
   font-size: 8px;
@@ -147,4 +148,4 @@
 }
 .event-card-3 .event-details .lieu {
   color: #f55437;
-}/*# sourceMappingURL=event-card.component.css.map */
+} /*# sourceMappingURL=event-card.component.css.map */

@@ -1,0 +1,166 @@
+:host {
+  font-family: 'cabinet-grotesk', sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #1b1b1b;
+  font-size: 1.3em;
+
+}
+
+.container {
+  margin: auto;
+  background: white;
+  overflow: hidden;
+  min-height: 100vh ;
+  position: relative;
+}
+
+.event-header {
+  position: relative;
+  overflow: hidden;
+  height: 400px;
+}
+
+.event-category {
+  border-radius: 12px;
+  color: #fff;
+  display: flex;
+}
+
+.ticket-price {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin:  0;
+  width: 100%;
+
+  svg {
+    border-radius: 5px;
+    padding: 5px;
+    border: 0.5px solid #e6e6e6;
+    color: #ff773d;
+    margin-right: 10px;
+  }
+
+  p {
+    display: flex;
+    align-items: center;
+    font-family: "clash-display", sans-serif;
+    font-weight: 500;
+  }
+}
+
+.event-description h2 {
+  font-family: 'clash-display', sans-serif;
+  margin: 0 0 10px 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.event-category p {
+  background-color: rgba(255, 255, 255, 0.6);
+  padding: 3px 7px;
+  border-radius: 5px;
+}
+
+.event-image {
+  width: 100%;
+  height: 100%;
+}
+
+.event-info {
+  position: absolute;
+  margin-top: -9em;
+  padding: 15px;
+  color: #fff;
+
+  h1 {
+    font-family: 'clash-display', sans-serif;
+    font-size: 1.5em;
+    margin: 0;
+  }
+
+  p {
+    margin: 15px 10px 15px 0;
+    display: flex;
+    font-size: .7em;
+    align-items: center;
+  }
+}
+
+.event-date {
+  display: flex;
+}
+
+.event-description {
+  padding: 15px;
+}
+
+.ticket-purchase {
+  padding: 0 15px;
+
+  h3 {
+    font-family: 'clash-display', sans-serif;
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+  }
+}
+
+.ticket-quantity {
+  display: flex;
+  align-items: center;
+
+  button {
+    font-size: 1.2em;
+    padding: 7px 13px;
+    background: #FFFFFF;
+    border: 0.5px solid #E2DEDE;
+    border-radius: 5px;
+    color: #000000;
+  }
+
+  p {
+    margin: 0 10px;
+    padding: 7px 20px;
+    background: #F4F4F4;
+    border-radius: 6px;  }
+}
+
+
+
+.ticket-available {
+  width: 92%;
+  display: flex;
+  justify-content: space-between;
+  background: rgba(255, 87, 34, 0.1);
+  padding: 10px 15px;
+  border-radius: 7px;
+  margin-bottom: 0;
+  span {
+    color: #FF773D;
+    font-weight: bold;
+  }
+}
+
+.button-container {
+  padding: 15px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+
+  .purchase-button {
+    width: 93%;
+    padding: 10px;
+    background-color: #FF773D;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2em;
+
+    &:hover {
+      background-color: #FF773D;
+    }
+  }
+}

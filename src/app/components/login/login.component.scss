@@ -1,0 +1,151 @@
+/* Global styles */
+$primary-color: hsl(16, 100%, 50%); /* Utiliser hsl ou hex au lieu de hwb */
+$background-color: #F4F4F4;
+$text-color: #1B1B1B;
+$placeholder-color: #bbb;
+$font-family: 'cabinet-grotesk', sans-serif;
+
+:host {
+  font-family: $font-family;
+  background-color: white;
+  padding: 20px;
+  margin: 0;
+  display: flex;
+  // justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.container {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  // text-align: center;
+  color: $text-color;
+}
+
+/* Form styles */
+form {
+  display: flex;
+  flex-direction: column;
+  width: 100%; /* Full width for mobile */
+  margin: 0 auto;
+
+  label {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: $text-color;
+  }
+
+  input,
+  select {
+    width: 93%;
+    padding: 15px;
+    border-radius: 10px;
+    border: none;
+    background-color: $background-color;
+    font-size: 1rem;
+    color: $text-color;
+    outline: none;
+    margin: 20px 0 2em 0;
+
+    &::placeholder {
+      color: $placeholder-color;
+    }
+  }
+}
+
+.email-verification {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  color: $text-color;
+
+  .info {
+    span {
+      font-weight: bold;
+    }
+  }
+
+  .countdown {
+    span {
+      color: $primary-color;
+      font-weight: bold;
+    }
+  }
+}
+
+/* Submit button styles */
+.submit-btn {
+  background-color: $primary-color;
+  color: white;
+  padding: 15px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 20px;
+
+  &:hover {
+    background-color: darken($primary-color, 10%);
+  }
+}
+
+/* Additional links styles */
+.additional-links {
+  text-align: center;
+  font-size: 0.9rem;
+
+  a {
+    color: $primary-color;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .connect-later {
+    margin-top: 10px;
+    display: block;
+  }
+}
+
+/* Profile picture upload */
+.profile-pic-upload {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 200px;
+  background-color: $background-color;
+  border-radius: 10px;
+  border: 1px dashed $placeholder-color;
+  cursor: pointer;
+
+  input[type='file'] {
+    display: none;
+  }
+
+  label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    span {
+      font-size: 1rem;
+      color: $placeholder-color;
+    }
+  }
+}

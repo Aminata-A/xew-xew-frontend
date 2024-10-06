@@ -1,0 +1,90 @@
+@font-face {
+  font-family: 'cabinet-grotesk';
+  src: url(/font/Cabinet-Grotesk.ttf) format('opentype');
+}
+@font-face {
+  font-family: 'clash-display';
+  src: url(/font/ClashDisplay-Variable.ttf) format('opentype');
+}
+
+// Variables
+$primary-font: 'Cabinet-Grotesk', sans-serif;
+$secondary-font: 'clash-display', sans-serif;
+$primary-color: #FF773D;
+$secondary-color: #ffbc00;
+$font-color: #000;
+$wave-color: #49D2FA;
+$gray-color: #ABABAB;
+$white-color: #fff;
+$card-radius: 20px;
+
+.cards-section {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+
+  .card {
+      width:240px;
+      height: 130px;
+      // padding: 20px;
+      border-radius: $card-radius;
+      color: $white-color;
+      border-radius: $card-radius ;
+      // text-align: center;
+      font-size: 14px;
+
+      &.red-card {
+          background-color: $primary-color;
+      }
+
+      &.blue-card {
+          background-color: #000;
+
+          .wave{
+              border-radius: $card-radius  $card-radius 0 0;
+              display: flex;
+              align-items: center;
+              height: 58px;
+              font-size: 16px;
+              font-family: $secondary-font;
+              font-weight: 500;
+              padding: 0 10px ;
+              background-color: $wave-color;
+              // justify-content: center;
+              // background-color: #49D2FA;
+              img{
+                  width: 30px;
+                  height: 30px;
+                  margin-right: 5px;
+              }
+          }
+
+          .balance{
+              display: flex;
+              justify-content: space-between  ;
+              align-items: center;
+              font-size: 16px;
+              font-weight: bold;
+              color: $white-color;
+              margin-top: 20px;
+              padding: 0 15px ;
+              p{
+                  font-size: 12px;
+                  font-weight: lighter;
+                  margin: 0;
+                  color: $wave-color;
+              }
+              h6{
+                  font-size: 10px;
+                  font-weight: bolder;
+                  margin: 0;
+                  color: $wave-color;
+              }
+          }
+      }
+
+      &.orange-card {
+          background-color: #ff9900;
+      }
+  }
+}

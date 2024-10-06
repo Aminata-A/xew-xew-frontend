@@ -1,5 +1,5 @@
 export interface Event {
-id?: number;
+  id?: number;
   name: string;
   description: string;
   location: string;
@@ -19,3 +19,22 @@ export interface Ticket {
   quantity: number;
   event_id: number;
 }
+
+export interface Transaction{
+  id?: number;
+  event_name: string;
+  event_date: string;
+  event_time: string;
+  transaction_amount: number;
+}
+
+export interface Register {
+  name: string;
+  email: string;
+  password: string;
+  password_confirmation: string;
+  phone: string;
+  role: string;
+  photo: string | null;
+}
+

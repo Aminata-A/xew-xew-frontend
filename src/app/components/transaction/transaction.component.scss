@@ -1,0 +1,75 @@
+// @font-face {
+//   font-family: 'cabinet-grotesk';
+//   src: url(../font/CabinetGrotesk-Variable.ttf) format('opentype');
+// }
+// @font-face {
+//   font-family: 'clash-display';
+//   src: url(../font/ClashDisplay-Variable.ttf) format('opentype');
+// }
+
+// Variables
+$primary-font: 'Cabinet-Grotesk', sans-serif;
+$secondary-font: 'clash-display', sans-serif;
+$primary-color: #FF773D;
+$font-color: #1B1B1B;
+$gray-color: #ABABAB;
+$white-color: #FFFFFF;
+$card-radius: 12px;
+*{
+  color: $font-color;
+}
+
+.transaction {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: $white-color;
+  padding: 15px;
+  border-radius: $card-radius;
+  margin-bottom: 10px;
+  // box-shadow: 0 2px 4px rgba(0, 0, 0, 0.078);
+  border: solid .5px #ababab27;
+
+  .event-info {
+    .event-type{
+      font-size: 10px;
+      color: $primary-color;
+      margin: 0;
+    }
+    .event-name {
+      font-weight: light;
+      font-family: $secondary-font;
+      margin: 5px 0;
+    }
+
+    .event-date {
+      font-size: 10px;
+      color: $gray-color;
+      margin: 0;
+    }
+  }
+
+  .transaction-amount {
+    font-weight: 500;
+    font-size: 16px;
+    color: $font-color;
+    font-family: $secondary-font;
+    font-size: 10px;
+
+
+    .icons {
+      display: flex;
+      align-items: center;
+      margin-bottom: 5px;
+
+      span {
+        width: 20px;
+        height: 20px;
+        margin-right: 5px;
+        background-color: $primary-color;
+        border-radius: 50%;
+      }
+    }
+  }
+}
+

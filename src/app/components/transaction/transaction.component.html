@@ -1,0 +1,11 @@
+<div class="transaction" *ngFor="let transaction of transactions">
+  <div class="event-info">
+      <p class="event-type">Événement</p>
+      <p class="event-name">{{ transaction.event_name }}</p>
+      <p class="event-date">
+        {{ transaction.event_date | date: 'EEEE d MMMM y' }} à {{ transaction.event_time }}
+      </p>
+  </div>
+
+  <div class="transaction-amount">{{ transaction.transaction_amount | currency: 'XOF' }}</div>
+</div>
