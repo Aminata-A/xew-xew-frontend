@@ -15,7 +15,7 @@ interface Organizer {
   id: string;
   name: string;
 }
-
+  
 @Component({
   selector: 'app-ticket-card',
   templateUrl: './ticket-card.component.html',
@@ -38,45 +38,6 @@ export class TicketCardComponent implements OnInit {
 
   // Charger les tickets fictifs directement dans le composant
   loadTickets(): void {
-    this.tickets = [
-      {
-        id: 'T001',
-        event_name: 'Concert de Jazz',
-        organizer_id: 'ORG001',
-        date: new Date('2024-11-15'),
-        time: '20:00',
-        location: 'Salle de concert de Paris',
-        ticket_price: 15000,
-      },
-      {
-        id: 'T002',
-        event_name: 'Conférence Tech',
-        organizer_id: 'ORG002',
-        date: new Date('2024-12-02'),
-        time: '09:00',
-        location: 'Centre des Congrès, Dakar',
-        ticket_price: 10000,
-      },
-      {
-        id: 'T003',
-        event_name: 'Festival de Film',
-        organizer_id: 'ORG003',
-        date: new Date('2024-10-20'),
-        time: '18:30',
-        location: 'Cinéma Le Majestic, Abidjan',
-        ticket_price: 8000,
-      },
-      {
-        id: 'T004',
-        event_name: 'Spectacle de Danse',
-        organizer_id: 'ORG004',
-        date: new Date('2024-11-28'),
-        time: '19:00',
-        location: 'Théâtre National, Yaoundé',
-        ticket_price: 12000,
-      }
-    ];
-
     this.selectedTicket = this.tickets[0]; // Sélectionne le premier ticket
     this.updateOrganizerName(); // Mettre à jour le nom de l'organisateur
   }
@@ -84,10 +45,10 @@ export class TicketCardComponent implements OnInit {
   // Charger les organisateurs fictifs
   loadOrganizers(): void {
     this.organizers = [
-      { id: 'ORG001', name: 'Jazz Events' },
-      { id: 'ORG002', name: 'Tech Talks' },
-      { id: 'ORG003', name: 'Film Festivals' },
-      { id: 'ORG004', name: 'Dance Performers' },
+      // { id: 'ORG001', name: 'Jazz Events' },
+      // { id: 'ORG002', name: 'Tech Talks' },
+      // { id: 'ORG003', name: 'Film Festivals' },
+      // { id: 'ORG004', name: 'Dance Performers' },
     ];
   }
 
@@ -100,7 +61,7 @@ export class TicketCardComponent implements OnInit {
   }
 }
 
- 
+
 
 
 // import { CommonModule } from '@angular/common';

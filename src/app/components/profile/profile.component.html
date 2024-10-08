@@ -1,0 +1,73 @@
+<!-- <div class="container">
+  <h1>Profile</h1>
+
+  <div class="profile-section"> -->
+    <!-- Image de profil -->
+    <!-- <img [src]="profileImage" alt="Photo de profile" class="profile-img" /> -->
+
+    <!-- Formulaire de profil pré-rempli avec les valeurs de l'utilisateur -->
+    <!-- <form class="profile-form" (ngSubmit)="onSubmit()">
+      <div class="input-group">
+        <label for="name">Nom complet</label>
+        <input type="text" id="name" [(ngModel)]="user.name" name="name" required />
+      </div>
+
+      <div class="input-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" [(ngModel)]="user.email" name="email" required />
+      </div>
+
+      <div class="input-group">
+        <label for="phone">Numéro de téléphone</label>
+        <input type="tel" id="phone" [(ngModel)]="user.phone" name="phone" required />
+      </div>
+
+      <div class="input-group">
+        <label for="role">Rôle</label>
+        <select id="role" [(ngModel)]="user.role" name="role" required class="form-select">
+          <option value="organisateur">Organisateur</option>
+          <option value="participant">Participant</option>
+        </select>
+      </div>
+
+      <button type="submit" class="submit-btn">Modifier</button>
+    </form>
+  </div>
+</div> -->
+
+<div class="container">
+  <h1>Profile</h1>
+
+  <div class="profile-section">
+    <!-- Image de profil -->
+    <img [src]="profileImage" alt="Photo de profile" class="profile-img" />
+
+    <!-- Formulaire de profil pré-rempli avec les valeurs de l'utilisateur -->
+    <form class="profile-form">
+      <div class="input-group">
+        <label for="name">Nom complet</label>
+        <input type="text" id="name" [(ngModel)]="user.name" name="name" required />
+      </div>
+
+      <div class="input-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" [(ngModel)]="user.email" name="email" required />
+      </div>
+
+      <div class="input-group">
+        <label for="phone">Numéro de téléphone</label>
+        <input type="tel" id="phone" [(ngModel)]="user.phone" name="phone" required />
+      </div>
+
+      <div class="input-group">
+        <label for="role">Rôle</label>
+        <select id="role" [(ngModel)]="user.role" name="role" required class="form-select">
+          <option value="organisateur">Organisateur</option>
+          <option value="participant">Participant</option>
+        </select>
+      </div>
+
+      <button type="submit" class="submit-btn">Modifier</button>
+    </form>
+  </div>
+</div>

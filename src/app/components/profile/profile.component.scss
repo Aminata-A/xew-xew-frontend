@@ -1,0 +1,118 @@
+
+/* Mobile-first: Target small devices (phones) */
+:host {
+  font-family: 'cabinet-grotesk', sans-serif;
+  // background-color: #f9f9f9;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  /* max-width: 100%; */
+  width: 100%;
+  min-height: 100vh;
+}
+
+h1 {
+  text-align: center;
+  font-family: 'clash-display', sans-serif;
+  font-size: 1.5rem; /* Adjusted for mobile */
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.profile-section {
+  text-align: center;
+}
+
+.profile-img {
+  width: 120px;
+  height: 120px;
+  border-radius: 10px;
+  object-fit: cover;
+  margin-bottom: 2.5em;
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group {
+  margin-bottom: 2.5em;
+  text-align: left;
+}
+
+label {
+  font-size: 1rem; /* Optimized for mobile */
+  margin-bottom: 5px;
+  display: block;
+  color: #666;
+}
+
+input, select {
+  width: 95%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+  outline: none;
+  background-color: #fff ;
+  color: #1B1B1B;
+}
+.form-select {
+  width: 100%;
+
+}
+input::placeholder {
+  color: #1B1B1B;
+}
+
+.submit-btn {
+  background-color: #FF6C37;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  width: 100%; /* Full width for mobile */
+}
+
+.submit-btn:hover {
+  background-color: #e65c27;
+}
+
+/* Tablet and larger screens */
+@media (min-width: 768px) {
+  .container {
+      max-width: 400px;
+      padding: 30px;
+      background-color: #fff;
+  }
+
+  h1 {
+      font-size: 2rem; /* Adjusted for larger screens */
+  }
+
+  .profile-img {
+      width: 120px;
+      height: 120px;
+  }
+
+  input, select {
+      padding: 15px;
+      font-size: 1.1rem;
+  }
+
+  .submit-btn {
+      padding: 15px;
+  }
+}

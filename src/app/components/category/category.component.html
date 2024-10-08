@@ -1,0 +1,35 @@
+<div class="container">
+  <h2>Catégories</h2>
+
+  <!-- Error Message -->
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Category List -->
+  <ul class="category-list">
+    <li *ngFor="let category of categories">
+      <span *ngIf="editCategoryData?.id !== category.id">{{ category.label }}</span>
+
+      <!-- Edit Mode -->
+      <div *ngIf="editCategoryData?.id === category.id">
+        <input [(ngModel)]="editCategoryData.label" type="text" />
+        <button (click)="updateCategory()">Mettre à jour</button>
+        <button (click)="cancelEdit()">Annuler</button>
+      </div>
+
+      <!-- Action Buttons -->
+      <div *ngIf="isAuthenticated && editCategoryData?.id !== category.id" class="actions">
+        <button (click)="editCategory(category)">Modifier</button>
+        <button (click)="deleteCategory(category.id)">Supprimer</button>
+      </div>
+    </li>
+  </ul>
+
+  <!-- Create Category (Only for authenticated users) -->
+  <div *ngIf="isAuthenticated" class="create-category">
+    <h3>Créer une nouvelle catégorie</h3>
+    <input [(ngModel)]="newCategory" type="text" placeholder="Nom de la catégorie" />
+    <button (click)="createCategory()">Créer</button>
+  </div>
+</div>

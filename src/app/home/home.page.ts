@@ -1,3 +1,4 @@
+import { TicketsComponent } from './../components/tickets/tickets.component';
 import { TicketService } from './../services/ticket.service';
 import { Component, inject } from '@angular/core';
 import { IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/angular/standalone';
@@ -11,6 +12,9 @@ import { Transaction } from '../services/interfaces';
 import { NgFor } from '@angular/common';
 import { RegisterComponent } from '../components/register/register.component';
 import { LoginComponent } from '../components/login/login.component';
+import { ProfileComponent } from '../components/profile/profile.component';
+import { tick } from '@angular/core/testing';
+import { WalletCreateComponent } from '../components/wallet-create/wallet-create.component';
 
 
 @Component({
@@ -18,7 +22,7 @@ import { LoginComponent } from '../components/login/login.component';
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent, NgFor, EventCardComponent, TicketCardComponent, TransactionComponent, RegisterComponent, LoginComponent],
+  imports: [IonHeader, IonToolbar, IonTitle, IonContent, NgFor, EventCardComponent, TicketCardComponent, TransactionComponent, RegisterComponent, LoginComponent, ProfileComponent, TicketsComponent, WalletCreateComponent],
 })
 export class HomePage {
 
@@ -50,7 +54,7 @@ export class HomePage {
   }
 
   loadTicket() {
-    this.ticketservice.getTickets().subscribe({
+    this.ticketservice.getUserTickets().subscribe({
       next: (data) => {
         // this.tickets = data;
       }

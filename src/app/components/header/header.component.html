@@ -1,3 +1,10 @@
-<p>
-  header works!
-</p>
+<header>
+  <div class="header-container">
+    <img src="../../images/logo.jpg" alt="Logo" class="logo">
+    <div class="user-icon">
+      <!-- Vérifiez si les données utilisateur existent avant de les afficher -->
+      <img *ngIf="user?.photo" [src]="user.photo" alt="User" class="avatar">
+      <span *ngIf="user">{{ user.name }}</span> <!-- Afficher le nom de l'utilisateur -->
+    </div>
+  </div>
+</header>

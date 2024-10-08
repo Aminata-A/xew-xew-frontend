@@ -1,0 +1,123 @@
+.container {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 0 auto;
+
+  h2 {
+    color: #1b1b1b;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+}
+
+.category-list {
+  list-style: none;
+  padding: 0;
+
+  li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    &:hover {
+      background-color: #f1f1f1;
+    }
+
+    span {
+      font-size: 16px;
+      font-weight: bold;
+      color: #1b1b1b;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+
+      button {
+        padding: 5px 10px;
+        background-color: #ff773d;
+        border: none;
+        border-radius: 4px;
+        color: white;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: #ff5722;
+        }
+
+        &:disabled {
+          background-color: #ccc;
+          cursor: not-allowed;
+        }
+      }
+    }
+
+    input {
+      width: 70%;
+      padding: 5px;
+      // border: 1px solid #ccc;
+      border-radius: 4px;
+      background: #F4F4F4;
+    }
+  }
+}
+
+.create-category {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h3 {
+    font-size: 18px;
+    color: #1b1b1b;
+    margin-bottom: 10px;
+  }
+
+  input {
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    width: 70%;
+    margin-bottom: 10px;
+    background-color: #F4F4F4;
+    color: #1b1b1b;
+  }
+
+  button {
+    padding: 10px 20px;
+    background-color: #ff773d;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: #f85915;
+    }
+
+    &:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.error-message {
+  color: red;
+  margin-bottom: 20px;
+  font-size: 14px;
+  text-align: center;
+}

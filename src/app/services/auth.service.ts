@@ -29,6 +29,29 @@ export class AuthService {
   login(data: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/auth/login`, data);
   }
+
+  // Méthode pour récupérer les informations de l'utilisateur via le token
+  getUserProfile(token: string): Observable<Register> {
+    const headers = { Authorization: `Bearer ${token}` };  // Passer le token dans l'en-tête Authorization
+    return this.http.get<Register>(`${this.apiUrl}/user/profile`, { headers });
+  }
+
+
+
+// Mettre à jour le profil utilisateur
+updateProfile(data: Register, token: string): Observable<any> {
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${token}`,
+  });
+  return this.http.put(`${this.apiUrl}/auth/user-profile`, data, { headers });
+}
+
+    logout(token: string): Observable<any> {
+      const headers = new HttpHeaders({
+        Authorization: `Bearer ${token}`,
+      });
+      return this.http.post(`${this.apiUrl}/auth/logout`, {}, { headers });
+    }
 }
 
 
