@@ -1,7 +1,7 @@
 /* Global styles */
-$primary-color: hsl(16, 100%, 50%); /* Utiliser hsl ou hex au lieu de hwb */
-$background-color: #F4F4F4;
-$text-color: #1B1B1B;
+$primary-color: hsl(16, 100%, 50%);
+$background-color: #f4f4f4;
+$text-color: #1b1b1b;
 $placeholder-color: #bbb;
 $font-family: 'cabinet-grotesk', sans-serif;
 
@@ -11,7 +11,7 @@ $font-family: 'cabinet-grotesk', sans-serif;
   padding: 20px;
   margin: 0;
   display: flex;
-  // justify-content: center;
+  justify-content: center;
   align-items: center;
   min-height: 100vh;
 }
@@ -27,7 +27,6 @@ $font-family: 'cabinet-grotesk', sans-serif;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  // text-align: center;
   color: $text-color;
 }
 
@@ -35,7 +34,7 @@ $font-family: 'cabinet-grotesk', sans-serif;
 form {
   display: flex;
   flex-direction: column;
-  width: 100%; /* Full width for mobile */
+  width: 100%;
   margin: 0 auto;
 
   label {
@@ -62,24 +61,38 @@ form {
   }
 }
 
-.email-verification {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  color: $text-color;
-
-  .info {
-    span {
-      font-weight: bold;
-    }
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  /* Adjust form input width on tablets */
+  form input,
+  form select {
+    width: 100%; /* Full width on medium screens */
   }
 
-  .countdown {
-    span {
-      color: $primary-color;
-      font-weight: bold;
-    }
+  .container {
+    max-width: 90%; /* Wider container for better use of screen space */
+  }
+}
+
+@media (max-width: 480px) {
+  /* Mobile specific styles */
+  .container {
+    padding: 10px;
+  }
+
+  form label {
+    font-size: 1rem; /* Slightly smaller text on mobile */
+  }
+
+  form input,
+  form select {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+
+  .submit-btn {
+    padding: 10px;
+    font-size: 0.9rem;
   }
 }
 
@@ -147,5 +160,26 @@ form {
       font-size: 1rem;
       color: $placeholder-color;
     }
+  }
+}
+
+/* Responsive adjustments for profile upload */
+@media (max-width: 768px) {
+  .profile-pic-upload {
+    height: 150px; /* Reduce height on smaller screens */
+  }
+
+  .profile-pic-upload label span {
+    font-size: 0.9rem; /* Adjust text size */
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-pic-upload {
+    height: 120px; /* Even smaller height on mobile */
+  }
+
+  .profile-pic-upload label span {
+    font-size: 0.8rem;
   }
 }

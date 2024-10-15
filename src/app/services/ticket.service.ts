@@ -8,19 +8,22 @@ import { Ticket } from './interfaces';
   providedIn: 'root',
 })
 export class TicketService {
-  
-  private baseUrl = 'http://127.0.0.1:8000/api';  // URL de base pour accéder à l'API backend
+
+  private baseUrl = 'http://127.0.0.1:8000/api/tickets';  // URL de base pour accéder à l'API backend
 
   constructor(private http: HttpClient) {}
 
   // Récupérer les tickets de l'utilisateur connecté
-  getUserTickets(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/tickets`);
-  }
+ // Récupérer les tickets de l'utilisateur
+ getUserTickets(): Observable<any> {
+  const token = localStorage.getItem('jwt_token');
+  const headers = { Authorization: `Bearer ${token}` };
+  return this.http.get(this.baseUrl, { headers });
+}
 
   // Créer une commande de tickets
-  createTicket(data: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/tickets`, data);
+  createTransaction(data: any): Observable<any> {
+    return this.http.post(this.baseUrl, data);
   }
 
 }

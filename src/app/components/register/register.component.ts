@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from './../../services/auth.service';
-
+import { Router, RouterLink } from '@angular/router'; // Ajout de la dépendance Router pour la navigation
+Router
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -22,18 +23,18 @@ export class RegisterComponent {
   };
 
   verificationCode: string = '';
-  emailSent: boolean = false; // Pour vérifier si l'email a été envoyé
-  emailVerified: boolean = false; // Pour vérifier si le code est correct
-  additionalInfoProvided: boolean = false; // Pour vérifier si les infos supplémentaires sont fournies
-  token: string = ''; // Stocker le token JWT ici
-  countdown: number = 300; // Temps de 5 minutes en secondes
-  countdownMinutes: number = 5; // Minutes restantes
-  countdownSeconds: number = 0; // Secondes restantes
-  timer: any; // Référence du timer
-  errorMessage: string = ''; // Message d'erreur général
-  emailExists: boolean = false; // Pour afficher un message si l'email existe déjà
+  emailSent: boolean = false;
+  emailVerified: boolean = false;
+  additionalInfoProvided: boolean = false;
+  token: string = '';
+  countdown: number = 300;
+  countdownMinutes: number = 5;
+  countdownSeconds: number = 0;
+  timer: any;
+  errorMessage: string = '';
+  emailExists: boolean = false;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   sendVerificationEmail() {
     console.log('Envoi de l\'email de vérification à : ', this.formData.email);
@@ -45,8 +46,8 @@ export class RegisterComponent {
           this.errorMessage = 'Cet email est déjà associé à un compte.';
         } else {
           this.emailSent = true;
-          this.errorMessage = ''; // Réinitialiser le message d'erreur
-          this.startCountdown(); // Lancer le compte à rebours après l'envoi du code
+          this.errorMessage = '';
+          this.startCountdown();
         }
       },
       (error) => {
@@ -68,7 +69,11 @@ export class RegisterComponent {
         console.log('Temps écoulé pour la vérification du code.');
         this.errorMessage = 'Le temps pour entrer le code a expiré.';
       }
-    }, 1000); // Mettre à jour chaque seconde
+    }, 1000);
+  }
+
+  navigateToLogin() {
+    this.router.navigate(['/login']);
   }
 
   verifyCode() {
@@ -77,11 +82,11 @@ export class RegisterComponent {
       this.authService.verifyCode(this.formData.email, this.verificationCode).subscribe(
         (response) => {
           console.log('Réponse de l\'API lors de la vérification du code : ', response);
-          if (response.message === 'Code verified successfully') { // Vérifier le succès
+          if (response.message === 'Code verified successfully') {
             console.log('Code vérifié avec succès');
-            this.emailVerified = true;  // Mettre à jour pour afficher le formulaire
-            this.token = response.token;  // Sauvegarder le token reçu
-            this.errorMessage = ''; // Réinitialiser les erreurs si le code est correct
+            this.emailVerified = true;
+            this.token = response.token;
+            this.errorMessage = '';
           } else {
             this.errorMessage = 'Code de vérification invalide ou expiré.';
           }
@@ -117,6 +122,7 @@ export class RegisterComponent {
     this.authService.register(this.formData, this.token).subscribe(
       (response) => {
         console.log('Inscription réussie', response);
+        this.router.navigate(['/login']);  // Redirection vers la page de connexion
       },
       (error) => {
         console.error('Erreur lors de l\'inscription', error);

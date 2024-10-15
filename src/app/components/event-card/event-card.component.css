@@ -1,3 +1,4 @@
+@charset "UTF-8";
 .event-card {
   width: 300px;
   height: 150px;
@@ -12,18 +13,19 @@
   width: 100%;
   height: 100%;
   -o-object-fit: cover;
-  object-fit: cover;
+     object-fit: cover;
   border-radius: 15px;
 }
 .event-card h4 {
   position: absolute;
-  top: 30%;
+  top: 20%;
   left: 50%;
   transform: translate(-50%, -50%);
   color: white;
   font-size: 1.2rem;
   font-family: "cabinet-grotesk", sans-serif;
   font-weight: bold;
+  line-height: 15px;
   z-index: 1;
 }
 .event-card p {
@@ -36,6 +38,11 @@
   width: 80%;
   line-height: 1.3rem;
   z-index: 1;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2; /* Limiter à 2 lignes */
+  overflow: hidden;
+  text-overflow: ellipsis; /* Ajoute "..." pour les textes coupés */
 }
 
 .event-card-2 {
@@ -68,7 +75,7 @@
   width: 100%;
   height: 130px;
   -o-object-fit: cover;
-  object-fit: cover;
+     object-fit: cover;
 }
 .event-card-2 h6 {
   font-size: 16px;
@@ -148,4 +155,111 @@
 }
 .event-card-3 .event-details .lieu {
   color: #f55437;
-} /*# sourceMappingURL=event-card.component.css.map */
+}
+
+/* Styles globaux pour les cartes */
+.event-card,
+.event-card-2,
+.event-card-3 {
+  box-sizing: border-box;
+}
+.event-card::after,
+.event-card-2::after,
+.event-card-3::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 0;
+}
+
+/* Par défaut: 4 cartes par ligne */
+.event-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* Crée 4 colonnes égales */
+  gap: 20px;
+}
+
+/* Pour les petits écrans (tablettes, mobiles) */
+@media (max-width: 1024px) {
+  .event-list {
+    grid-template-columns: repeat(2, 1fr); /* 2 colonnes pour les tablettes */
+  }
+  .event-card,
+  .event-card-2,
+  .event-card-3 {
+    width: 100%; /* Adapter les cartes à la largeur de leur conteneur */
+    height: auto;
+  }
+}
+@media (max-width: 768px) {
+  .event-list {
+    grid-template-columns: repeat(1, 1fr); /* 1 colonne pour les mobiles */
+  }
+  .event-card,
+  .event-card-2,
+  .event-card-3 {
+    width: 100%; /* Adapter les cartes à la largeur de leur conteneur */
+    height: auto;
+  }
+  /* Adapter les images pour qu'elles soient bien visibles */
+  .event-card img,
+  .event-card-2 .event-image,
+  .event-card-3 .event-image {
+    width: 100%;
+    height: auto;
+  }
+  /* Réduire la taille des titres et descriptions sur mobile */
+  .event-card h4,
+  .event-card-2 h4,
+  .event-card-3 h4 {
+    font-size: 1em;
+  }
+  .event-card p,
+  .event-card-2 p,
+  .event-card-3 p {
+    font-size: 0.8em;
+  }
+  .event-card-3 .event-details h4 {
+    font-size: 1em;
+  }
+  .event-card-3 .event-details p {
+    font-size: 0.7em;
+  }
+}
+/* Réduire la taille des éléments sur les très petits écrans (téléphones portables) */
+@media (max-width: 480px) {
+  .event-card,
+  .event-card-2,
+  .event-card-3 {
+    width: 100%; /* S'assurer que les cartes prennent toute la largeur disponible */
+  }
+  .event-card img,
+  .event-card-2 .event-image,
+  .event-card-3 .event-image {
+    height: auto;
+  }
+  /* Réduire encore plus la taille des textes sur les très petits écrans */
+  .event-card h4,
+  .event-card-2 h4,
+  .event-card-3 h4 {
+    font-size: 0.9em;
+  }
+  .event-card p,
+  .event-card-2 p,
+  .event-card-3 p {
+    font-size: 0.7em;
+  }
+  .event-card-3 .event-details h4 {
+    font-size: 1em;
+  }
+  .event-card-3 .event-details p {
+    font-size: 0.6em;
+  }
+  .price {
+    font-size: 0.7em;
+  }
+}/*# sourceMappingURL=event-card.component.css.map */

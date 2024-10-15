@@ -1,0 +1,43 @@
+<div class="container">
+  <app-sidebar class="sidebar"></app-sidebar>
+  <div class="content-wrapper">
+    <app-header class="header"></app-header>
+
+    <div class="content">
+
+      <div class="title">
+        <h2>Mes Événements</h2>
+        <p>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.</p>
+      </div>
+
+      <!-- Si l'utilisateur n'est pas connecté, afficher un message -->
+      <div *ngIf="!isAuthenticated">
+        <p class="error-message">{{ message }}</p>
+      </div>
+
+      <!-- Si l'utilisateur est connecté, afficher les événements -->
+      <div *ngIf="isAuthenticated">
+        <!-- Section pour les événements à venir -->
+        <h3>Événements à venir</h3>
+        <div *ngIf="upcomingEvents.length > 0; else noUpcomingEvents" class="events-list">
+          <app-event-card *ngFor="let event of upcomingEvents" [event]="event" [variant]="2"></app-event-card>
+        </div>
+
+        <ng-template #noUpcomingEvents>
+          <p class="no-events-message">Aucun événement à venir pour le moment.</p>
+        </ng-template>
+
+        <!-- Section pour les événements passés -->
+        <h3>Événements passés</h3>
+        <div *ngIf="pastEvents.length > 0; else noPastEvents" class="events-list">
+          <app-event-card *ngFor="let event of pastEvents" [event]="event" [variant]="2"></app-event-card>
+        </div>
+
+        <ng-template #noPastEvents>
+          <p class="no-events-message">Aucun événement passé.</p>
+        </ng-template>
+
+      </div>
+    </div>
+  </div>
+</div>

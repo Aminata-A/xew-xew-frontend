@@ -5,6 +5,7 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   max-width: 800px;
   margin: 0 auto;
+  font-family: 'Cabinet Grotesk', sans-serif;
 
   h2 {
     color: #1b1b1b;
@@ -65,7 +66,6 @@
     input {
       width: 70%;
       padding: 5px;
-      // border: 1px solid #ccc;
       border-radius: 4px;
       background: #F4F4F4;
     }
@@ -120,4 +120,58 @@
   margin-bottom: 20px;
   font-size: 14px;
   text-align: center;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+    max-width: 100%;
+  }
+
+  .category-list li {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .category-list li input {
+    width: 100%;
+  }
+
+  .category-list li .actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .create-category input {
+    width: 90%;
+  }
+
+  .create-category button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 10px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  .category-list li {
+    padding: 8px;
+  }
+
+  .create-category input {
+    width: 100%;
+  }
+
+  .create-category button {
+    width: 100%;
+    padding: 8px 15px;
+    font-size: 14px;
+  }
 }

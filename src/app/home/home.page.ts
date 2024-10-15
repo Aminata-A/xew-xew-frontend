@@ -1,3 +1,4 @@
+import { SidebarComponent } from './../components/sidebar/sidebar.component';
 import { TicketsComponent } from './../components/tickets/tickets.component';
 import { TicketService } from './../services/ticket.service';
 import { Component, inject } from '@angular/core';
@@ -15,6 +16,8 @@ import { LoginComponent } from '../components/login/login.component';
 import { ProfileComponent } from '../components/profile/profile.component';
 import { tick } from '@angular/core/testing';
 import { WalletCreateComponent } from '../components/wallet-create/wallet-create.component';
+import { MyEventsComponent } from '../components/my-events/my-events.component';
+// import { SidebarComponent } from '../components/sidebar/sidebar.component';
 
 
 @Component({
@@ -22,7 +25,7 @@ import { WalletCreateComponent } from '../components/wallet-create/wallet-create
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent, NgFor, EventCardComponent, TicketCardComponent, TransactionComponent, RegisterComponent, LoginComponent, ProfileComponent, TicketsComponent, WalletCreateComponent],
+  imports: [IonHeader, IonToolbar, IonTitle, IonContent, NgFor, EventCardComponent, TicketCardComponent, TransactionComponent, RegisterComponent, LoginComponent, ProfileComponent, TicketsComponent, WalletCreateComponent, SidebarComponent, MyEventsComponent],
 })
 export class HomePage {
 

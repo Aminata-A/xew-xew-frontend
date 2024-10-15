@@ -38,20 +38,20 @@ export class AuthService {
 
 
 
-// Mettre à jour le profil utilisateur
-updateProfile(data: Register, token: string): Observable<any> {
-  const headers = new HttpHeaders({
-    Authorization: `Bearer ${token}`,
-  });
-  return this.http.put(`${this.apiUrl}/auth/user-profile`, data, { headers });
-}
+  // Mettre à jour le profil utilisateur
+  updateProfile(data: Register, token: string): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+    return this.http.put(`${this.apiUrl}/auth/user-profile`, data, { headers });
+  }
 
-    logout(token: string): Observable<any> {
-      const headers = new HttpHeaders({
-        Authorization: `Bearer ${token}`,
-      });
-      return this.http.post(`${this.apiUrl}/auth/logout`, {}, { headers });
-    }
+  logout(token: string): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+    return this.http.post(`${this.apiUrl}/auth/logout`, {}, { headers });
+  }
 }
 
 

@@ -1,15 +1,20 @@
+import { NgIf } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/services/auth.service';
 import { Register } from 'src/app/services/interfaces';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.scss'],
+  standalone: true,
+  imports: [NgIf, FormsModule],  // Importations nécessaires
 })
 export class HeaderComponent implements OnInit {
   public user!: Register; // Stocker les informations de l'utilisateur connecté
   public token: string = ''; // Le token JWT de l'utilisateur connecté
+  profileImage: string = 'https://img.freepik.com/vecteurs-premium/icone-utilisateur-orange-sans-icone-arriere-plan_1076610-85993.jpg?w=740';
 
   constructor(private authService: AuthService) {}
 

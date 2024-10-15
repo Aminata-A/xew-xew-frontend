@@ -1,6 +1,6 @@
 import { ModalController, IonicModule } from '@ionic/angular';
 import { CommonModule, NgIf } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Event } from 'src/app/services/interfaces';
 import { EventService } from 'src/app/services/event.service'; // Import EventService
@@ -11,7 +11,7 @@ import { PurchaseModalComponent } from '../purchase-modal/purchase-modal.compone
   templateUrl: './event-details.component.html',
   styleUrls: ['./event-details.component.scss'],
   standalone: true,
-  imports: [NgIf, CommonModule, IonicModule],
+  imports: [NgIf, CommonModule, IonicModule, PurchaseModalComponent],
 })
 export class EventDetailsComponent implements OnInit {
   public event!: Event;
@@ -19,6 +19,10 @@ export class EventDetailsComponent implements OnInit {
   public quantity: number = 1;
   public totalAmount: number = 0;
   public presentingElement!: HTMLElement | undefined;
+  similarEvents: any[] = []; // Store similar events
+  public pageWidth!: number;
+  public onDesktop = false;
+  public currentPageNumber: number = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -28,13 +32,23 @@ export class EventDetailsComponent implements OnInit {
 
   ngOnInit() {
     const eventId = this.route.snapshot.paramMap.get('id');
+    this.pageWidth = window.innerWidth;
+    if(this.pageWidth >= 768){
+      this.onDesktop = true
+    }
+    console.log(this.onDesktop);
     if (eventId) {
       this.fetchEvent(Number(eventId));
     }
 
-    // Initialize presentingElement
-    const ionApp = document.querySelector('ion-app');
-    this.presentingElement = ionApp ? ionApp : undefined;
+    if (this.event && this.event.categories) {
+      this.loadSimilarEvents(this.event.categories);
+    }
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event) {
+    this.pageWidth = window.innerWidth;
   }
 
   fetchEvent(id: number) {
@@ -58,14 +72,40 @@ export class EventDetailsComponent implements OnInit {
   }
 
   async openPurchaseModal() {
-    const modal = await this.modalController.create({
-      component: PurchaseModalComponent,
-      componentProps: {
-        event: this.event,
-        quantity: this.quantity
+      const modal = await this.modalController.create({
+        component: PurchaseModalComponent,
+        componentProps: {
+          event: this.event,
+          quantity: this.quantity
+        },
+        presentingElement: this.presentingElement
+      });
+      return await modal.present();
+  }
+
+  public setPage(page: number = 0) {
+    console.log('Page number:', page);
+    this.currentPageNumber = page;
+  }
+
+   // Method to load similar events based on categories
+  loadSimilarEvents(categories: number[]) {
+    this.eventService.getEventsByCategories(categories).subscribe(
+      (response) => {
+        this.similarEvents = response;
       },
-      presentingElement: this.presentingElement
-    });
-    return await modal.present();
+      (error) => {
+        console.error('Error fetching similar events', error);
+      }
+    );
+  }
+
+  // isAuthenticated() {
+  //   return !!localStorage.getItem('jwt_token');
+  // }
+
+
+  close(){
+    this.modalController.dismiss();
   }
 }

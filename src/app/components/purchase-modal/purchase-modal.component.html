@@ -1,8 +1,8 @@
 <div class="purchase-container">
-  <header class="purchase-header">
+  <div class="purchase-header">
     <button class="back-button" (click)="close()">&larr;</button>
     <h1>Votre achat</h1>
-  </header>
+  </div>
 
   <div class="event-summary">
     <div class="event-details">
@@ -39,7 +39,8 @@
     </div>
   </div>
 
-  <form>
+  <!-- Afficher ce formulaire uniquement si l'utilisateur n'est pas connecté -->
+  <form *ngIf="!isAuthenticated">
     <div class="input-group">
       <label for="name">Nom & Prénom</label>
       <input type="name" id="name" placeholder="xew xew" required>
@@ -50,6 +51,12 @@
       <input type="email" id="email" placeholder="xew2@exemple.com" required>
     </div>
   </form>
+
+  <!-- Si l'utilisateur est connecté, afficher son nom et email -->
+  <div *ngIf="isAuthenticated">
+    <p><strong>Nom :</strong> {{ userName }}</p>
+    <p><strong>Email :</strong> {{ userEmail }}</p>
+  </div>
 
   <div class="additional-info">
     <p>Lorem Ipsum has been the industry's standard dummy text since the 1500s.</p>

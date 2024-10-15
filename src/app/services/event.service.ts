@@ -48,4 +48,17 @@ export class EventService {
     return this.http.get<any[]>(`${baseURL}/users?role=organizer`);
   }
 
+  // Fonction pour récupérer les événements de l'utilisateur connecté
+  getMyEvents(): Observable<any[]> {
+    const token = localStorage.getItem('jwt_token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`, // Envoi du token JWT dans l'en-tête Authorization
+    });
+    return this.http.get<any[]>(`${baseURL}/events/my-events`, { headers });
+  }
+   // Method to fetch events based on categories
+   getEventsByCategories(categoryIds: number[]): Observable<any> {
+    return this.http.post(`${baseURL}/events/similar`, { categories: categoryIds });
+  }
+
 }

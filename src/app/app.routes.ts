@@ -4,13 +4,13 @@ import { ProfileComponent } from './components/profile/profile.component';
 
 
 export const routes: Routes = [
-  {
-    path: 'home',
-    loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
-  },
+  // {
+  //   path: 'home',
+  //   loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
+  // },
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'events',
     pathMatch: 'full',
   },
   { path: 'event-details/:id', component: EventDetailsComponent },
@@ -26,5 +26,18 @@ export const routes: Routes = [
   {path: 'tickets', loadComponent: () => import('./components/tickets/tickets.component').then(m => m.TicketsComponent)},
   {path: 'wallet-create', loadComponent: () => import('./components/wallet-create/wallet-create.component').then(m => m.WalletCreateComponent)},
   {path: 'category', loadComponent: () => import('./components/category/category.component').then(m => m.CategoryComponent)},
-  {path: 'form-event', loadComponent: () => import('./components/form-event/form-event.component').then(m => m.CreateEventComponent)},
+  {path: 'form-event', loadComponent: () => import('./components/form-event/form-event.component').then(m => m.FormEventComponent)},
+  {path: 'sidebar', loadComponent: () => import('./components/sidebar/sidebar.component').then(m => m.SidebarComponent)},
+  {
+    path: 'events',
+    loadComponent: () => import('./pages/event/event.page').then( m => m.EventPage)
+  },
+  {
+    path: 'event-details',
+    loadComponent: () => import('./pages/event-details/event-details.page').then( m => m.EventDetailsPage)
+  },
+  {
+    path: 'my-events',
+    loadComponent: () => import('./components/my-events/my-events.component').then( m => m.MyEventsComponent)
+  }
 ];

@@ -10,6 +10,13 @@ export interface Event {
   ticket_price: number;
   event_status: 'publier' | 'brouillon' | 'archiver' | 'annuler' | 'supprimer';
   organizer_id: number;
+  categories: number[]; // Array of category IDs
+
+}
+
+export interface Category {
+  id?: number;
+  label: string;
 }
 
 export interface Ticket {
@@ -37,5 +44,6 @@ export interface Register {
   phone: string;
   role: string;
   photo: string | null;
+
 }
 

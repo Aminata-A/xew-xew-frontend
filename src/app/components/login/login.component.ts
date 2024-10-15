@@ -20,20 +20,24 @@ export class LoginComponent {
   constructor(private authService: AuthService, private router: Router) {} // Injecter le Router
 
   login() {
+    console.log('Tentative de connexion avec', this.loginData); // Vérifiez les données envoyées
+
     this.authService.login(this.loginData).subscribe(
       (response) => {
-        console.log('Connexion réussie', response);
+        console.log('Réponse reçue du serveur', response); // Voir la réponse complète du serveur
         if (response.token) {
           localStorage.setItem('jwt_token', response.token); // Assurez-vous que le token est bien sauvegardé
-          this.router.navigate(['/home']); // Redirection après la connexion
+          this.router.navigate(['/events']); // Redirection après la connexion
+          window.location.reload(); // Recharge la page après la redirection
         } else {
           console.error('Aucun token trouvé dans la réponse');
         }
       },
       (error) => {
-        console.error('Erreur de connexion', error);
+        console.error('Erreur de connexion', error); // Log de l'erreur de connexion
       }
     );
   }
+
 
 }
