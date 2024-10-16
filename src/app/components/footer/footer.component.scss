@@ -1,0 +1,22 @@
+/* Footer navigation fixe */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.619);
+  opacity: 90%;
+  display: flex;
+  justify-content: space-around;
+  padding: 20px 0;
+  border-top: 1px solid #eaeaea;
+  border-radius: 25px;
+}
+
+.bottom-nav li {
+  list-style-type: none;
+}
+
+.bottom-nav a {
+  color: #ff4b2b;
+  font-size: 1.5rem;
+}

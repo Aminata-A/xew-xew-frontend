@@ -8,8 +8,21 @@
   <!-- Barre de recherche (sera cachée sur mobile) -->
   <div class="search-bar">
     <input class="search" type="text" placeholder="Rechercher un événement" />
-    <div class="profile-pic">
+    <div class="profile-pic" (click)="toggleProfileMenu()">
       <img [src]="profileImage" alt="Profile" />
     </div>
+  </div>
+
+  <!-- Menu contextuel qui s'affiche lors du clic sur l'image de profil -->
+  <div class="profile-menu" *ngIf="showProfileMenu">
+    <ul *ngIf="isAuthenticated; else notLoggedIn">
+      <li (click)="viewProfile()">Voir mon profil</li>
+      <li (click)="logout()">Se déconnecter</li>
+    </ul>
+    <ng-template #notLoggedIn>
+      <ul>
+        <li (click)="login()">Se connecter</li>
+      </ul>
+    </ng-template>
   </div>
 </header>

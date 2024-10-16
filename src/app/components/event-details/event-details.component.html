@@ -78,25 +78,34 @@
       </div>
 
       <!-- Afficher ce formulaire uniquement si l'utilisateur n'est pas connecté -->
-      <form>
-        <div class="input-group">
-          <h4 for="name">Nom & Prénom</h4>
-          <input type="name" id="name" placeholder="xew xew" required>
-        </div>
+      <!-- Formulaire pour les utilisateurs non connectés -->
+    <!-- Formulaire pour les utilisateurs non connectés -->
+<div *ngIf="!isAuthenticated">
+  <form>
+    <div class="input-group">
+      <label for="name">Nom & Prénom</label>
+      <input type="text" id="name" [(ngModel)]="userName" name="userName" placeholder="Votre nom" required>
+    </div>
+    <div class="input-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" [(ngModel)]="userEmail" name="userEmail" placeholder="Votre email" required>
+    </div>
+  </form>
+</div>
 
-        <div class="input-group">
-          <h4 for="email">Email</h4>
-          <input type="email" id="email" placeholder="xew2@exemple.com" required>
-        </div>
-      </form>
+
       <div class="additional-info">
         <p>Lorem Ipsum has been the industry's standard dummy text since the 1500s.</p>
       </div>
 
       <div class="action-buttons">
-        <button class="confirm-button">Confirmer</button>
+        <button class="confirm-button" (click)="purchaseTicket()">Confirmer</button>
         <button class="cancel-button" (click)="close()">Annuler</button>
+
+        <!-- Afficher le lien de paiement si disponible -->
+        <div *ngIf="paymentUrl" class="payment-link-container">
+          <a [href]="paymentUrl" target="_blank" class="payment-link">Continuer vers le paiement</a>
+        </div>
       </div>
-    </div>
 
   </div>

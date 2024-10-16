@@ -32,6 +32,7 @@ export class TicketsComponent implements OnInit {
         const decodedToken: any = jwtDecode(token);
         this.isAuthenticated = true; // Utilisateur authentifié
         this.user = decodedToken; // Stocker les informations de l'utilisateur
+        console.log('Utilisateur connecté :', this.user.id);
 
         // Charger les tickets après avoir décodé le token
         this.loadUserTickets();

@@ -1,6 +1,7 @@
+/* ---------- CARD 1 (event-card) ---------- */
 .event-card {
-  width: 300px;
-  height: 150px;
+  width: 350px;
+  height: 200px;
   border-radius: 15px;
   overflow: hidden;
   position: relative;
@@ -21,10 +22,9 @@
     left: 50%;
     transform: translate(-50%, -50%);
     color: white;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     font-family: "cabinet-grotesk", sans-serif;
     font-weight: bold;
-    line-height: 15px;
     z-index: 1;
   }
 
@@ -34,15 +34,10 @@
     left: 50%;
     transform: translateX(-50%);
     color: white;
-    font-size: 0.9rem;
+    font-size: 1rem;
     width: 80%;
     line-height: 1.3rem;
     z-index: 1;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2; /* Limiter à 2 lignes */
-    overflow: hidden;
-    text-overflow: ellipsis; /* Ajoute "..." pour les textes coupés */
   }
 
   &::after {
@@ -57,40 +52,78 @@
   }
 }
 
+/* Responsive adjustments for event-card */
+@media (max-width: 1024px) {
+  .event-card {
+    width: 300px;
+    height: 180px;
+  }
 
+  .event-card h4 {
+    font-size: 1.2rem;
+  }
+
+  .event-card p {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .event-card {
+    width: 100%;
+    // height: auto;
+    margin: 10px 0;
+  }
+
+  .event-card img {
+    // height: auto;
+  }
+
+  .event-card h4 {
+    font-size: 1rem;
+  }
+
+  .event-card p {
+    font-size: 0.8rem;
+  }
+}
+
+/* ---------- CARD 2 (event-card-2) ---------- */
 .event-card-2 {
-  width: 250px;
+  width: 280px;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   background-color: #fff;
-  margin: 10px;
-  // text-align: center;
+  margin: 20px;
+  text-align: left;
 
   .card-title {
     display: flex;
-    padding-left: 10px;
+    padding: 10px;
     align-items: center;
+
     img {
-      width: 30px;
-      height: 30px;
-      border-radius: 3px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
       margin-right: 10px;
-      // margin: 10px;
     }
+
     h4 {
       font-family: "Irish Grover", system-ui;
-      font-size: 1.2em;
-      margin: 10px 0;
+      font-size: 1.4em;
+      margin: 0;
       color: #000;
     }
   }
 
   .event-image {
     width: 100%;
-    height: 130px;
+    height: 150px;
     object-fit: cover;
+    border-radius: 0;
   }
 
   h6 {
@@ -100,7 +133,6 @@
   }
 
   p {
-    // font-family: "Arial", sans-serif;
     font-size: 12px;
     margin: 10px 15px;
   }
@@ -108,7 +140,6 @@
   .event-card-2-date {
     font-size: 12px;
     color: #888;
-    margin-bottom: 5px;
   }
 
   .price {
@@ -117,183 +148,214 @@
     border-radius: 5px;
     color: #ff773d;
     font-weight: bold;
-    width: fit-content;
-    // margin: 10px auto;
-    left: 0;
+    margin: 10px 15px;
   }
 }
 
-.event-card-3 {
-  width: 250px;
-  height: 300px;
-  border-radius: 12px;
-  overflow: hidden;
-  position: relative;
-  /* box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); */
-  margin: 10px;
-
-  .event-image-container {
-    position: relative;
-    .event-image {
-      width: 100%;
-      height: 300px;
-      -o-object-fit: cover;
-      object-fit: cover;
-      border-radius: 12px 12px 0 0;
-    }
-    .event-label {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      // background-color: rgba(255, 255, 255, 0.6);
-      padding: 5px 10px;
-      border-radius: 12px;
-      font-size: 0.7em;
-      color: #fff;
-      font-weight: bold;
-    }
-  }
-
-  .event-details {
-    position: absolute;
-    padding: 10px;
-    /* z-index: 1; */
-    background: white;
-    border-radius: 5px;
-    opacity: 0.9;
-    bottom: 5%;
-    right: 50%;
-    transform: translateX(50%);
-    width: 80%;
-    h4 {
-      // font-family: 'Irish Grover', system-ui;
-      font-size: 1.2em;
-      margin: 0;
-      color: #000;
-    }
-
-    p {
-      font-size: 8px;
-      color: #666;
-      margin: 5px 0;
-    }
-
-    .lieu {
-      color: #f55437;
-    }
-  }
-}
-
-
-
-/* Styles globaux pour les cartes */
-.event-card,
-.event-card-2,
-.event-card-3 {
-  box-sizing: border-box;
-}
-
-/* Par défaut: 4 cartes par ligne */
-.event-list {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); /* Crée 4 colonnes égales */
-  gap: 20px;
-}
-
-/* Pour les petits écrans (tablettes, mobiles) */
+/* Responsive adjustments for event-card-2 */
 @media (max-width: 1024px) {
-  .event-list {
-    grid-template-columns: repeat(2, 1fr); /* 2 colonnes pour les tablettes */
+  .event-card-2 {
+    width: 260px;
+    margin: 15px;
   }
 
-  .event-card,
-  .event-card-2,
-  .event-card-3 {
-    width: 100%; /* Adapter les cartes à la largeur de leur conteneur */
-    height: auto;
+  .event-card-2 .card-title img {
+    width: 30px;
+    height: 30px;
+  }
+
+  .event-card-2 h4 {
+    font-size: 1.2rem;
+  }
+
+  .event-card-2 h6 {
+    font-size: 14px;
   }
 }
 
 @media (max-width: 768px) {
-  .event-list {
-    grid-template-columns: repeat(1, 1fr); /* 1 colonne pour les mobiles */
-  }
-
-  .event-card,
-  .event-card-2,
-  .event-card-3 {
-    width: 100%; /* Adapter les cartes à la largeur de leur conteneur */
-    height: auto;
-  }
-
-  /* Adapter les images pour qu'elles soient bien visibles */
-  .event-card img,
-  .event-card-2 .event-image,
-  .event-card-3 .event-image {
+  .event-card-2 {
     width: 100%;
-    height: auto;
+    margin: 10px 0;
   }
 
-  /* Réduire la taille des titres et descriptions sur mobile */
-  .event-card h4,
-  .event-card-2 h4,
-  .event-card-3 h4 {
-    font-size: 1em;
+  .event-card-2 .event-image {
+    // height: auto;
   }
 
-  .event-card p,
+  .event-card-2 h4 {
+    font-size: 1rem;
+  }
+
+  .event-card-2 h6 {
+    font-size: 12px;
+  }
+
   .event-card-2 p,
-  .event-card-3 p {
-    font-size: 0.8em;
-  }
-
-  .event-card-3 .event-details {
-    h4 {
-      font-size: 1em;
-    }
-
-    p {
-      font-size: 0.7em;
-    }
+  .event-card-2 .price {
+    font-size: 0.9rem;
   }
 }
 
-/* Réduire la taille des éléments sur les très petits écrans (téléphones portables) */
-@media (max-width: 480px) {
-  .event-card,
-  .event-card-2,
+/* ---------- CARD 3 (event-card-3) ---------- */
+// .event-card-3 {
+//   // width: 320px;
+//   border-radius: 12px;
+//   // overflow: hidden;
+//   position: relative;
+//   margin: 20px;
+//   // box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Ajout d'une ombre */
+// }
+
+.event-image-container {
+  position: relative;
+}
+
+.event-image {
+  width: 22em;
+  height: 24em;
+  object-fit: cover;
+  border-radius: 12px;
+  position: relative;
+}
+
+.event-label {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: rgba(255, 255, 255, 0.6);
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  color: #000;
+  font-weight: bold;
+}
+
+.event-details {
+  padding: 15px;
+  background-color: white;
+  border-radius: 0 0 12px 12px;
+  text-align: center;
+  position: absolute;
+  bottom: 2em;
+}
+
+.event-details h4 {
+  font-size: 1.4rem;
+  color: #000;
+  margin: 5px 0;
+}
+
+.event-details p {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 5px 0;
+}
+
+.event-details .lieu {
+  font-size: 0.9rem;
+  color: #f55437;
+  font-weight: bold;
+}
+
+/* Responsive adjustments for event-card-3 */
+@media (max-width: 1024px) {
   .event-card-3 {
-    width: 100%; /* S'assurer que les cartes prennent toute la largeur disponible */
+    width: 280px;
   }
 
-  .event-card img,
-  .event-card-2 .event-image,
-  .event-card-3 .event-image {
-    height: auto;
+  .event-image {
+    height: 180px;
   }
 
-  /* Réduire encore plus la taille des textes sur les très petits écrans */
-  .event-card h4,
-  .event-card-2 h4,
+  .event-label {
+    font-size: 0.7rem;
+  }
+
+  .event-details h4 {
+    font-size: 1.2rem;
+  }
+
+  .event-details p,
+  .event-details .lieu {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .event-card-3 {
+    width: 100%;
+    margin: 10px 0;
+  }
+
+  .event-image {
+    // height: auto;
+  }
+
+  .event-details h4 {
+    font-size: 1.1rem;
+  }
+
+  .event-details p,
+  .event-details .lieu {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .event-card-3 {
+    width: 100%;
+  }
+
+  .event-details h4 {
+    font-size: 1rem;
+  }
+
+  .event-details p {
+    font-size: 0.7rem;
+  }
+
+  .event-details .lieu {
+    font-size: 0.7rem;
+  }
+}
+
+
+/* Responsive adjustments for event-card-3 */
+@media (max-width: 1024px) {
+  .event-card-3 {
+    width: 280px;
+    // height: auto;
+  }
+
+  .event-card-3 .event-image-container .event-image {
+    height: 180px;
+  }
+
   .event-card-3 h4 {
-    font-size: 0.9em;
+    font-size: 1.2rem;
   }
 
-  .event-card p,
-  .event-card-2 p,
   .event-card-3 p {
-    font-size: 0.7em;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .event-card-3 {
+    width: 100%;
+    margin: 10px 0;
   }
 
-  .event-card-3 .event-details h4 {
-    font-size: 1em;
+  .event-card-3 .event-image-container .event-image {
+    // height: auto;
   }
 
-  .event-card-3 .event-details p {
-    font-size: 0.6em;
+  .event-card-3 h4 {
+    font-size: 1.1rem;
   }
 
-  .price {
-    font-size: 0.7em;
+  .event-card-3 p {
+    font-size: 0.8rem;
   }
 }

@@ -27,8 +27,11 @@ export class LoginComponent {
         console.log('Réponse reçue du serveur', response); // Voir la réponse complète du serveur
         if (response.token) {
           localStorage.setItem('jwt_token', response.token); // Assurez-vous que le token est bien sauvegardé
-          this.router.navigate(['/events']); // Redirection après la connexion
-          window.location.reload(); // Recharge la page après la redirection
+          this.router.navigate(['/']).then(() => {
+            console.log('Redirection réussie vers /events');
+          }).catch(err => {
+            console.error('Erreur lors de la redirection:', err);
+          });
         } else {
           console.error('Aucun token trouvé dans la réponse');
         }
@@ -38,6 +41,4 @@ export class LoginComponent {
       }
     );
   }
-
-
 }

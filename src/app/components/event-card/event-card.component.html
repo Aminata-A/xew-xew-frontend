@@ -7,25 +7,23 @@
 
   <div *ngSwitchCase="2" class="event-card-2">
     <div class="card-title">
-      <img [src]=" getOrganizerName(event.organizer_id)" alt="photo de profile" />
-      <h4>{{  getOrganizerName(event.organizer_id) }}</h4>
+      <img [src]="getOrganizerName(event.organizer_id)" alt="photo de profile" />
+      <h4>{{ getOrganizerName(event.organizer_id) }}</h4>
     </div>
     <img [src]="event.banner" alt="image-event" class="event-image" />
     <h6>{{ event.name }}</h6>
     <p class="event-card-2-date">{{ event.location }} . {{ event.time }}.</p>
-    <p class="price">{{event.ticket_price === 0 ? 'Gratuit' : (event.ticket_price | currency:'XOF') }}
-    </p>
+    <p class="price">{{ event.ticket_price === 0 ? 'Gratuit' : (event.ticket_price | currency:'XOF') }}</p>
   </div>
 
   <div *ngSwitchCase="3" class="event-card-3">
     <div class="event-image-container">
-      <img [src]="event.banner" alt="image-event" class="event-image">
-      <span class="event-label">{{event.ticket_price === 0 ? 'Gratuit' : (event.ticket_price | currency:'XOF') }}
-      </span>
+      <img [src]="event.banner" alt="image-event" class="event-image" />
+      <span class="event-label">{{ event.ticket_price === 0 ? 'Gratuit' : (event.ticket_price | currency:'XOF') }}</span>
       <div class="event-details">
-        <h4>{{event.name}}</h4>
-        <p>{{ getOrganizerName(event.organizer_id)}}</p>
-        <p class="lieu">{{event.location}} . {{event.time}}.</p>
+        <h4>{{ event.name }}</h4>
+        <p>{{ getOrganizerName(event.organizer_id) }}</p>
+        <p class="lieu">{{ event.location }} . {{ event.time }}.</p>
       </div>
     </div>
   </div>

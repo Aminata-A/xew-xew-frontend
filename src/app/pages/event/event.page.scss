@@ -23,7 +23,7 @@
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
+  // overflow-y: auto;
 }
 
 .event-page-container {
@@ -33,6 +33,7 @@
   overflow-y: auto;
 }
 
+/* Navigation des catégories */
 .category-nav {
   display: flex;
   justify-content: center;
@@ -44,18 +45,11 @@
 }
 
 .category-list {
-  width: 100%;
-  overflow-x: scroll;
+  display: flex;
+  gap: 20px;
   justify-content: center;
   align-items: center;
   list-style: none;
-  display: flex;
-  gap: 20px;
-  &::-webkit-scrollbar {
-    width: 0px;
-    height: 0px;
-    background: transparent; /* make scrollbar transparent */
-  }
 }
 
 .category-list li a {
@@ -71,40 +65,33 @@
   color: #FF773D;
 }
 
-/* Section événements à la une - slider pour mobile */
-.event-list-slider {
-  overflow-x: auto;
-  display: flex;
-  gap: 20px;
-  scroll-snap-type: x mandatory;
-}
-
-.event-card-slider {
-  display: flex;
-  gap: 20px;
-  scroll-snap-align: start;
-}
-
-/* Mobile: Afficher une seule carte à la une, slider activé */
-@media (max-width: 768px) {
-  .event-list-slider {
-    display: flex;
-    overflow-x: scroll;
-    gap: 10px;
-  }
-  .event-card {
-    width: 90vw;
-  }
-}
-
-/* Web: Afficher deux cartes par ligne */
+/* Event lists (grids) */
 .event-list {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
 }
 
-/* Tous les événements: limiter à deux événements et ajouter un bouton "Voir plus" */
+/* Mobile: Une seule colonne pour les événements */
+@media (max-width: 768px) {
+  .event-list {
+    grid-template-columns: 1fr; /* Une seule colonne pour mobile */
+  }
+
+  .event-card {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
+/* Ajustements pour grands écrans : 4 cartes par ligne */
+@media (min-width: 1024px) {
+  .event-list {
+    grid-template-columns: repeat(4, 1fr); /* 4 colonnes pour les grands écrans */
+  }
+}
+
+/* Bouton Voir plus */
 .see-more {
   display: block;
   margin: 20px auto;
@@ -120,9 +107,18 @@
   background-color: #e65c22;
 }
 
-/* Pour les grands écrans, ajuster à 4 cartes par ligne */
-@media (min-width: 1024px) {
-  .event-list {
-    grid-template-columns: repeat(4, 1fr);
+/* Responsive - Ajustements des cartes */
+@media (max-width: 480px) {
+  .event-card {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .category-list li a {
+    font-size: 1em; /* Réduction de la taille des catégories sur petit écran */
+  }
+
+  .event-page-container {
+    padding: 10px;
   }
 }

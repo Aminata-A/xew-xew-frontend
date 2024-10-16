@@ -52,6 +52,15 @@ export class AuthService {
     });
     return this.http.post(`${this.apiUrl}/auth/logout`, {}, { headers });
   }
+
+  getUserInfo() {
+    const token = localStorage.getItem('jwt_token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.get('http://127.0.0.1:8000/api/user-profile', { headers });
+  }
 }
 
 
