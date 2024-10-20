@@ -16,6 +16,19 @@
   min-height: auto;
   .content{
     width: 100%;
+
+    .form-content{
+      display: flex;
+      flex-direction: column;
+      overflow-y: scroll;
+      min-height: 100vh;
+      max-height: calc(100vh - 100px); /* Limite la hauteur pour autoriser le scroll si besoin */
+      &::-webkit-scrollbar {
+        width: 0px;
+        height: 0px;
+        background: transparent; /* make scrollbar transparent */
+      }
+    }
     .title{
       font-family: 'Cabinet Grotesk', sans-serif;
       font-size: 1.2em;
@@ -40,14 +53,6 @@
     justify-content: center;
     align-items: center;
     // padding: 20px;
-    overflow-y: scroll;
-    min-height: 100vh;
-    max-height: calc(100vh - 100px); /* Limite la hauteur pour autoriser le scroll si besoin */
-    &::-webkit-scrollbar {
-      width: 0px;
-      height: 0px;
-      background: transparent; /* make scrollbar transparent */
-    }
   }
 }
 

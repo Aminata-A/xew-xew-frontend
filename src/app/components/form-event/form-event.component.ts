@@ -87,32 +87,60 @@ export class FormEventComponent implements OnInit {
   }
 
   // Méthode pour soumettre le formulaire
-  onSubmit() {
-    if (this.eventForm.invalid) {
-      console.log('Formulaire invalide');
-      return;
+
+onSubmit() {
+      if (this.eventForm.invalid) {
+        console.log('Formulaire invalide');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('name', this.eventForm.get('name')?.value);
+      formData.append('date', this.eventForm.get('date')?.value);
+      formData.append('time', this.eventForm.get('time')?.value);
+      formData.append('location', this.eventForm.get('location')?.value);
+      formData.append('ticket_price', this.eventForm.get('ticket_price')?.value);
+      formData.append('ticket_quantity', this.eventForm.get('ticket_quantity')?.value);
+      formData.append('description', this.eventForm.get('description')?.value);
+
+      // Ajout du fichier banner
+      const bannerFile = this.eventForm.get('banner')?.value;
+      if (bannerFile) {
+        formData.append('banner', bannerFile);
+      }
+
+      // Ajout des catégories et wallets sélectionnés
+      formData.append('categories', JSON.stringify(this.selectedCategories));
+      formData.append('wallets', JSON.stringify(this.selectedWallets));
+
+      // Appel au service pour créer l'événement
+      this.eventService.createEvent(formData).subscribe({
+        next: (response) => {
+          console.log('Événement créé avec succès:', response);
+          this.router.navigate(['/events']).then(() => {
+            window.location.reload();
+          });
+        },
+        error: (error: HttpErrorResponse) => {
+          console.error('Erreur lors de la création de l\'événement:', error);
+          this.errorMessage = 'Une erreur est survenue lors de la création de l\'événement.';
+        }
+      });
     }
 
-    const formData = {
-      ...this.eventForm.value,
-      categories: this.selectedCategories,
-      wallets: this.selectedWallets
-    };
 
-    // Appel au service pour créer l'événement
-    this.eventService.createEvent(formData).subscribe({
-      next: (response) => {
-        console.log('Événement créé avec succès:', response);
-        this.router.navigate(['/events']).then(() => {
-          window.location.reload();
+    onBannerUpload(event: any) {
+      const file = event.target.files[0];
+      if (file) {
+        console.log('Fichier sélectionné :', file);  // Ajoute un log pour vérifier que le fichier est bien sélectionné
+        this.eventForm.patchValue({
+          banner: file
         });
-      },
-      error: (error: HttpErrorResponse) => {
-        console.error('Erreur lors de la création de l\'événement:', error);
-        this.errorMessage = 'Une erreur est survenue lors de la création de l\'événement.';
+        this.eventForm.get('banner')?.updateValueAndValidity();
       }
-    })
-  }
+    }
+
+
 
   nextStep() {
     this.currentStep++;

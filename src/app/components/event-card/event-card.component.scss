@@ -11,9 +11,10 @@
 
   img {
     width: 100%;
-    height: 100%;
+    // height: 100%;
     object-fit: cover;
     border-radius: 15px;
+    z-index: -1;
   }
 
   h4 {
@@ -232,12 +233,15 @@
 }
 
 .event-details {
+  width: 80%;
   padding: 15px;
-  background-color: white;
-  border-radius: 0 0 12px 12px;
-  text-align: center;
+  background-color: #ffffffc4;
+  border-radius: 12px;
+  // text-align: center;
   position: absolute;
   bottom: 2em;
+  right: 1.2em;
+
 }
 
 .event-details h4 {
@@ -330,6 +334,7 @@
 
   .event-card-3 .event-image-container .event-image {
     height: 180px;
+    height: 25em;
   }
 
   .event-card-3 h4 {
@@ -346,7 +351,9 @@
     width: 100%;
     margin: 10px 0;
   }
-
+  .event-image {
+    width: 100%;
+  }
   .event-card-3 .event-image-container .event-image {
     // height: auto;
   }

@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { AuthService } from './../../services/auth.service';
-import { Router, RouterLink } from '@angular/router'; // Ajout de la dépendance Router pour la navigation
-Router
+import { Router } from '@angular/router'; // Ajout de la dépendance Router pour la navigation
+
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -19,7 +19,7 @@ export class RegisterComponent {
     password_confirmation: '',
     phone: '',
     role: '',
-    photo: '',
+    photo: ''  // URL pour la photo de profil
   };
 
   verificationCode: string = '';
@@ -36,14 +36,25 @@ export class RegisterComponent {
 
   constructor(private authService: AuthService, private router: Router) {}
 
-  sendVerificationEmail() {
-    console.log('Envoi de l\'email de vérification à : ', this.formData.email);
+  // Envoyer le code de vérification email
+  sendVerificationEmail(form: NgForm) {
+    if (!form.valid) {
+      this.errorMessage = 'Veuillez entrer un email valide.';
+      return;
+    }
+
     this.authService.verifyEmail(this.formData.email).subscribe(
       (response) => {
-        console.log('Réponse de l\'API pour l\'envoi du code de vérification : ', response);
         if (response.exists) {
-          this.emailExists = true;
-          this.errorMessage = 'Cet email est déjà associé à un compte.';
+          if (response.type === 'registered') {
+            // L'utilisateur est déjà enregistré (registered)
+            this.emailExists = true;
+            this.errorMessage = 'Cet email est déjà associé à un compte enregistré. Voulez-vous vous connecter ?';
+          } else {
+            // L'utilisateur n'est pas enregistré (peut être un utilisateur anonyme)
+            this.emailExists = true;
+            this.errorMessage = 'Cet email est déjà associé à un autre compte. Veuillez contacter le support.';
+          }
         } else {
           this.emailSent = true;
           this.errorMessage = '';
@@ -51,39 +62,42 @@ export class RegisterComponent {
         }
       },
       (error) => {
-        console.error('Erreur lors de l\'envoi du code de vérification', error);
         this.errorMessage = 'Erreur lors de l\'envoi du code de vérification.';
       }
     );
   }
 
+
+  // Démarrer le compte à rebours
   startCountdown() {
     this.timer = setInterval(() => {
       this.countdown--;
-
       this.countdownMinutes = Math.floor(this.countdown / 60);
       this.countdownSeconds = this.countdown % 60;
 
       if (this.countdown <= 0) {
         clearInterval(this.timer);
-        console.log('Temps écoulé pour la vérification du code.');
         this.errorMessage = 'Le temps pour entrer le code a expiré.';
       }
     }, 1000);
   }
 
+  // Rediriger vers la page de connexion
   navigateToLogin() {
     this.router.navigate(['/login']);
   }
 
-  verifyCode() {
-    console.log('Vérification du code : ', this.verificationCode);
+  // Vérifier le code de vérification email
+  verifyCode(form: NgForm) {
+    if (!form.valid) {
+      this.errorMessage = 'Veuillez entrer le code de vérification.';
+      return;
+    }
+
     if (this.countdown > 0) {
       this.authService.verifyCode(this.formData.email, this.verificationCode).subscribe(
         (response) => {
-          console.log('Réponse de l\'API lors de la vérification du code : ', response);
           if (response.message === 'Code verified successfully') {
-            console.log('Code vérifié avec succès');
             this.emailVerified = true;
             this.token = response.token;
             this.errorMessage = '';
@@ -92,7 +106,6 @@ export class RegisterComponent {
           }
         },
         (error) => {
-          console.error('Erreur lors de la vérification du code', error);
           this.errorMessage = 'Erreur lors de la vérification du code.';
         }
       );
@@ -101,10 +114,9 @@ export class RegisterComponent {
     }
   }
 
-
-  submitAdditionalInfo() {
-    console.log('Soumission des infos supplémentaires : ', this.formData);
-    if (!this.formData.name || !this.formData.phone || !this.formData.role) {
+  // Soumettre les informations supplémentaires (nom, téléphone, rôle, photo)
+  submitAdditionalInfo(form: NgForm) {
+    if (!form.valid) {
       this.errorMessage = 'Veuillez remplir tous les champs obligatoires.';
       return;
     }
@@ -112,8 +124,13 @@ export class RegisterComponent {
     this.additionalInfoProvided = true;
   }
 
-  register() {
-    console.log('Soumission du formulaire d\'inscription : ', this.formData);
+  // Soumettre le formulaire d'inscription avec le mot de passe
+  register(form: NgForm) {
+    if (!form.valid) {
+      this.errorMessage = 'Veuillez remplir tous les champs et confirmer le mot de passe.';
+      return;
+    }
+
     if (this.formData.password !== this.formData.password_confirmation) {
       this.errorMessage = 'Les mots de passe ne correspondent pas.';
       return;
@@ -121,20 +138,11 @@ export class RegisterComponent {
 
     this.authService.register(this.formData, this.token).subscribe(
       (response) => {
-        console.log('Inscription réussie', response);
         this.router.navigate(['/login']);  // Redirection vers la page de connexion
       },
       (error) => {
-        console.error('Erreur lors de l\'inscription', error);
         this.errorMessage = 'Erreur d\'inscription, veuillez vérifier les données fournies.';
       }
     );
-  }
-
-  onFileSelected(event: any) {
-    const file: File = event.target.files[0];
-    if (file) {
-      console.log('Fichier sélectionné :', file);
-    }
   }
 }

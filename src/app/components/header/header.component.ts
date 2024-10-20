@@ -22,28 +22,47 @@ export class HeaderComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
-    this.token = localStorage.getItem('authToken') || ''; // Récupérer le token depuis le stockage local (ou autre)
+    this.token = localStorage.getItem('authToken') || ''; // Récupérer le token
     if (this.token) {
-      this.isAuthenticated = true;
-      this.getUserProfile();
+      this.isAuthenticated = true; // Marquer comme authentifié si le token existe
+      this.getUserProfile(); // Récupérer le profil utilisateur
+    } else {
+      this.isAuthenticated = false; // Si pas de token, pas authentifié
     }
   }
 
-  // Récupérer le profil de l'utilisateur connecté
   getUserProfile() {
     this.authService.getUserProfile(this.token).subscribe(
       (profile: Register) => {
         this.user = profile; // Stocker les informations de l'utilisateur
-        // Mettre à jour l'image de profil s'il y a une image dans les données utilisateur
+        this.isAuthenticated = true; // Mettre à jour l'état après récupération du profil
         if (this.user.photo) {
-          this.profileImage = this.user.photo;
+          this.profileImage = this.user.photo; // Mettre à jour l'image de profil
         }
       },
       (error) => {
         console.error('Erreur lors de la récupération du profil utilisateur :', error);
+        this.isAuthenticated = false; // En cas d'erreur, marquer comme non authentifié
       }
     );
   }
+
+
+  // Récupérer le profil de l'utilisateur connecté
+  // getUserProfile() {
+  //   this.authService.getUserProfile(this.token).subscribe(
+  //     (profile: Register) => {
+  //       this.user = profile; // Stocker les informations de l'utilisateur
+  //       // Mettre à jour l'image de profil s'il y a une image dans les données utilisateur
+  //       if (this.user.photo) {
+  //         this.profileImage = this.user.photo;
+  //       }
+  //     },
+  //     (error) => {
+  //       console.error('Erreur lors de la récupération du profil utilisateur :', error);
+  //     }
+  //   );
+  // }
 
   // Afficher ou masquer le menu du profil
   toggleProfileMenu() {

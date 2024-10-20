@@ -56,9 +56,15 @@ export class EventService {
     });
     return this.http.get<any[]>(`${baseURL}/events/my-events`, { headers });
   }
-   // Method to fetch events based on categories
-   getEventsByCategories(categoryIds: number[]): Observable<any> {
-    return this.http.post(`${baseURL}/events/similar`, { categories: categoryIds });
+  // fonction pour recuperer les evenements d'une catégorie
+  getEventsByCategory(categoryId: number): Observable<Event[]> {
+    return this.http.get<Event[]>(`${baseURL}/events?category=${categoryId}`);
+  }
+
+  // fonction pour recuperer les evenements d'une catForSegue
+  getEventsByCategories(categoryIds: number[]): Observable<Event[]> {
+    const params = categoryIds.map(id => `category=${id}`).join('&');
+    return this.http.get<Event[]>(`${baseURL}/events?${params}`);
   }
 
 }

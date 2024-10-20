@@ -3,14 +3,42 @@
   <form (ngSubmit)="login()">
     <div class="input-group">
       <label for="email">Email:</label>
-      <input id="email" type="email" [(ngModel)]="loginData.email" name="email" placeholder="Entrez votre email" required />
+      <input
+        id="email"
+        type="email"
+        [(ngModel)]="loginData.email"
+        name="email"
+        placeholder="Entrez votre email"
+        required
+        #email="ngModel" />
+      <div *ngIf="email.invalid && email.touched" class="error-message">
+        Veuillez entrer un email valide.
+      </div>
     </div>
 
     <div class="input-group">
       <label for="password">Mot de passe:</label>
-      <input id="password" type="password" [(ngModel)]="loginData.password" name="password" placeholder="Entrez votre mot de passe" required />
+      <input
+        id="password"
+        type="password"
+        [(ngModel)]="loginData.password"
+        name="password"
+        placeholder="Entrez votre mot de passe"
+        required
+        #password="ngModel" />
+      <div *ngIf="password.invalid && password.touched" class="error-message">
+        Le mot de passe est requis.
+      </div>
+    </div>
+
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
     </div>
 
     <button type="submit" class="submit-btn">Se connecter</button>
   </form>
+
+  <div class="register-link">
+    Pas encore de compte ? <a [href]="['/register']">S'inscrire</a>
+  </div>
 </div>

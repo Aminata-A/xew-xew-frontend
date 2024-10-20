@@ -1,18 +1,16 @@
 .event-page {
   display: flex;
+  flex-direction: row;
   height: 100vh;
   color: #1b1b1b;
   font-family: 'cabinet-grotesk', sans-serif;
 }
 
-.sidebar {
-  width: 80px;
-  background-color: #333;
-  height: 100vh;
-  flex-shrink: 0;
-}
+// /* Sidebar : Masquer sur les petits écrans */
+// .sidebar {
+// display: block;
+// }
 
-/* Cacher la sidebar sur les petits écrans */
 @media (max-width: 768px) {
   .sidebar {
     display: none;
@@ -23,7 +21,6 @@
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  // overflow-y: auto;
 }
 
 .event-page-container {
@@ -31,6 +28,12 @@
   flex-grow: 1;
   background-color: #fff;
   overflow-y: auto;
+  max-height: calc(100vh - 100px); /* Limiter la hauteur pour autoriser le défilement */
+  &::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+    background: transparent; /* rendre la barre de défilement transparente */
+  }
 }
 
 /* Navigation des catégories */
@@ -46,6 +49,7 @@
 
 .category-list {
   display: flex;
+  flex-wrap: wrap; /* Permet d’afficher les catégories sur plusieurs lignes si nécessaire */
   gap: 20px;
   justify-content: center;
   align-items: center;
@@ -68,12 +72,15 @@
 /* Event lists (grids) */
 .event-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* S’adapte automatiquement à l'écran */
   gap: 20px;
 }
 
 /* Mobile: Une seule colonne pour les événements */
 @media (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
   .event-list {
     grid-template-columns: 1fr; /* Une seule colonne pour mobile */
   }
@@ -84,8 +91,11 @@
   }
 }
 
-/* Ajustements pour grands écrans : 4 cartes par ligne */
+/* Grands écrans : 4 colonnes par ligne */
 @media (min-width: 1024px) {
+  .sidebar {
+    display: none;
+  }
   .event-list {
     grid-template-columns: repeat(4, 1fr); /* 4 colonnes pour les grands écrans */
   }
@@ -107,8 +117,11 @@
   background-color: #e65c22;
 }
 
-/* Responsive - Ajustements des cartes */
+/* Ajustements pour les cartes d'événement sur petit écran */
 @media (max-width: 480px) {
+  .sidebar {
+    display: none;
+  }
   .event-card {
     width: 100%;
     margin-bottom: 10px;

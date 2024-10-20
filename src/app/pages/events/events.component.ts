@@ -7,15 +7,14 @@ import { EventService } from 'src/app/services/event.service';
 import { Event } from 'src/app/services/interfaces';
 import { NgFor } from '@angular/common';
 import { HeaderComponent } from 'src/app/components/header/header.component';
-
 @Component({
-  selector: 'app-event',
-  templateUrl: './event.page.html',
-  styleUrls: ['./event.page.scss'],
+  selector: 'app-events',
+  templateUrl: './events.component.html',
+  styleUrls: ['./events.component.scss'],
   standalone: true,
   imports: [SidebarComponent, EventCardComponent, CategoryComponent, NgFor, HeaderComponent],
 })
-export class EventPage implements OnInit {
+export class EventsComponent  implements OnInit {
   featuredEvents: Event[] = [];  // À la une
   newEvents: Event[] = [];       // Nouveaux événements
   allEvents: Event[] = [];       // Tous les événements
@@ -109,6 +108,5 @@ export class EventPage implements OnInit {
       );
     }
   }
-
 
 }

@@ -23,6 +23,12 @@ $font-family: 'cabinet-grotesk', sans-serif;
   box-sizing: border-box;
 }
 
+.error-message {
+  color: red;
+  font-size: 0.9em;
+  margin-top: 5px;
+}
+
 /* Form styles */
 form {
   display: flex;

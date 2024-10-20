@@ -36,6 +36,7 @@ export class EventCardComponent implements OnInit {
 
   getOrganizerName(organizerId: number): string {
     const organizer = this.events.find((org) => org.organizer_id === organizerId);
+    console.log(organizer);
     return organizer ? organizer.name : 'Inconnu';
   }
 

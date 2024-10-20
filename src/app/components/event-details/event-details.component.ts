@@ -2,7 +2,7 @@ import { ModalController, IonicModule } from '@ionic/angular';
 import { CommonModule, NgIf } from '@angular/common';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Event } from 'src/app/services/interfaces';
+import { Category, Event } from 'src/app/services/interfaces';
 import { EventService } from 'src/app/services/event.service';
 import { HttpClient } from '@angular/common/http';
 import { PurchaseModalComponent } from '../purchase-modal/purchase-modal.component';
@@ -32,6 +32,11 @@ export class EventDetailsComponent implements OnInit {
   public currentPageNumber: number = 0;
   public paymentUrl: string | null = null;
 
+  // Initialiser le constructeur
+  // Injecter les services
+  // Initialiser les variables
+  // Charger les données
+
   constructor(
     private route: ActivatedRoute,
     private modalController: ModalController,
@@ -40,6 +45,7 @@ export class EventDetailsComponent implements OnInit {
     private router: Router
   ) {}
 
+  // Charger les données
   ngOnInit() {
     const eventId = this.route.snapshot.paramMap.get('id');
     this.pageWidth = window.innerWidth;
@@ -142,11 +148,6 @@ export class EventDetailsComponent implements OnInit {
   purchaseTicket() {
     const token = localStorage.getItem('jwt_token');
 
-    if (!token) {
-      console.error('Token JWT non disponible');
-      alert('Vous devez être connecté pour acheter un billet.');
-      return;
-    }
 
     const ticketData = {
       event_id: this.event.id,
@@ -185,6 +186,7 @@ export class EventDetailsComponent implements OnInit {
   }
 
   close() {
-    this.modalController.dismiss();
+    console.log('Fermeture du modal');
+    this.modalController.dismiss(); // Assurez-vous que cette ligne est appelée
   }
 }

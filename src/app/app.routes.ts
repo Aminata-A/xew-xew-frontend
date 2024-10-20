@@ -39,5 +39,9 @@ export const routes: Routes = [
   {
     path: 'my-events',
     loadComponent: () => import('./components/my-events/my-events.component').then( m => m.MyEventsComponent)
+  },
+  {
+    path: 'event',
+    loadComponent: () => import('./pages/events/events.component').then( m => m.EventsComponent)
   }
 ];

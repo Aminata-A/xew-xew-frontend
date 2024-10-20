@@ -1,4 +1,3 @@
-/* CSS pour l'en-tête de la page */
 header {
   display: flex;
   justify-content: space-between;
@@ -6,11 +5,10 @@ header {
   padding: 7px 20px;
   background-color: #ffffff;
   border-bottom: 1px solid #eaeaea;
-  // width: 100%;
-  // position: relative; /* Pour permettre un placement flexible */
 }
-.logo{
-  display: none;
+
+.logo {
+  display: none; /* Masquer le logo par défaut (sera visible sur mobile) */
 }
 
 h1 {
@@ -42,6 +40,7 @@ input[type="text"] {
   width: 40px;
   object-fit: cover;
 }
+
 .profile-menu {
   position: absolute;
   top: 60px;
@@ -87,14 +86,11 @@ input[type="text"] {
   .logo {
     display: block; /* Afficher le logo de la plateforme */
     width: 50px;
-    // height: 35px;
   }
   .search-bar {
     width: auto;
-    .search {
-      display: none; /* Cacher la barre de recherche sur mobile */
-    }
   }
-
-
+  .search {
+    display: none; /* Cacher la barre de recherche sur mobile */
+  }
 }
