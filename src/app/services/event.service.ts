@@ -32,20 +32,22 @@ export class EventService {
 
   createEvent(eventData: FormData): Observable<any> {
     const headers = this.getAuthHeaders();
-    return this.http.post(`${baseURL}/events`, eventData, { headers });
+    return this.http.post<Event>(`${baseURL}/events`, eventData, { headers });
   }
 
-
-  updateEvent(event: Event): Observable<any> {
-    const token = localStorage.getItem('token');
+  updateEvent(eventId: number, eventData: FormData): Observable<any> {
+    const token = localStorage.getItem('jwt_token');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
-    return this.http.put(`${baseURL}/events/${event.id}`, event, { headers });
+
+    // Utilisation correcte de `eventData` et non `FormData`
+    return this.http.put(`${baseURL}/events/${eventId}`, eventData, { headers });
   }
 
+
   getOrganizers(): Observable<any[]> {
-    return this.http.get<any[]>(`${baseURL}/users?role=organizer`);
+    return this.http.get<any[]>(`${baseURL}/users`);
   }
 
   // Fonction pour récupérer les événements de l'utilisateur connecté
@@ -65,6 +67,11 @@ export class EventService {
   getEventsByCategories(categoryIds: number[]): Observable<Event[]> {
     const params = categoryIds.map(id => `category=${id}`).join('&');
     return this.http.get<Event[]>(`${baseURL}/events?${params}`);
+  }
+
+  deleteEvent(id: number): Observable<any> {
+    const headers = this.getAuthHeaders();
+    return this.http.delete(`${baseURL}/events/${id}`, { headers });
   }
 
 }

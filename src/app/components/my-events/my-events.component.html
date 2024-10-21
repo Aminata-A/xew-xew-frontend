@@ -4,7 +4,6 @@
     <app-header class="header"></app-header>
 
     <div class="content">
-
       <div class="title">
         <h2>Mes Événements</h2>
         <p>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.</p>
@@ -20,7 +19,20 @@
         <!-- Section pour les événements à venir -->
         <h3>Événements à venir</h3>
         <div *ngIf="upcomingEvents.length > 0; else noUpcomingEvents" class="events-list">
-          <app-event-card *ngFor="let event of upcomingEvents" [event]="event" [variant]="2"></app-event-card>
+          <div *ngFor="let event of upcomingEvents" class="event-item">
+
+            
+
+            <app-event-card [event]="event" [variant]="2"></app-event-card>
+
+            <!-- Affichage des icônes Modifier et Supprimer si l'utilisateur est l'organisateur -->
+              <button (click)="onEditEvent(event.id)" class="edit-btn">
+                <i class="fas fa-edit"></i> Modifier
+              </button>
+              <button (click)="onDeleteEvent(event.id)" class="delete-btn">
+                <i class="fas fa-trash-alt"></i> Supprimer
+              </button>
+          </div>
         </div>
 
         <ng-template #noUpcomingEvents>
@@ -30,13 +42,22 @@
         <!-- Section pour les événements passés -->
         <h3>Événements passés</h3>
         <div *ngIf="pastEvents.length > 0; else noPastEvents" class="events-list">
-          <app-event-card *ngFor="let event of pastEvents" [event]="event" [variant]="2"></app-event-card>
+          <div *ngFor="let event of pastEvents" class="event-item">
+            <app-event-card [event]="event" [variant]="2"></app-event-card>
+
+            <!-- Affichage des icônes Modifier et Supprimer si l'utilisateur est l'organisateur -->
+              <button (click)="onEditEvent(event.id)" class="edit-btn">
+                <i class="fas fa-edit"></i> Modifier
+              </button>
+              <button (click)="onDeleteEvent(event.id)" class="delete-btn">
+                <i class="fas fa-trash-alt"></i> Supprimer
+              </button>
+          </div>
         </div>
 
         <ng-template #noPastEvents>
           <p class="no-events-message">Aucun événement passé.</p>
         </ng-template>
-
       </div>
     </div>
   </div>

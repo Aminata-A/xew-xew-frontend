@@ -1,0 +1,96 @@
+<div class="container">
+  <app-sidebar class="sidebar"></app-sidebar>
+
+  <div class="content">
+    <app-header></app-header>
+
+    <!-- Formulaire pour la modification d'évènement -->
+    <div class="form-content">
+      <div class="title">
+        <h2>Modifier l'événement</h2>
+        <p>Modifiez les détails de l'événement ici.</p>
+      </div>
+      <form [formGroup]="eventForm" (ngSubmit)="onUpdate()" enctype="multipart/form-data">
+        <div class="event-edit-page">
+
+          <!-- Step 1: Catégories & Portefeuilles -->
+          <div *ngIf="currentStep === 1" class="step step-1">
+            <div class="form-group">
+              <label for="bannerUpload">Modifier votre affiche</label>
+              <input id="bannerUpload" type="file" (change)="onBannerUpload($event)" />
+            </div>
+
+            <div class="form-group">
+              <label for="name">Nom de l'évènement</label>
+              <input type="text" formControlName="name" placeholder="Nom event" />
+            </div>
+
+            <div class="form-group">
+              <label for="date">Date</label>
+              <input type="date" formControlName="date" />
+            </div>
+
+            <div class="form-group">
+              <label for="time">Heure</label>
+              <input type="time" formControlName="time" />
+            </div>
+
+            <button type="button" (click)="nextStep()">Suivant</button>
+          </div>
+
+          <!-- Step 2: Détails de l'événement -->
+          <div *ngIf="currentStep === 2" class="step step-2">
+            <div class="form-group">
+              <label for="location">Lieu</label>
+              <input type="text" formControlName="location" placeholder="Lieu" />
+            </div>
+
+            <div class="form-group">
+              <label for="ticket_price">Prix</label>
+              <input type="number" formControlName="ticket_price" placeholder="Prix" />
+            </div>
+
+            <div class="form-group">
+              <label for="ticket_quantity">Nombre de places</label>
+              <input type="number" formControlName="ticket_quantity" placeholder="Nombre de places" />
+            </div>
+
+            <div class="form-group">
+              <label for="description">Description</label>
+              <textarea formControlName="description" placeholder="Description"></textarea>
+            </div>
+
+            <button type="button" (click)="previousStep()">Retour</button>
+            <button type="button" (click)="nextStep()">Suivant</button>
+          </div>
+
+          <!-- Step 3: Image et autres détails -->
+          <div *ngIf="currentStep === 3" class="step step-3">
+            <div class="form-group">
+              <label for="categories">Catégorie</label>
+              <div class="categories-checkboxes">
+                <div *ngFor="let category of categories">
+                  <input type="checkbox" [checked]="isSelectedCategory(category.id)" (change)="onCategoryChange($event, category.id)" />
+                  <label>{{ category.label }}</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="wallets">Choisissez vos portefeuilles</label>
+              <div class="wallets-checkboxes">
+                <div *ngFor="let wallet of wallets">
+                  <input type="checkbox" [checked]="isSelectedWallet(wallet.id)" (change)="onWalletChange($event, wallet.id)" />
+                  <label>{{ wallet.name }}</label>
+                </div>
+              </div>
+            </div>
+
+            <button type="submit">Mettre à jour</button>
+            <button type="button" (click)="previousStep()">Retour</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

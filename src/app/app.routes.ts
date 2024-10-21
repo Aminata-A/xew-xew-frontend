@@ -16,7 +16,7 @@ export const routes: Routes = [
   { path: 'event-details/:id', component: EventDetailsComponent },
   {path: 'login', loadComponent: () => import('./components/login/login.component').then(m => m.LoginComponent)},
   {path: 'register', loadComponent: () => import('./components/register/register.component').then(m => m.RegisterComponent)},
-  {path: 'ticket-card', loadComponent: () => import('./components/ticket-card/ticket-card.component').then(m => m.TicketCardComponent)},
+  // {path: 'ticket-card', loadComponent: () => import('./components/ticket-card/ticket-card.component').then(m => m.TicketCardComponent)},
   {path: 'transaction', loadComponent: () => import('./components/transaction/transaction.component').then(m => m.TransactionComponent)},
   {path: 'header', loadComponent: () => import('./components/header/header.component').then(m => m.HeaderComponent)},
   // {path: 'footer', loadComponent: () => import('./components/footer/footer.component').then(m => m.FooterComponent)},
@@ -24,6 +24,7 @@ export const routes: Routes = [
   {path: 'event-details', loadComponent: () => import('./components/event-details/event-details.component').then(m => m.EventDetailsComponent)},
   {path: 'profile', loadComponent: () => import('./components/profile/profile.component').then(m => m.ProfileComponent)},
   {path: 'tickets', loadComponent: () => import('./components/tickets/tickets.component').then(m => m.TicketsComponent)},
+  {path: 'tickets/:id', loadComponent: () => import('./components/ticket-details/ticket-details.component').then(m => m.TicketDetailsComponent)},
   {path: 'wallet-create', loadComponent: () => import('./components/wallet-create/wallet-create.component').then(m => m.WalletCreateComponent)},
   {path: 'category', loadComponent: () => import('./components/category/category.component').then(m => m.CategoryComponent)},
   {path: 'form-event', loadComponent: () => import('./components/form-event/form-event.component').then(m => m.FormEventComponent)},
@@ -43,5 +44,13 @@ export const routes: Routes = [
   {
     path: 'event',
     loadComponent: () => import('./pages/events/events.component').then( m => m.EventsComponent)
+  },
+  {
+    path: 'form-event-edit:id',
+    loadComponent: () => import('./components/form-event-edit/form-event-edit.component').then( m => m.FormEventEditComponent)
+  },
+  {
+    path: 'ticket-details\:id',
+    loadComponent: () => import('./components/ticket-details/ticket-details.component').then( m => m.TicketDetailsComponent)
   }
 ];

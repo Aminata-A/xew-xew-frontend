@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { TicketCardComponent } from './ticket-card.component';
+import { FormEventEditComponent } from './form-event-edit.component';
 
-describe('TicketCardComponent', () => {
-  let component: TicketCardComponent;
-  let fixture: ComponentFixture<TicketCardComponent>;
+describe('FormEventEditComponent', () => {
+  let component: FormEventEditComponent;
+  let fixture: ComponentFixture<FormEventEditComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ TicketCardComponent ],
+      declarations: [ FormEventEditComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(TicketCardComponent);
+    fixture = TestBed.createComponent(FormEventEditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

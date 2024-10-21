@@ -1,137 +1,90 @@
-.event-page {
-  display: flex;
-  flex-direction: row;
-  height: 100vh;
-  color: #1b1b1b;
+:host {
   font-family: 'cabinet-grotesk', sans-serif;
-}
+  margin: 0;
+  padding: 0;
+  color: #1b1b1b;
+  font-size: 1em;
+  min-height: 100vh;
+  background-color: #f9f9f9;
 
-// /* Sidebar : Masquer sur les petits écrans */
-// .sidebar {
-// display: block;
-// }
-
-@media (max-width: 768px) {
-  .sidebar {
-    display: none;
-  }
-}
-
-.main-content {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.event-page-container {
-  padding: 20px;
-  flex-grow: 1;
-  background-color: #fff;
-  overflow-y: auto;
-  max-height: calc(100vh - 100px); /* Limiter la hauteur pour autoriser le défilement */
-  &::-webkit-scrollbar {
-    width: 0px;
-    height: 0px;
-    background: transparent; /* rendre la barre de défilement transparente */
-  }
-}
-
-/* Navigation des catégories */
-.category-nav {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #fff;
-  padding: 20px 0;
-  border-bottom: 1px solid #eee;
-  width: 100%;
-}
-
-.category-list {
-  display: flex;
-  flex-wrap: wrap; /* Permet d’afficher les catégories sur plusieurs lignes si nécessaire */
-  gap: 20px;
-  justify-content: center;
-  align-items: center;
-  list-style: none;
-}
-
-.category-list li a {
-  text-align: center;
-  text-decoration: none;
-  color: #333;
-  font-size: 1.2em;
-  font-weight: 600;
-  transition: color 0.3s ease;
-}
-
-.category-list li a:hover {
-  color: #FF773D;
-}
-
-/* Event lists (grids) */
-.event-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* S’adapte automatiquement à l'écran */
-  gap: 20px;
-}
-
-/* Mobile: Une seule colonne pour les événements */
-@media (max-width: 768px) {
-  .sidebar {
-    display: none;
-  }
-  .event-list {
-    grid-template-columns: 1fr; /* Une seule colonne pour mobile */
-  }
-
-  .event-card {
+  .event-page {
     width: 100%;
-    margin-bottom: 10px;
-  }
-}
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    color: #1b1b1b;
+    font-family: 'cabinet-grotesk', sans-serif;
+    background-color: #fff;
 
-/* Grands écrans : 4 colonnes par ligne */
-@media (min-width: 1024px) {
-  .sidebar {
-    display: none;
-  }
-  .event-list {
-    grid-template-columns: repeat(4, 1fr); /* 4 colonnes pour les grands écrans */
-  }
-}
+    .main-content {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      max-height: 100vh;
+      overflow: auto; /* Permet le défilement */
 
-/* Bouton Voir plus */
-.see-more {
-  display: block;
-  margin: 20px auto;
-  background-color: #FF773D;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
+      &::-webkit-scrollbar {
+        width: 0px;
+        height: 0px;
+        background: transparent; /* rendre la barre de défilement transparente */
+      }
 
-.see-more:hover {
-  background-color: #e65c22;
-}
+      /* Navigation des catégories */
+      .category-nav {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #fff;
+        padding: 20px 0;
+        border-bottom: 1px solid #eee;
+        width: 100%;
 
-/* Ajustements pour les cartes d'événement sur petit écran */
-@media (max-width: 480px) {
-  .sidebar {
-    display: none;
-  }
-  .event-card {
-    width: 100%;
-    margin-bottom: 10px;
-  }
+        .category-list {
+          display: flex;
+          flex-wrap: wrap; /* Permet d’afficher les catégories sur plusieurs lignes si nécessaire */
+          gap: 20px;
+          justify-content: center;
+          align-items: center;
+          list-style: none;
 
-  .category-list li a {
-    font-size: 1em; /* Réduction de la taille des catégories sur petit écran */
-  }
+          li {
+            a {
+              text-align: center;
+              text-decoration: none;
+              color: #333;
+              font-size: 1.2em;
+              font-weight: 600;
+              transition: color 0.3s ease;
 
-  .event-page-container {
-    padding: 10px;
+              &:hover {
+                color: #FF773D;
+              }
+            }
+          }
+        }
+      }
+
+      .event-page-container {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1; /* Permet de prendre toute la hauteur disponible */
+        overflow: auto; /* Permet le défilement si nécessaire */
+
+        &::-webkit-scrollbar {
+          width: 0px;
+          height: 0px;
+          background: transparent; /* rendre la barre de défilement transparente */
+        }
+
+        .event-list {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 20px;
+          justify-content: center;
+
+        }
+      }
+    }
   }
 }

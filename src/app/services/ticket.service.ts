@@ -50,4 +50,26 @@ export class TicketService {
       })
     );
   }
+
+  // Méthode pour récupérer les détails d'un billet spécifique
+  getTicket(ticketId: number): Observable<any> {
+    const token = localStorage.getItem('jwt_token');
+
+    if (!token) {
+      console.error('Token JWT non disponible');
+      return throwError(() => new Error('Token JWT non disponible'));
+    }
+
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.get(`${this.baseUrl}/${ticketId}`, { headers }).pipe(
+      catchError((error) => {
+        if (error.status === 401) {
+          console.error('Erreur 401: Utilisateur non authentifié ou token invalide');
+        }
+        return throwError(() => error);
+      })
+    );
+  }
+
 }

@@ -94,24 +94,27 @@ onSubmit() {
         return;
       }
 
+      // Construction du FormData
       const formData = new FormData();
-      formData.append('name', this.eventForm.get('name')?.value);
-      formData.append('date', this.eventForm.get('date')?.value);
-      formData.append('time', this.eventForm.get('time')?.value);
-      formData.append('location', this.eventForm.get('location')?.value);
-      formData.append('ticket_price', this.eventForm.get('ticket_price')?.value);
-      formData.append('ticket_quantity', this.eventForm.get('ticket_quantity')?.value);
-      formData.append('description', this.eventForm.get('description')?.value);
+      formData.append('body', JSON.stringify({
+        'name': this.eventForm.get('name')?.value,
+        'date': this.eventForm.get('date')?.value,
+        'time': this.eventForm.get('time')?.value,
+        'location': this.eventForm.get('location')?.value,
+        'ticket_price': this.eventForm.get('ticket_price')?.value,
+        'ticket_quantity': this.eventForm.get('ticket_quantity')?.value,
+        'description': this.eventForm.get('description')?.value,
+      }));
+
+      // Ajout des catégories et wallets sélectionnés
+      formData.append('categories', JSON.stringify(this.selectedCategories));
+      formData.append('wallets', JSON.stringify(this.selectedWallets));
 
       // Ajout du fichier banner
       const bannerFile = this.eventForm.get('banner')?.value;
       if (bannerFile) {
         formData.append('banner', bannerFile);
       }
-
-      // Ajout des catégories et wallets sélectionnés
-      formData.append('categories', JSON.stringify(this.selectedCategories));
-      formData.append('wallets', JSON.stringify(this.selectedWallets));
 
       // Appel au service pour créer l'événement
       this.eventService.createEvent(formData).subscribe({

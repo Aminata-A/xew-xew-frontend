@@ -79,4 +79,20 @@ export class MyEventsComponent implements OnInit {
     this.upcomingEvents = this.events.filter(event => new Date(event.date) > currentDate);
     this.pastEvents = this.events.filter(event => new Date(event.date) <= currentDate);
   }
+
+  onEditEvent(eventId: number) {
+    this.router.navigate(['/form-event-edit', eventId]);
+  }
+
+  onDeleteEvent(eventId: number) {
+    this.eventService.deleteEvent(eventId).subscribe(
+      () => {
+        this.loadEvents();
+      },
+      (error: HttpErrorResponse) => {
+        console.error('Erreur lors de la suppression de l\'événement :', error);
+        this.loadEvents();
+      }
+    );
+  }
 }

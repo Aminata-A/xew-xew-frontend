@@ -8,10 +8,23 @@ export interface Event {
   banner: string;
   ticket_quantity: number;
   ticket_price: number;
-  event_status: 'publier' | 'brouillon' | 'archiver' | 'annuler' | 'supprimer';
   organizer_id: number;
   categories: number[]; // Array of category IDs
+  tickets: Ticket[];
+  transactions: Transaction[];
+  organizer: Organizer;
 
+}
+
+export interface Organizer {
+  id: number;
+  user: User; // Utilisateur associé à l'organisateur
+}
+
+export interface User {
+  id: number;
+  name: string;
+  email: string;
 }
 
 export interface Category {

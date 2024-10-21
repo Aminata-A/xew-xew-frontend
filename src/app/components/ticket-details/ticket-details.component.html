@@ -1,0 +1,15 @@
+<div class="ticket-details" *ngIf="ticketDetails">
+  <a href="/src/app/components/tickets/tickets.component.html">retour</a>
+  <qrcode [qrdata]="ticketDetails.qr_code" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
+  <h2>Détails du billet</h2>
+  <p><strong>Nom de l'événement :</strong> {{ ticketDetails.event_name }}</p>
+  <p><strong>Date :</strong> {{ ticketDetails.event_date }}</p>
+  <p><strong>Lieu :</strong> {{ ticketDetails.event_location }}</p>
+  <p><strong>Prix :</strong> {{ ticketDetails.event_price | currency:'XOF' }}</p>
+  <p><strong>Quantité :</strong> {{ ticketDetails.quantity }}</p>
+  <p><strong>ticket_status :</strong>{{ ticketDetails.ticket_status }}</p>
+</div>
+
+<div *ngIf="!ticketDetails">
+  <p>Chargement des détails du billet...</p>
+</div>

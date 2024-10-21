@@ -18,7 +18,7 @@
 
       <div class="tickets">
 
-        <div *ngFor="let ticket of tickets" class="ticket">
+        <div *ngFor="let ticket of tickets" class="ticket" (click)="goToTicketDetails(ticket.ticket_id)">
           <h5>{{ ticket.event_name }}</h5>
           <h6>{{ ticket.event?.name }}</h6>
           <div class="info">
