@@ -47,27 +47,36 @@ export class EventPage implements OnInit {
     this.eventService.getEvents().subscribe(
       (events: Event[]) => {
         console.log('Événements récupérés:', events);
-        const sortedByTicketQuantity = events.sort((a, b) => b.ticket_quantity - a.ticket_quantity);
-        this.featuredEvents = sortedByTicketQuantity.slice(0, 3);
 
+        // Obtenir la date actuelle
         const today = new Date();
-        this.newEvents = events
-          .filter((event) => {
-            const eventDate = new Date(event.date);
-            const oneWeekAgo = new Date(today);
-            oneWeekAgo.setDate(today.getDate() - 7);
-            return eventDate >= oneWeekAgo;
-          })
-          .slice(0, 8);
 
-        this.allEvents = events;
-        console.log('Tous les événements:', this.allEvents);
+        // Filtrer les événements à venir
+        const upcomingEvents = events
+          .filter(event => new Date(event.date) >= today) // Ne garder que les événements futurs
+          .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()); // Trier par date croissante
+
+        // Section des événements à la une (3 premiers)
+        this.featuredEvents = upcomingEvents.slice(0, 3);
+
+        // Section des nouveaux événements (derniers 7 jours parmi les événements futurs)
+        const oneWeekAgo = new Date(today);
+        oneWeekAgo.setDate(today.getDate() - 7);
+
+        this.newEvents = upcomingEvents
+          .filter(event => new Date(event.date) >= oneWeekAgo)
+          .slice(0, 8); // Limite de 8 nouveaux événements
+
+        // Tous les événements à venir
+        this.allEvents = upcomingEvents;
+        console.log('Tous les événements à venir:', this.allEvents);
       },
       (error) => {
         console.error('Erreur lors de la récupération des événements', error);
       }
     );
-  }
+}
+
 
   loadCategories() {
     console.log('Chargement des catégories...');
@@ -90,22 +99,23 @@ export class EventPage implements OnInit {
       this.eventService.getEventsByCategory(categoryId).subscribe(
         (events: Event[]) => {
           console.log(`Événements récupérés pour la catégorie ID: ${categoryId}`, events);
-          if (events.length === 0) {
-            console.warn(`Aucun événement trouvé pour la catégorie ID: ${categoryId}`);
-          }
-          this.allEvents = events;
 
-          const sortedByTicketQuantity = events.sort((a, b) => b.ticket_quantity - a.ticket_quantity);
+          // Filtrer les événements futurs uniquement
+          const today = new Date();
+          const upcomingEvents = events.filter(event => new Date(event.date) >= today);
+
+          // Mettre à jour la liste des événements affichés
+          this.allEvents = upcomingEvents;
+
+          // Trier par la quantité de billets pour la section "À la une"
+          const sortedByTicketQuantity = upcomingEvents.sort((a, b) => b.ticket_quantity - a.ticket_quantity);
           this.featuredEvents = sortedByTicketQuantity.slice(0, 3);
 
-          const today = new Date();
-          this.newEvents = events
-            .filter((event) => {
-              const eventDate = new Date(event.date);
-              const oneWeekAgo = new Date(today);
-              oneWeekAgo.setDate(today.getDate() - 7);
-              return eventDate >= oneWeekAgo;
-            })
+          // Section des nouveaux événements pour la catégorie (derniers 7 jours)
+          const oneWeekAgo = new Date(today);
+          oneWeekAgo.setDate(today.getDate() - 7);
+          this.newEvents = upcomingEvents
+            .filter(event => new Date(event.date) >= oneWeekAgo)
             .slice(0, 8);
         },
         (error) => {
@@ -113,6 +123,6 @@ export class EventPage implements OnInit {
         }
       );
     }
-  }
+}
 
 }

@@ -189,4 +189,10 @@ export class EventDetailsComponent implements OnInit {
     console.log('Fermeture du modal');
     this.modalController.dismiss(); // Assurez-vous que cette ligne est appelée
   }
+
+  cancel() {
+    this.router.navigate(['/events']).then(() => {
+      window.location.reload();
+    });
+  }
 }

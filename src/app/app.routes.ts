@@ -46,7 +46,7 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/events/events.component').then( m => m.EventsComponent)
   },
   {
-    path: 'form-event-edit:id',
+    path: 'form-event-edit/:id',
     loadComponent: () => import('./components/form-event-edit/form-event-edit.component').then( m => m.FormEventEditComponent)
   },
   {

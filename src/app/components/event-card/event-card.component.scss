@@ -92,6 +92,7 @@
 /* ---------- CARD 2 (event-card-2) ---------- */
 .event-card-2 {
   width: 280px;
+  height: 22em;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
@@ -99,6 +100,8 @@
   background-color: #fff;
   margin: 20px;
   text-align: left;
+  position: relative;
+
 
   .card-title {
     display: flex;
@@ -150,6 +153,8 @@
     color: #ff773d;
     font-weight: bold;
     margin: 10px 15px;
+    position: absolute;
+    bottom: 0;
   }
 }
 
@@ -176,7 +181,7 @@
 
 @media (max-width: 768px) {
   .event-card-2 {
-    width: 100%;
+    width: 23em;
     margin: 10px 0;
   }
 
@@ -233,7 +238,7 @@
 }
 
 .event-details {
-  width: 80%;
+  width: 90%;
   padding: 15px;
   background-color: #ffffffc4;
   border-radius: 12px;

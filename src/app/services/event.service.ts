@@ -41,9 +41,10 @@ export class EventService {
       'Authorization': `Bearer ${token}`
     });
 
-    // Utilisation correcte de `eventData` et non `FormData`
-    return this.http.put(`${baseURL}/events/${eventId}`, eventData, { headers });
+    // Suppression de `Content-Type` pour laisser Angular le gérer automatiquement
+    return this.http.post(`${baseURL}/events/${eventId}/update`, eventData, { headers });
   }
+
 
 
   getOrganizers(): Observable<any[]> {

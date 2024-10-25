@@ -1,25 +1,38 @@
-:host{
-  height: 100%;
-  width: 100%;
-  background-color: #fff;
-  padding: 0;
+* {
   margin: 0;
-  box-sizing: border-box;
+  padding: 0;
+  // box-sizing: border-box;
+  // width: 100%;
 }
-.sidebar{
-  display: none;
-}
-.container{
-  display: flex;
-  width: 100%;
-  background-color: #fff;
-  min-height: auto;
-  .content{
-    width: 100%;
 
-    .form-content{
-      display: flex;
-      flex-direction: column;
+:host {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.container {
+  display: flex;
+  font-family: 'Cabinet Grotesk', sans-serif;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+
+  .sidebar {
+    display: none;
+  }
+
+  .content {
+    flex-grow: 1; /* Prendre tout l'espace restant */
+    padding: 20px;
+    height: 100vh;
+
+    .form-content {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
       overflow-y: scroll;
       min-height: 100vh;
       max-height: calc(100vh - 100px); /* Limite la hauteur pour autoriser le scroll si besoin */
@@ -28,187 +41,174 @@
         height: 0px;
         background: transparent; /* make scrollbar transparent */
       }
-    }
-    .title{
-      font-family: 'Cabinet Grotesk', sans-serif;
-      font-size: 1.2em;
-      padding: 2em;
 
-      // font-weight: bold;
-      color: #1b1b1b;
-      h2{
-        font-family: 'Clash Display', sans-serif;
+
+
+      .title {
+        margin-bottom: 30px;
+        font-family: 'clash-display', sans-serif;
         font-size: 1.5em;
-        font-weight: bold;
-        margin-bottom: 20px;
-        color: #1b1b1b;
+
+        h2 {
+          font-size: 1.8rem;
+          color: #333;
+          margin-bottom: 10px;
+        }
+
+        p {
+          font-size: 0.9rem;
+          color: #777;
+        }
       }
-    }
-  }
-  form {
-    // height: 100%;
-    // width: 100%;
-    // background-color: #fff;
-    // display: flex;
-    justify-content: center;
-    align-items: center;
-    // padding: 20px;
-  }
-}
-
-.event-creation-page {
-  width: 80%;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  // box-shadow: 10px 10px 8px rgba(0, 0, 0, 0.1);
-  // border: 2px solid rgba(0, 0, 0, 0.04);
-  font-family: 'Cabinet Grotesk', sans-serif;
-
-  .step {
-    margin-bottom: 20px;
-
-    h3 {
-      font-size: 24px;
-      font-weight: 600;
-      margin-bottom: 15px;
-      color: #333;
-      text-align: center;
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-
-      label {
-        font-size: 14px;
-        color: #666;
-        margin-bottom: 5px;
-        display: block;
+      .banner-label {
+        cursor: pointer;
       }
 
-      input,
-      textarea {
-        box-sizing: border-box;
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ddd;
+      .banner-preview {
+        max-width: 100%;
+        height: auto;
+        margin-top: 10px;
         border-radius: 5px;
-        font-size: 14px;
-        margin-bottom: 10px;
-        transition: all 0.3s ease;
-        background-color: #f5f5f5;
-        color: #1b1b1b;
+        position: relative;
 
-        &:focus {
-          border-color: #FF773D;
-          outline: none;
+      }
+
+      form {
+        .step {
+          margin-bottom: 30px;
+
+          h3 {
+            font-size: 1.4rem;
+            color: #555;
+            margin-bottom: 15px;
+          }
+
+          .form-group,
+          .form-group-inline {
+            margin-bottom: 20px;
+
+            label {
+              display: block;
+              font-size: 0.9rem;
+              color: #666;
+              margin-bottom: 5px;
+            }
+
+            input[type="text"],
+            input[type="date"],
+            input[type="time"],
+            input[type="number"],
+            textarea {
+              width: 100%;
+              padding: 10px;
+              font-size: 1rem;
+              border: 1px solid #ddd;
+              background-color: #f9f9f9;
+              border-radius: 5px;
+              color: #1b1b1b;
+              outline: none;
+              transition: border-color 0.3s;
+
+              &:focus {
+                border-color: #ff773d;
+              }
+            }
+
+            .banner-preview {
+              width: 100%;
+              height: 40vh;
+              margin-top: 10px;
+              border-radius: 5px;
+              z-index: 0;
+              position: relative;
+
+
+              &::after {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.3);
+                z-index: 1;
+              }
+            }
+          }
+
+          .form-group-inline {
+            display: flex;
+            gap: 15px;
+
+            .form-group {
+              flex: 1;
+            }
+          }
+
+          .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+
+            div {
+              display: flex;
+              align-items: center;
+
+              input[type="checkbox"] {
+                margin-right: 8px;
+              }
+
+              label {
+                font-size: 0.9rem;
+                color: #1b1b1b;
+              }
+            }
+          }
         }
-      }
 
-      textarea {
-        resize: vertical;
-        height: 100px;
-      }
-
-      .categories-checkboxes,
-      .wallets-checkboxes {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 15px;
-
-        div {
+        .form-actions {
           display: flex;
-          align-items: center;
+          justify-content: flex-end;
 
-          input {
-            margin-right: 10px;
+          .btn-submit {
+            padding: 10px 20px;
+            background-color: #ff773d;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+
+            &:hover {
+              background-color: #e0672a;
+            }
           }
-
-          label {
-            font-size: 14px;
-          }
-        }
-      }
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      font-size: 16px;
-      font-weight: bold;
-      color: #fff;
-      background-color: #FF773D;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-
-      &:hover {
-        background-color: rgb(241, 98, 15);
-      }
-
-      &:disabled {
-        background-color: #ccc;
-        cursor: not-allowed;
-      }
-    }
-
-    .prev-step {
-      background-color: #f5f5f5;
-      color: #666;
-      border: 1px solid #ddd;
-
-      &:hover {
-        background-color: #ddd;
-      }
-    }
-
-    /* Step Indicator */
-    .step-indicator {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 20px;
-
-      .step-dot {
-        width: 30px;
-        height: 4px;
-        background-color: #ddd;
-        border-radius: 2px;
-        transition: all 0.3s ease;
-
-        &.active {
-          background-color: #FF773D;
         }
       }
     }
   }
 
-  /* Custom file input style */
-  input[type="file"] {
-    display: none;
+  /* Responsive design */
+  @media (min-width: 768px) {
+    .sidebar {
+      display: block;
+      height: 100vh;
+    }
 
-    + label {
-      display: inline-block;
-      padding: 10px 20px;
-      background-color: #FF773D;
-      color: #fff;
-      border-radius: 5px;
-      cursor: pointer;
+    .form-group-inline {
+      flex-direction: row;
+    }
+  }
 
-      &:hover {
-        background-color: #f77022;
-      }
+  @media (max-width: 767px) {
+    .content {
+      padding: 10px;
+    }
+
+    .form-content {
+      padding: 15px;
     }
   }
 }
-
-
-/* --- Version Web: Flex Layout for larger screens --- */
-@media (min-width: 768px) {
- .sidebar {
-   display: block;
- }
-}
-
-

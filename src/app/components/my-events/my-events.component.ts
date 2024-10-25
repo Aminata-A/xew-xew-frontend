@@ -1,29 +1,45 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms'; // Import FormsModule
 import { EventService } from 'src/app/services/event.service';
-import { jwtDecode } from 'jwt-decode'; // Vérifie que jwtDecode est bien importé
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { HeaderComponent } from '../header/header.component';
-import { CommonModule } from '@angular/common';
 import { EventCardComponent } from '../event-card/event-card.component';
 import { HttpErrorResponse } from '@angular/common/http';
+import { CategoryService } from 'src/app/services/category.service';
+import { jwtDecode } from 'jwt-decode';
+
 
 @Component({
   selector: 'app-my-events',
   templateUrl: './my-events.component.html',
   styleUrls: ['./my-events.component.scss'],
   standalone: true,
-  imports: [CommonModule, SidebarComponent, HeaderComponent, EventCardComponent],
+  imports: [CommonModule, FormsModule, SidebarComponent, HeaderComponent, EventCardComponent, RouterLink], // Add FormsModule here
 })
 export class MyEventsComponent implements OnInit {
-  events: any[] = []; // Initialisation des événements
-  upcomingEvents: any[] = []; // Initialisation des événements à venir
-  pastEvents: any[] = []; // Initialisation des événements passés
+  events: any[] = [];
+  upcomingEvents: any[] = [];
+  pastEvents: any[] = [];
   isAuthenticated: boolean = false;
   user: any = null;
   message: string = '';
+  newCategory: string = '';
+  errorMessage: string = '';
+  showCategoryForm: boolean = false;
 
-  constructor(private eventService: EventService, private router: Router) {}
+  // Pagination
+  currentPage: number = 1;
+  eventsPerPage: number = 12;
+  paginatedUpcomingEvents: any[] = [];
+  paginatedPastEvents: any[] = [];
+
+  constructor(
+    private eventService: EventService,
+    private categoryService: CategoryService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     const token = localStorage.getItem('jwt_token');
@@ -33,7 +49,6 @@ export class MyEventsComponent implements OnInit {
         const decodedToken: any = jwtDecode(token);
         const currentTime = Math.floor(Date.now() / 1000);
 
-        // Vérifie si le token est expiré
         if (decodedToken.exp < currentTime) {
           this.message = 'Votre session a expiré. Veuillez vous reconnecter.';
           this.isAuthenticated = false;
@@ -74,10 +89,22 @@ export class MyEventsComponent implements OnInit {
 
   filterEvents() {
     const currentDate = new Date();
+    this.upcomingEvents = this.events.filter((event) => new Date(event.date) > currentDate);
+    this.pastEvents = this.events.filter((event) => new Date(event.date) <= currentDate);
+    this.setPage(1);
+  }
 
-    // Séparation des événements en à venir et passés
-    this.upcomingEvents = this.events.filter(event => new Date(event.date) > currentDate);
-    this.pastEvents = this.events.filter(event => new Date(event.date) <= currentDate);
+  setPage(page: number) {
+    this.currentPage = page;
+    const startIndex = (this.currentPage - 1) * this.eventsPerPage;
+    const endIndex = startIndex + this.eventsPerPage;
+
+    this.paginatedUpcomingEvents = this.upcomingEvents.slice(startIndex, endIndex);
+    this.paginatedPastEvents = this.pastEvents.slice(startIndex, endIndex);
+  }
+
+  totalPages(eventsArray: any[]): number {
+    return Math.ceil(eventsArray.length / this.eventsPerPage);
   }
 
   onEditEvent(eventId: number) {
@@ -90,7 +117,7 @@ export class MyEventsComponent implements OnInit {
         this.loadEvents();
       },
       (error: HttpErrorResponse) => {
-        console.error('Erreur lors de la suppression de l\'événement :', error);
+        console.error("Erreur lors de la suppression de l'événement :", error);
         this.loadEvents();
       }
     );

@@ -4,89 +4,98 @@
   <div class="content">
     <app-header></app-header>
 
-    <!-- Formulaire pour la création d'évènement -->
-     <div class="form-content">
-    <div class="title">
-      <h2>Créer un événement</h2>
-      <p>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.</p>
-    </div>
-    <form [formGroup]="eventForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
-      <div class="event-creation-page">
+    <div class="form-content">
+      <div class="title">
+        <h2>Créer un événement</h2>
+        <p>Remplissez les détails de votre événement.</p>
+      </div>
 
-        <!-- Step 1: Catégories & Portefeuilles -->
-        <div *ngIf="currentStep === 1" class="step step-1">
+      <!-- Formulaire pour la création d'un nouvel événement -->
+      <form [formGroup]="eventForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+        <!-- Etape 1 : Informations principales de l'événement -->
+        <div class="step">
+          <h3>Informations de l'événement</h3>
 
+          <!-- Section de l'image de la bannière -->
           <div class="form-group">
-            <label for="bannerUpload">Téléversez votre affiche</label>
-            <input id="bannerUpload" type="file" (change)="onBannerUpload($event)" />
+            <label for="bannerUpload" class="banner-label">
+              <img
+                *ngIf="!bannerPreview; else selectedBanner"
+                src="https://img.freepik.com/free-photo/texture-close-up-stones_23-2148198939.jpg?ga=GA1.2.917949220.1701081905&semt=ais_hybrid"
+                alt="Image par défaut"
+                class="banner-preview"
+              />
+              <ng-template #selectedBanner>
+                <img
+                  [src]="bannerPreview"
+                  alt="Banner Preview"
+                  class="banner-preview"
+                />
+              </ng-template>
+            </label>
+            <input
+              id="bannerUpload"
+              type="file"
+              (change)="onBannerUpload($event)"
+              style="display: none;"
+            />
           </div>
 
+          <!-- Autres champs de création de l'événement -->
           <div class="form-group">
-            <label for="name">Nom de l'évènement</label>
-            <input type="text" formControlName="name" placeholder="Nom event" />
+            <label for="name">Nom de l'événement</label>
+            <input type="text" formControlName="name" placeholder="Nom de l'événement" />
           </div>
-
-          <div class="form-group">
-            <label for="date">Date</label>
-            <input type="date" formControlName="date" />
+          <div class="form-group-inline">
+            <div class="form-group">
+              <label for="date">Date</label>
+              <input type="date" formControlName="date" />
+            </div>
+            <div class="form-group">
+              <label for="time">Heure</label>
+              <input type="time" formControlName="time" />
+            </div>
           </div>
-
-          <div class="form-group">
-            <label for="time">Heure</label>
-            <input type="time" formControlName="time" />
-          </div>
-
-
-          <!-- Navigation Buttons -->
-          <button type="button" (click)="nextStep()">Suivant</button>
-        </div>
-
-        <!-- Step 2: Détails de l'événement -->
-        <div *ngIf="currentStep === 2" class="step step-2">
-          <!-- <h3>Création d'évènement</h3> -->
-
           <div class="form-group">
             <label for="location">Lieu</label>
-            <input type="text" formControlName="location" placeholder="Lieu" />
+            <input type="text" formControlName="location" placeholder="Lieu de l'événement" />
           </div>
 
-          <div class="form-group">
-            <label for="ticket_price">Prix</label>
-            <input type="number" formControlName="ticket_price" placeholder="Prix" />
-          </div>
-
-          <div class="form-group">
-            <label for="ticket_quantity">Nombre de places</label>
-            <input type="number" formControlName="ticket_quantity" placeholder="Nombre de places" />
-          </div>
-
+          <!-- Ajout du champ de description -->
           <div class="form-group">
             <label for="description">Description</label>
-            <textarea formControlName="description" placeholder="Description"></textarea>
+            <textarea formControlName="description" placeholder="Description de l'événement"></textarea>
           </div>
-
-          <!-- Navigation Buttons -->
-          <button type="button" (click)="previousStep()">Retour</button>
-          <button type="button" (click)="nextStep()">Suivant</button>
         </div>
 
-        <!-- Step 3: Image et autres détails -->
-        <div *ngIf="currentStep === 3" class="step step-3">
-          <!-- Categories -->
+        <!-- Etape 2 : Détails des billets -->
+        <div class="step">
+          <h3>Détails des billets</h3>
           <div class="form-group">
-            <label for="categories">Catégorie</label>
-            <div class="categories-checkboxes">
+            <label for="ticket_price">Prix du billet</label>
+            <input type="number" formControlName="ticket_price" placeholder="Prix en XOF" />
+          </div>
+          <div class="form-group">
+            <label for="ticket_quantity">Quantité de billets</label>
+            <input type="number" formControlName="ticket_quantity" placeholder="Nombre de billets disponibles" />
+          </div>
+        </div>
+
+        <!-- Etape 3 : Catégories et Portefeuilles -->
+        <div class="step">
+          <h3>Catégories et Portefeuilles</h3>
+          <div class="form-group">
+            <label for="categories">Catégories</label>
+            <div class="checkbox-group">
               <div *ngFor="let category of categories">
                 <input type="checkbox" (change)="onCategoryChange($event, category.id)" />
                 <label>{{ category.label }}</label>
               </div>
             </div>
           </div>
-
-          <!-- Wallets -->
           <div class="form-group">
-            <label for="wallets">Choisissez vos portefeuilles</label>
-            <div class="wallets-checkboxes">
+            <label for="wallets">Portefeuilles de paiement</label>
+            <div class="checkbox-group">
               <div *ngFor="let wallet of wallets">
                 <input type="checkbox" (change)="onWalletChange($event, wallet.id)" />
                 <label>{{ wallet.name }}</label>
@@ -94,13 +103,12 @@
             </div>
           </div>
 
-          <!-- Submit Button -->
-          <button type="submit">Publier</button>
-          <button type="button" (click)="previousStep()">Retour</button>
+          <!-- Boutons de navigation -->
+          <div class="form-actions">
+            <button type="submit" class="btn-submit">Créer l'événement</button>
+          </div>
         </div>
-      </div>
-    </form>
-  </div>
+      </form>
+    </div>
   </div>
 </div>
-

@@ -1,6 +1,6 @@
 <div class="container" *ngIf="event">
   <div class="event-header">
-    <img [src]="event.banner" alt="{{ event.name }}" class="event-image">
+    <img [src]="'http://127.0.0.1:8000' + event.banner" alt="image-event" class="event-image" />
     <div class="event-info">
       <div class="event-category">
         <p><i class="fas fa-music"></i> Musique</p>
@@ -99,7 +99,7 @@
 
       <div class="action-buttons">
         <button class="confirm-button" (click)="purchaseTicket()">Confirmer</button>
-        <button class="cancel-button" (click)="close()">Annuler</button>
+        <button class="cancel-button" (click)="cancel()">Annuler</button>
 
         <!-- Afficher le lien de paiement si disponible -->
         <div *ngIf="paymentUrl" class="payment-link-container">

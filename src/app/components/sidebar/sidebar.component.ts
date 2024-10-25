@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './../../services/auth.service'; // Importer le service d'authentification
 import { EventCardComponent } from '../event-card/event-card.component';
-import { CommonModule, NgFor } from '@angular/common';
+import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
@@ -9,7 +9,7 @@ import { RouterLink } from '@angular/router';
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
-  providers: [CommonModule,FormsModule, NgFor,AuthService, EventCardComponent],
+  providers: [CommonModule,FormsModule, NgFor,AuthService, EventCardComponent, NgIf],
   standalone: true,
   imports: [RouterLink],
 })
@@ -23,11 +23,14 @@ export class SidebarComponent implements OnInit {
   ngOnInit() {
     // Vérifier si l'utilisateur est connecté
     const token = localStorage.getItem('authToken'); // Récupérer le token du localStorage ou autre
+    console.log('Token récupéré:', token); // Vérifier si le token est bien récupéré
+
     if (token) {
       this.isLoggedIn = true;
       // Si l'utilisateur est connecté, récupérer son image de profil et son nom
       this.authService.getUserProfile(token).subscribe(
         (user) => {
+          console.log('Utilisateur récupéré:', user); // Vérifie si l'utilisateur est bien récupéré
           this.profileImage = user.photo ? user.photo : this.profileImage;
           this.userName = user.name;
         },
@@ -36,6 +39,9 @@ export class SidebarComponent implements OnInit {
           this.isLoggedIn = false; // Si une erreur se produit, marquer l'utilisateur comme non connecté
         }
       );
+    } else {
+      console.log('Aucun token trouvé, utilisateur non connecté');
+      this.isLoggedIn = false;
     }
   }
 
