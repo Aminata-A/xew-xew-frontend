@@ -5,7 +5,7 @@ import { EventCardComponent } from 'src/app/components/event-card/event-card.com
 import { SidebarComponent } from 'src/app/components/sidebar/sidebar.component';
 import { EventService } from 'src/app/services/event.service';
 import { Event } from 'src/app/services/interfaces';
-import { NgFor } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { HeaderComponent } from 'src/app/components/header/header.component';
 
 @Component({
@@ -13,7 +13,7 @@ import { HeaderComponent } from 'src/app/components/header/header.component';
   templateUrl: './event.page.html',
   styleUrls: ['./event.page.scss'],
   standalone: true,
-  imports: [SidebarComponent, EventCardComponent, CategoryComponent, NgFor, HeaderComponent],
+  imports: [SidebarComponent, EventCardComponent, CategoryComponent, NgFor, HeaderComponent, NgIf],
 })
 export class EventPage implements OnInit {
   featuredEvents: Event[] = [];  // À la une
@@ -21,6 +21,8 @@ export class EventPage implements OnInit {
   allEvents: Event[] = [];       // Tous les événements
   categories: any[] = [];        // Ajout pour les catégories
   token: string | null = null;   // Variable pour le token
+  public isAuthenticated: boolean = false;
+
 
   constructor(
     private eventService: EventService,
@@ -28,25 +30,32 @@ export class EventPage implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.checkUserConnection(); // Vérifier la connexion de l'utilisateur
-    this.loadEvents();
-    this.loadCategories();
+    // Vérifier la connexion de l'utilisateur
+    this.isAuthenticated = !!localStorage.getItem('jwt_token'); // Vérifie la présence d'un token
+
+    if (this.isAuthenticated) {
+      this.loadEvents();
+      this.loadCategories();
+    } else {
+      console.warn("Utilisateur non authentifié : le contenu protégé ne sera pas affiché.");
+    }
   }
+
 
   checkUserConnection() {
     this.token = localStorage.getItem('jwt_token'); // Récupérer le token depuis localStorage
     if (this.token) {
-      console.log('Token récupéré depuis localStorage:', this.token);
+      // console.log('Token récupéré depuis localStorage:', this.token);
     } else {
       console.warn('Aucun token trouvé, utilisateur non connecté');
     }
   }
 
   loadEvents() {
-    console.log('Chargement des événements...');
+    // console.log('Chargement des événements...');
     this.eventService.getEvents().subscribe(
       (events: Event[]) => {
-        console.log('Événements récupérés:', events);
+        // console.log('Événements récupérés:', events);
 
         // Obtenir la date actuelle
         const today = new Date();
@@ -69,7 +78,7 @@ export class EventPage implements OnInit {
 
         // Tous les événements à venir
         this.allEvents = upcomingEvents;
-        console.log('Tous les événements à venir:', this.allEvents);
+        // console.log('Tous les événements à venir:', this.allEvents);
       },
       (error) => {
         console.error('Erreur lors de la récupération des événements', error);
@@ -79,10 +88,10 @@ export class EventPage implements OnInit {
 
 
   loadCategories() {
-    console.log('Chargement des catégories...');
+    // console.log('Chargement des catégories...');
     this.categoryService.getCategories().subscribe(
       (categories: any) => {
-        console.log('Catégories récupérées:', categories);
+        // console.log('Catégories récupérées:', categories);
         this.categories = categories;
       },
       (error) => {
@@ -92,13 +101,13 @@ export class EventPage implements OnInit {
   }
 
   filterEvents(categoryId: any): void {
-    console.log(`Filtrage des événements pour la catégorie ID: ${categoryId}`);
+    // console.log(`Filtrage des événements pour la catégorie ID: ${categoryId}`);
     if (categoryId === 'all') {
       this.loadEvents();  // Recharger tous les événements si "Voir Tous"
     } else {
       this.eventService.getEventsByCategory(categoryId).subscribe(
         (events: Event[]) => {
-          console.log(`Événements récupérés pour la catégorie ID: ${categoryId}`, events);
+          // console.log(`Événements récupérés pour la catégorie ID: ${categoryId}`, events);
 
           // Filtrer les événements futurs uniquement
           const today = new Date();

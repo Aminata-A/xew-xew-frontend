@@ -1,117 +1,102 @@
-import { NgIf } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Register } from 'src/app/services/interfaces';
-import { AuthService } from 'src/app/services/auth.service';
-import { Router } from '@angular/router'; // Pour la redirection
-import { ChangeDetectorRef } from '@angular/core';
+import { CommonModule, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
   standalone: true,
-  imports: [NgIf, FormsModule],
+  imports: [CommonModule, NgIf],
 })
 export class HeaderComponent implements OnInit {
-  public user: Register | null = null; // Stocker les informations de l'utilisateur connecté
-  public token: string | null = ''; // Le token JWT de l'utilisateur connecté
-  public isAuthenticated: boolean = false; // Savoir si l'utilisateur est connecté
-  public showProfileMenu: boolean = false; // Afficher ou masquer le menu du profil
-  profileImage: string = 'https://img.freepik.com/vecteurs-premium/icone-utilisateur-orange-sans-icone-arriere-plan_1076610-85993.jpg?w=740';
-  public message: string = '';
+  public showProfileMenu: boolean = false;
+  public profileImage: string = 'https://img.freepik.com/vecteurs-premium/icone-utilisateur-orange-sans-icone-arriere-plan_1076610-85993.jpg?w=740';
+  public isAuthenticated: boolean = false;
+  public user: Register = {
+    name: '',
+    email: '',
+    password: '',
+    password_confirmation: '',
+    phone: '',
+    role: '',
+    photo: null,
+  };
+  public token: string = '';
+  public title: string = 'Home';
 
   constructor(
-    private authService: AuthService,
     private router: Router,
-    private cdr: ChangeDetectorRef // Ajout de ChangeDetectorRef
+    private http: HttpClient,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    // Récupérer le token depuis le localStorage
-    this.token = localStorage.getItem('authToken');
-    console.log('Token récupéré:', this.token);
-
+    this.token = localStorage.getItem('jwt_token') || ''; // Récupérer le token JWT
     if (this.token) {
-      // Si le token existe, l'utilisateur est authentifié
       this.isAuthenticated = true;
-      console.log('Utilisateur authentifié');
-      this.getUserProfile();
-    } else {
-      // Pas de token, l'utilisateur n'est pas connecté
-      this.isAuthenticated = false;
-      console.log('Utilisateur non authentifié');
+      this.loadUserProfile(); // Charger le profil utilisateur
     }
+
+    // Détecter les changements de route pour mettre à jour le titre
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.updateTitleBasedOnRoute();
+      }
+    });
   }
 
-  // Récupérer le profil de l'utilisateur connecté
-  getUserProfile() {
-    if (!this.token) return; // Assurez-vous que le token existe
+  updateTitleBasedOnRoute() {
+    if (this.router.url.includes('ticket')) {
+      this.title = 'Mes Billets';
+    } else if (this.router.url.includes('my-events')) {
+      this.title = 'Mes evenements';
+    } else{
+      this.title = 'Home';
+    }
+    this.cdr.detectChanges(); // Forcer la mise à jour de l'interface
+  }
 
-    console.log('Tentative de récupération du profil utilisateur...');
-    this.authService.getUserProfile(this.token).subscribe(
+  // Charger les informations de l'utilisateur connecté
+  loadUserProfile() {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+    });
+
+    this.http.get<Register>('http://127.0.0.1:8000/api/auth/user-profile', { headers }).subscribe(
       (profile: Register) => {
-        console.log('Profil utilisateur récupéré avec succès:', profile);
-        this.user = profile; // Stocker les informations de l'utilisateur
-        this.isAuthenticated = true; // Mettre à jour l'état d'authentification
-        console.log('Utilisateur authentifié après récupération du profil:', this.isAuthenticated);
-
-        if (this.user.photo) {
-          this.profileImage = this.user.photo;
-        }
-
-        // Forcer la détection des changements
-        this.cdr.detectChanges();
+        this.user = { ...this.user, ...profile }; // Mettre à jour `user` avec les informations de l'API
+        this.profileImage = this.user.photo ? `http://127.0.0.1:8000${this.user.photo}` : this.profileImage;
+        this.cdr.detectChanges(); // Mise à jour de l'interface utilisateur
       },
       (error) => {
-        console.error('Erreur lors de la récupération du profil utilisateur:', error);
+        console.error('Erreur lors de la récupération du profil utilisateur :', error);
         this.isAuthenticated = false;
       }
     );
   }
 
-  // Afficher ou masquer le menu du profil
   toggleProfileMenu() {
-    console.log('Affichage du menu de profil, utilisateur authentifié:', this.isAuthenticated);
     this.showProfileMenu = !this.showProfileMenu;
+    this.cdr.detectChanges(); // Forcer la mise à jour de l'interface
   }
 
-  // Voir le profil de l'utilisateur
-  viewProfile() {
-    console.log('Redirection vers le profil, état authentification:', this.isAuthenticated);
-    if (this.isAuthenticated) {
-      this.router.navigate(['/profile']); // Rediriger vers la page de profil
-    } else {
-      this.router.navigate(['/login']); // Rediriger vers la page de connexion
-    }
+  logout() {
+    localStorage.removeItem('jwt_token');
+    this.isAuthenticated = false;
+    this.router.navigate(['/login']);
     this.showProfileMenu = false;
   }
 
-  // Se déconnecter
-  logout() {
-    if (!this.token) return; // Assurez-vous que le token existe avant d'essayer de déconnecter
-
-    console.log('Déconnexion...');
-    this.authService.logout(this.token).subscribe(
-      () => {
-        localStorage.removeItem('authToken'); // Supprimer le token du stockage local
-        this.isAuthenticated = false;
-        console.log('Utilisateur déconnecté, redirection vers la page de login');
-        this.router.navigate(['/login']); // Rediriger vers la page de connexion
-        this.showProfileMenu = false;
-      },
-      (error) => {
-        console.error('Erreur lors de la déconnexion:', error);
-      }
-    );
+  login() {
+    this.router.navigate(['/login']);
+    window.location.reload();
   }
 
-  // Se connecter (redirige vers la page de connexion)
-  login() {
-    console.log('Redirection vers la page de connexion...');
-    this.router.navigate(['/login']).then(() => {
-      window.location.reload();
-    });
+  viewProfile() {
+    this.router.navigate(['/profile']);
     this.showProfileMenu = false;
   }
 }

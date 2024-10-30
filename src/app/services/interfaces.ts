@@ -13,7 +13,7 @@ export interface Event {
   tickets: Ticket[];
   transactions: Transaction[];
   organizer: Organizer;
-
+  wallets: any[];
 }
 
 export interface Organizer {

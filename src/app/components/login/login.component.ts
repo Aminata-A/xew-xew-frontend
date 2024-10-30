@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { AuthService } from './../../services/auth.service';
 import { Router } from '@angular/router'; // Import du Router
 
@@ -22,9 +22,12 @@ export class LoginComponent {
 
   constructor(private authService: AuthService, private router: Router) {} // Injecter le Router
 
-  login() {
-    console.log('Tentative de connexion avec', this.loginData);
-
+  login(form: NgForm) {
+    if (form.invalid) {
+      form.controls['email'].markAsTouched();
+      form.controls['password'].markAsTouched();
+      return;
+    }
     // Réinitialisation du message d'erreur avant la tentative de connexion
     this.errorMessage = null;
 

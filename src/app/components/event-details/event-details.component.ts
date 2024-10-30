@@ -15,7 +15,7 @@ import { jwtDecode } from 'jwt-decode'; // Import de jwt-decode
   templateUrl: './event-details.component.html',
   styleUrls: ['./event-details.component.scss'],
   standalone: true,
-  imports: [NgIf, CommonModule, IonicModule, PurchaseModalComponent, FormsModule],
+  imports: [NgIf, CommonModule, IonicModule, PurchaseModalComponent, FormsModule, NgIf],
 })
 export class EventDetailsComponent implements OnInit {
   public event!: Event;
@@ -31,6 +31,7 @@ export class EventDetailsComponent implements OnInit {
   public onDesktop = false;
   public currentPageNumber: number = 0;
   public paymentUrl: string | null = null;
+  public ticketsRemaining: number = 0;
 
   // Initialiser le constructeur
   // Injecter les services
@@ -73,14 +74,17 @@ export class EventDetailsComponent implements OnInit {
     this.pageWidth = window.innerWidth;
   }
 
+
+
   fetchEvent(id: number) {
     this.eventService.getEvent(id).subscribe(
-      (eventData: Event) => {
-        this.event = eventData;
-        this.ticketAvailable = this.event.ticket_quantity;
+      (response: any) => {
+        console.log(response); // Vérifiez la structure de la réponse
+        this.event = response.event;
+        this.ticketsRemaining = response.tickets_remaining; // Assignez tickets_remaining ici
       },
       (error) => {
-        console.error('Error fetching event data:', error);
+        console.error('Erreur lors de la récupération des détails de l\'événement :', error);
       }
     );
   }

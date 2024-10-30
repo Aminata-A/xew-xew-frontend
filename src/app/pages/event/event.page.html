@@ -1,6 +1,7 @@
 <div class="event-page">
   <!-- Sidebar component -->
-  <app-sidebar></app-sidebar>
+    <!-- Contenu ici visible uniquement si isAuthenticated est vrai -->
+    <app-sidebar *ngIf="isAuthenticated"></app-sidebar>
 
   <div class="main-content">
     <app-header></app-header>

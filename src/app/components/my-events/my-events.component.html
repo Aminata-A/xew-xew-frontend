@@ -1,4 +1,4 @@
-<div class="container">
+<div class="my-events-page">
   <app-sidebar class="sidebar"></app-sidebar>
   <div class="content-wrapper">
     <app-header class="header"></app-header>
@@ -9,18 +9,23 @@
         <p>Découvrez et gérez tous vos événements facilement ici.</p>
       </div>
 
+      <!-- Message de connexion -->
       <div *ngIf="!isAuthenticated">
         <p class="no-events-message">Connectez-vous pour voir vos événements.</p>
       </div>
 
+            <!-- Message de succès de suppression -->
+            <div *ngIf="deleteMessage" class="delete-message">
+              {{ deleteMessage }}
+            </div>
+
+      <!-- Section des événements à venir -->
       <div *ngIf="isAuthenticated">
         <h3>Événements à venir</h3>
         <div *ngIf="paginatedUpcomingEvents.length > 0; else noUpcomingEvents" class="events-grid">
           <div *ngFor="let event of paginatedUpcomingEvents" class="event-card">
-        <!-- <div *ngIf="upcomingEvents.length > 0; else noUpcomingEvents" class="events-grid">
-          <div *ngFor="let event of upcomingEvents" class="event-card"> -->
             <div class="event-image">
-              <img [src]="'http://127.0.0.1:8000' + event.banner || 'default-image.jpg'" alt="{{ event.name }}" />
+              <img [src]="'http://127.0.0.1:8000' + event.banner || 'https://img.freepik.com/premium-photo/indian-republic-day-concept-indian-flag-print-air-balloon-with-copy-space-banner_742418-20690.jpg?w=1060'" alt="{{ event.name }}" />
             </div>
             <div class="event-details">
               <h4>{{ event.name }}</h4>
@@ -33,148 +38,58 @@
               <a [href]="['/form-event-edit/' + event.id]" class="btn edit-btn">
                 <i class="fas fa-edit"></i> Modifier
               </a>
-              <button (click)="onDeleteEvent(event.id)" class="btn delete-btn">
+              <button (click)="onDeleteEvent(event.id, event.ticketsSold, event.date)" class="btn delete-btn">
                 <i class="fas fa-trash-alt"></i> Supprimer
               </button>
             </div>
           </div>
         </div>
 
-      <!-- </div>
-    </div> -->
+        <!-- Pagination des événements à venir -->
+        <div class="pagination" *ngIf="totalPages(upcomingEvents) > 1">
+          <button
+            *ngFor="let page of [].constructor(totalPages(upcomingEvents)); let i = index"
+            (click)="setPage(i + 1)"
+            [class.active]="i + 1 === currentPage"
+          >
+            {{ i + 1 }}
+          </button>
+        </div>
+        <ng-template #noUpcomingEvents>
+          <p class="no-events-message">Aucun événement à venir pour le moment.</p>
+        </ng-template>
 
-    <!-- Pagination for Upcoming Events -->
-    <div class="pagination" *ngIf="totalPages(upcomingEvents) > 1">
-      <button
-        *ngFor="let page of [].constructor(totalPages(upcomingEvents)); let i = index"
-        (click)="setPage(i + 1)"
-        [class.active]="i + 1 === currentPage"
-      >
-        {{ i + 1 }}
-      </button>
-    </div>
-
-    <ng-template #noUpcomingEvents>
-      <p class="no-events-message">Aucun événement à venir pour le moment.</p>
-    </ng-template>
-
-    <h3>Événements passés</h3>
-    <div *ngIf="paginatedPastEvents.length > 0; else noPastEvents" class="events-grid">
-      <div *ngFor="let event of paginatedPastEvents" class="event-card">
-            <div class="event-image">
-              <img [src]="'http://127.0.0.1:8000' + event.banner || 'default-image.jpg'" alt="{{ event.name }}" />
+        <!-- Section des événements passés -->
+        <h3>Événements passés</h3>
+        <div *ngIf="paginatedPastEvents.length > 0; else noPastEvents" class="events-grid">
+          <div *ngFor="let event of paginatedPastEvents" class="event-card past-event-card"
+          [style.background-image]="'url(' + getEventImage(event) + ')'">
+          <div class="delete-icon" (click)="onDeleteEvent(event.id, event.ticketsSold, event.date)">
+              <i class="fas fa-trash-alt"></i>
             </div>
-            <div class="event-details">
+            <div class="event-overlay">
               <h4>{{ event.name }}</h4>
               <p class="event-date">{{ event.date | date }}</p>
               <p class="event-location">Lieu : {{ event.location }}</p>
               <p class="event-price">Prix : {{ event.ticket_price === 0 ? 'Gratuit' : (event.ticket_price | currency:'XOF') }}</p>
-              <p class="event-remaining">Places restantes : {{ event.ticket_quantity - event.tickets_sold }}</p>
-            </div>
-            <div class="event-actions">
-              <a [href]="['/form-event-edit/' + event.id]" class="btn edit-btn">
-                Modifier
-              </a>
-
-              <button (click)="onDeleteEvent(event.id)" class="btn delete-btn">
-                <i class="fas fa-trash-alt"></i> Supprimer
-              </button>
             </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <!-- Pagination for Past Events -->
-    <div class="pagination" *ngIf="totalPages(pastEvents) > 1">
-      <button
-        *ngFor="let page of [].constructor(totalPages(pastEvents)); let i = index"
-        (click)="setPage(i + 1)"
-        [class.active]="i + 1 === currentPage"
-      >
-        {{ i + 1 }}
-      </button>
-    </div>
-
-    <ng-template #noPastEvents>
-      <p class="no-events-message">Aucun événement passé.</p>
-    </ng-template>
-  </div>
-</div>
-
-
-
-<!-- <div class="container">
-  <app-sidebar class="sidebar"></app-sidebar>
-  <div class="content-wrapper">
-    <app-header class="header"></app-header>
-
-    <div class="content">
-      <div class="title">
-        <h2>Mes Événements</h2>
-        <p>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.</p>
-      </div> -->
-
-      <!-- Bouton pour afficher le formulaire de création de catégorie -->
-      <!-- <div *ngIf="isAuthenticated">
-        <button class="btn-create-category" (click)="toggleCategoryForm()">
-          <i class="fas fa-plus"></i> Créer une catégorie
-        </button> -->
-
-        <!-- Formulaire pour créer une nouvelle catégorie -->
-        <!-- <div *ngIf="showCategoryForm" class="category-form">
-          <h3>Créer une nouvelle catégorie</h3>
-          <div class="form-group">
-            <input type="text" [(ngModel)]="newCategory" placeholder="Nom de la catégorie" />
-            <button (click)="createCategory()" class="btn-create">Créer</button>
-          </div>
-          <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+        <!-- Pagination des événements passés -->
+        <div class="pagination" *ngIf="totalPages(pastEvents) > 1">
+          <button
+            *ngFor="let page of [].constructor(totalPages(pastEvents)); let i = index"
+            (click)="setPage(i + 1)"
+            [class.active]="i + 1 === currentPage"
+          >
+            {{ i + 1 }}
+          </button>
         </div>
-      </div>
-
-      <div *ngIf="!isAuthenticated">
-        <p class="no-events-message">Connectez-vous pour voir vos événements.</p>
-      </div> -->
-
-      <!-- Event listing -->
-      <!-- <div *ngIf="isAuthenticated"> -->
-        <!-- Upcoming events section -->
-        <!-- <h3>Événements à venir</h3>
-        <div *ngIf="upcomingEvents.length > 0; else noUpcomingEvents" class="events-list">
-          <div *ngFor="let event of upcomingEvents" class="event-item">
-            <app-event-card [event]="event" [variant]="2"></app-event-card> -->
-            <!-- <button (click)="onEditEvent(event.id)" class="edit-btn">
-              <i class="fas fa-edit"></i> Modifier
-            </button> -->
-            <!-- <a href="/form-event-edit/{{ event.id }}"><i class="fas fa-edit"></i> Modifier</a>
-            <button (click)="onDeleteEvent(event.id)" class="delete-btn">
-              <i class="fas fa-trash-alt"></i> Supprimer
-            </button>
-          </div>
-        </div>
-
-        <ng-template #noUpcomingEvents>
-          <p class="no-events-message">Aucun événement à venir pour le moment.</p>
-        </ng-template> -->
-
-        <!-- Past events section -->
-        <!-- <h3>Événements passés</h3>
-        <div *ngIf="pastEvents.length > 0; else noPastEvents" class="events-list">
-          <div *ngFor="let event of pastEvents" class="event-item">
-            <app-event-card [event]="event" [variant]="2"></app-event-card>
-            <button (click)="onEditEvent(event.id)" class="edit-btn">
-              <i class="fas fa-edit"></i> Modifier
-            </button>
-            <button (click)="onDeleteEvent(event.id)" class="delete-btn">
-              <i class="fas fa-trash-alt"></i> Supprimer
-            </button>
-          </div>
-        </div>
-
         <ng-template #noPastEvents>
           <p class="no-events-message">Aucun événement passé.</p>
         </ng-template>
       </div>
     </div>
   </div>
-</div> -->
+</div>

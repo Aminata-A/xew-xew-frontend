@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { AuthService } from './../../services/auth.service';
 import { Router } from '@angular/router'; // Ajout de la dépendance Router pour la navigation
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-register',
@@ -33,8 +34,11 @@ export class RegisterComponent {
   timer: any;
   errorMessage: string = '';
   emailExists: boolean = false;
+  @ViewChild('profilePicInput') profilePicInput!: ElementRef<HTMLInputElement>;
+  profilePreview: string | ArrayBuffer | null = null;
 
-  constructor(private authService: AuthService, private router: Router) {}
+
+  constructor(private authService: AuthService, private router: Router, private cdr: ChangeDetectorRef) {}
 
   // Envoyer le code de vérification email
   sendVerificationEmail(form: NgForm) {
@@ -90,29 +94,34 @@ export class RegisterComponent {
   // Vérifier le code de vérification email
   verifyCode(form: NgForm) {
     if (!form.valid) {
-      this.errorMessage = 'Veuillez entrer le code de vérification.';
-      return;
+        this.errorMessage = 'Veuillez entrer le code de vérification.';
+        return;
     }
 
     if (this.countdown > 0) {
-      this.authService.verifyCode(this.formData.email, this.verificationCode).subscribe(
-        (response) => {
-          if (response.message === 'Code verified successfully') {
-            this.emailVerified = true;
-            this.token = response.token;
-            this.errorMessage = '';
-          } else {
-            this.errorMessage = 'Code de vérification invalide ou expiré.';
-          }
-        },
-        (error) => {
-          this.errorMessage = 'Erreur lors de la vérification du code.';
-        }
-      );
+        this.authService.verifyCode(this.formData.email, this.verificationCode).subscribe(
+            (response) => {
+                if (response.message === 'Code vérifié avec succès') {
+                    this.emailVerified = true;  // Change l'état pour débloquer l'étape suivante
+                    this.errorMessage = '';
+                    this.token = response.token;
+                    console.log('Code vérifié, emailVerified:', this.emailVerified);
+                    this.cdr.detectChanges(); // Force Angular à mettre à jour l'affichage
+
+                } else {
+                    this.errorMessage = 'Code de vérification invalide ou expiré.';
+                }
+            },
+            (error) => {
+                this.errorMessage = 'Erreur lors de la vérification du code.';
+                console.error('Erreur de vérification:', error);
+            }
+        );
     } else {
-      this.errorMessage = 'Le temps pour entrer le code a expiré.';
+        this.errorMessage = 'Le temps pour entrer le code a expiré.';
     }
-  }
+}
+
 
   // Soumettre les informations supplémentaires (nom, téléphone, rôle, photo)
   submitAdditionalInfo(form: NgForm) {
@@ -139,10 +148,25 @@ export class RegisterComponent {
     this.authService.register(this.formData, this.token).subscribe(
       (response) => {
         this.router.navigate(['/login']);  // Redirection vers la page de connexion
+        window.location.reload();
       },
       (error) => {
         this.errorMessage = 'Erreur d\'inscription, veuillez vérifier les données fournies.';
       }
     );
+  }
+   // Ouvre la boîte de dialogue de sélection de fichier
+  openFilePicker() {
+    this.profilePicInput.nativeElement.click();
+  }
+
+  // Charge et prévisualise l'image sélectionnée
+  onProfilePicUpload(event: Event): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => this.profilePreview = e?.target?.result || null;
+      reader.readAsDataURL(file);
+    }
   }
 }

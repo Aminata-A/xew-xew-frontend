@@ -1,180 +1,90 @@
-<div class="container">
-  <!-- Affichage du message d'erreur -->
-  <div *ngIf="errorMessage" class="error-message">
-    <p>{{ errorMessage }}</p>
+<div class="registration-page container-fluid ">
+  <!-- Left Panel with Logo and Circles -->
+  <div class="left-panel col-lg-6 d-none d-lg-flex">
+    <img src="../../../assets/images/logo.png" alt="Logo" class="logo mt-5">
+    <div class="circle-decorations">
+      <div class="circle circle1"></div>
+      <div class="circle circle2"></div>
+    </div>
   </div>
 
-  <div *ngIf="emailExists">
-    <p>Cet email est déjà associé à un compte. <a (click)="navigateToLogin()">Connectez-vous ici</a>.</p>
-  </div>
+  <!-- Right Panel with Form -->
+  <div class="card right-panel border-none p-4 col-lg-6" style="max-width: 400px; width: 100%;">
+    <h2 class="text-center mb-4">Inscription</h2>
 
-  <!-- Étape 1: Email -->
-  <div *ngIf="!emailSent && !emailVerified && !emailExists">
-    <form #form="ngForm" (ngSubmit)="sendVerificationEmail(form)">
-      <div class="input-group">
-        <label for="email">Email</label>
-        <input
-          type="email"
-          id="email"
-          [(ngModel)]="formData.email"
-          name="email"
-          placeholder="exemple@domaine.com"
-          required
-          #email="ngModel"
-        />
-         <!-- Ajout d'une variable locale pour l'accès à l'état de l'input -->
-        <!-- Message d'erreur sous l'input email -->
-        <div *ngIf="email.invalid && email.touched" class="error-message">
-          <p *ngIf="email.errors?.['required']">L'email est requis.</p>
-          <p *ngIf="email.errors?.['email']">Veuillez entrer un email valide.</p>
-        </div>
+    <!-- Step 1: Email Verification -->
+    <form *ngIf="!emailSent && !emailVerified && !emailExists" #emailForm="ngForm" (ngSubmit)="sendVerificationEmail(emailForm)" class="needs-validation" novalidate>
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" class="form-control" id="email" placeholder="exemple@domaine.com" [(ngModel)]="formData.email" name="email" required #email="ngModel">
+        <div *ngIf="email.invalid && email.touched" class="invalid-feedback">Veuillez entrer un email valide.</div>
+        <div *ngIf="errorMessage && emailForm.submitted" class="text-danger">{{ errorMessage }}</div>
       </div>
-      <button type="submit" class="submit-btn">Envoyer le code de vérification</button>
+      <button type="submit" class="btn btn-primary w-100">Envoyer le code de vérification</button>
     </form>
-  </div>
 
-  <!-- Étape 2: Vérification du code -->
-  <div *ngIf="emailSent && !emailVerified" class="email-verification">
-    <h2>Vérification email</h2>
-    <p class="info">Nous vous avons envoyé un code de vérification sur <span>{{ formData.email }}</span></p>
-    <form #form="ngForm" (ngSubmit)="verifyCode(form)">
-      <div class="input-group">
-        <input
-          type="text"
-          id="verificationCode"
-          [(ngModel)]="verificationCode"
-          name="verificationCode"
-          placeholder="Entrez votre code de vérification"
-          required
-          #verificationCodeInput="ngModel"
-        />
-        <!-- Message d'erreur sous le champ de code de vérification -->
-        <div *ngIf="verificationCodeInput.invalid && verificationCodeInput.touched" class="error-message">
-          <p *ngIf="verificationCodeInput.errors?.['required']">Le code de vérification est requis.</p>
-        </div>
+    <!-- Step 2: Code Verification -->
+    <form *ngIf="emailSent && !emailVerified" #codeForm="ngForm" (ngSubmit)="verifyCode(codeForm)" class="mt-4">
+      <h5>Vérification email</h5>
+      <p>Un code a été envoyé à <span>{{ formData.email }}</span></p>
+      <div class="mb-3">
+        <label for="verificationCode" class="form-label">Code de vérification</label>
+        <input type="text" class="form-control" id="verificationCode" [(ngModel)]="verificationCode" name="verificationCode" required #verificationCodeInput="ngModel">
+        <div *ngIf="verificationCodeInput.invalid && verificationCodeInput.touched" class="invalid-feedback">Le code est requis.</div>
+        <div *ngIf="errorMessage && codeForm.submitted" class="text-danger">{{ errorMessage }}</div>
       </div>
-
-      <!-- Compte à rebours -->
-      <p class="countdown">Temps restant : <span>{{ countdownMinutes }} : {{ countdownSeconds }} </span></p>
-
-      <button type="submit" class="submit-btn">Vérifier le code</button>
+      <p *ngIf="emailSent && !emailVerified" class="countdown">
+        Temps restant pour entrer le code : <span>{{ countdownMinutes }}:{{ countdownSeconds < 10 ? '0' + countdownSeconds : countdownSeconds }}</span>
+      </p>
+      <button type="submit" class="btn btn-primary w-100">Vérifier le code</button>
     </form>
-  </div>
 
-  <!-- Étape 3: Nom, Téléphone, Rôle, Photo de profil -->
-  <div *ngIf="emailVerified && !additionalInfoProvided">
-    <h1>Inscription</h1>
-
-    <form #form="ngForm" (ngSubmit)="submitAdditionalInfo(form)">
-      <div class="input-group">
-        <label for="name">Nom</label>
-        <input
-          type="text"
-          id="name"
-          [(ngModel)]="formData.name"
-          name="name"
-          placeholder="Votre nom complet"
-          required
-          #name="ngModel"
-        />
-        <!-- Message d'erreur sous le champ nom -->
-        <div *ngIf="name.invalid && name.touched" class="error-message">
-          <p *ngIf="name.errors?.['required']">Le nom est requis.</p>
-        </div>
+    <!-- Step 3: Additional Information -->
+    <form *ngIf="emailVerified && !additionalInfoProvided" #infoForm="ngForm" (ngSubmit)="submitAdditionalInfo(infoForm)" class="mt-4">
+      <div class="mb-3">
+        <label for="name" class="form-label">Nom</label>
+        <input type="text" class="form-control" id="name" placeholder="Votre nom complet" [(ngModel)]="formData.name" name="name" required #name="ngModel">
+        <div *ngIf="name.invalid && name.touched" class="invalid-feedback">Le nom est requis.</div>
+        <div *ngIf="errorMessage && infoForm.submitted" class="text-danger">{{ errorMessage }}</div>
       </div>
-
-      <div class="input-group">
-        <label for="phone">Téléphone</label>
-        <input
-          type="tel"
-          id="phone"
-          [(ngModel)]="formData.phone"
-          name="phone"
-          placeholder="Numéro de téléphone"
-          required
-          #phone="ngModel"
-        />
-        <!-- Message d'erreur sous le champ téléphone -->
-        <div *ngIf="phone.invalid && phone.touched" class="error-message">
-          <p *ngIf="phone.errors?.['required']">Le numéro de téléphone est requis.</p>
-        </div>
+      <div class="mb-3">
+        <label for="phone" class="form-label">Téléphone</label>
+        <input type="tel" class="form-control" id="phone" placeholder="Numéro de téléphone" [(ngModel)]="formData.phone" name="phone" required #phone="ngModel">
+        <div *ngIf="phone.invalid && phone.touched" class="invalid-feedback">Le téléphone est requis.</div>
       </div>
-
-      <div class="input-group">
-        <label for="role">Rôle</label>
-        <select
-          id="role"
-          [(ngModel)]="formData.role"
-          name="role"
-          required
-          #role="ngModel"
-        >
+      <div class="mb-3">
+        <label for="role" class="form-label">Rôle</label>
+        <select id="role" class="form-select" [(ngModel)]="formData.role" name="role" required #role="ngModel">
           <option value="organizer">Organisateur</option>
           <option value="participant">Participant</option>
         </select>
-        <!-- Message d'erreur sous le champ rôle -->
-        <div *ngIf="role.invalid && role.touched" class="error-message">
-          <p *ngIf="role.errors?.['required']">Le rôle est requis.</p>
+        <div *ngIf="role.invalid && role.touched" class="invalid-feedback">Le rôle est requis.</div>
+      </div>
+      <div class="mb-3">
+        <label for="photo" class="form-label">Photo de profil</label>
+        <div class="profile-pic-upload text-center">
+          <input type="file" #profilePicInput (change)="onProfilePicUpload($event)" accept="image/*" style="display: none;">
+          <img [src]="profilePreview || 'https://img.freepik.com/vecteurs-premium/icone-utilisateur-orange-sans-icone-arriere-plan_1076610-85993.jpg?w=740'" alt="Aperçu de la photo" class="profile-preview mb-2 rounded-circle" width="100">
+          <button type="button" class="btn btn-outline-secondary" (click)="openFilePicker()">Choisir une photo</button>
         </div>
       </div>
-
-      <div class="input-group">
-        <label for="photo">Photo de profil (URL)</label>
-        <input type="url" id="photo" [(ngModel)]="formData.photo" name="photo" placeholder="Lien vers votre photo de profil"  #photo="ngModel"/>
-        <!-- Message d'erreur sous le champ photo de profil -->
-        <div *ngIf="photo.invalid && photo.touched" class="error-message">
-          <p *ngIf="photo.errors?.['required']">L'URL de la photo est requise.</p>
-          <p *ngIf="photo.errors?.['url']">Veuillez entrer une URL valide.</p>
-        </div>
-      </div>
-
-      <button type="submit" class="submit-btn">Soumettre les informations</button>
+      <button type="submit" class="btn btn-primary w-100">Soumettre les informations</button>
     </form>
-  </div>
 
-  <!-- Étape 4: Mot de passe -->
-  <div *ngIf="additionalInfoProvided">
-    <h1>Définir un mot de passe</h1>
-
-    <form #form="ngForm" (ngSubmit)="register(form)">
-      <div class="input-group">
-        <label for="password">Mot de passe</label>
-        <input
-          type="password"
-          id="password"
-          [(ngModel)]="formData.password"
-          name="password"
-          placeholder="Mot de passe"
-          required
-          minlength="6"
-          #password="ngModel"
-        />
-        <!-- Message d'erreur sous le champ mot de passe -->
-        <div *ngIf="password.invalid && password.touched" class="error-message">
-          <p *ngIf="password.errors?.['required']">Le mot de passe est requis.</p>
-          <p *ngIf="password.errors?.['minlength']">Le mot de passe doit contenir au moins 6 caractères.</p>
-        </div>
+    <!-- Step 4: Password Setup -->
+    <form *ngIf="additionalInfoProvided" #passwordForm="ngForm" (ngSubmit)="register(passwordForm)" class="mt-4">
+      <div class="mb-3">
+        <label for="password" class="form-label">Mot de passe</label>
+        <input type="password" class="form-control" id="password" [(ngModel)]="formData.password" name="password" placeholder="Mot de passe" required minlength="6" #password="ngModel">
+        <div *ngIf="password.invalid && password.touched" class="invalid-feedback">Le mot de passe doit contenir au moins 6 caractères.</div>
+        <div *ngIf="errorMessage && passwordForm.submitted" class="text-danger">{{ errorMessage }}</div>
       </div>
-
-      <div class="input-group">
-        <label for="password_confirmation">Confirmer le mot de passe</label>
-        <input
-          type="password"
-          id="password_confirmation"
-          [(ngModel)]="formData.password_confirmation"
-          name="password_confirmation"
-          placeholder="Confirmez le mot de passe"
-          required
-          #passwordConfirmation="ngModel"
-        />
-        <!-- Message d'erreur sous le champ confirmation du mot de passe -->
-        <div *ngIf="passwordConfirmation.invalid && passwordConfirmation.touched" class="error-message">
-          <p *ngIf="passwordConfirmation.errors?.['required']">La confirmation du mot de passe est requise.</p>
-          <p *ngIf="formData.password !== formData.password_confirmation">Les mots de passe ne correspondent pas.</p>
-        </div>
+      <div class="mb-3">
+        <label for="password_confirmation" class="form-label">Confirmer le mot de passe</label>
+        <input type="password" class="form-control" id="password_confirmation" [(ngModel)]="formData.password_confirmation" name="password_confirmation" placeholder="Confirmez le mot de passe" required #passwordConfirmation="ngModel">
+        <div *ngIf="passwordConfirmation.invalid && passwordConfirmation.touched" class="invalid-feedback">La confirmation du mot de passe est requise.</div>
       </div>
-
-      <button type="submit" class="submit-btn">S'inscrire</button>
+      <button type="submit" class="btn btn-primary w-100">S'inscrire</button>
     </form>
   </div>
 </div>

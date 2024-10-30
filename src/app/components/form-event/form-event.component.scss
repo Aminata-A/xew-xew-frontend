@@ -12,7 +12,7 @@
   width: 100%;
 }
 
-.container {
+.form-event-page {
   display: flex;
   font-family: 'Cabinet Grotesk', sans-serif;
   width: 100vw;
@@ -187,6 +187,17 @@
           }
         }
       }
+    }
+    .error-message {
+      color: red;
+      font-size: 0.9em;
+      margin-top: 4px;
+    }
+
+    .success-message {
+      color: green;
+      font-size: 0.9em;
+      margin-top: 4px;
     }
   }
 

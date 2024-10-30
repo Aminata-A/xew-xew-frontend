@@ -1,44 +1,68 @@
-<div class="container login-container">
-  <h2>Connexion</h2>
-  <form (ngSubmit)="login()">
-    <div class="input-group">
-      <label for="email">Email:</label>
-      <input
-        id="email"
-        type="email"
-        [(ngModel)]="loginData.email"
-        name="email"
-        placeholder="Entrez votre email"
-        required
-        #email="ngModel" />
-      <div *ngIf="email.invalid && email.touched" class="error-message">
-        Veuillez entrer un email valide.
+<div class="login-page container-fluid min-vh-100 p-0">
+  <!-- Colonne gauche avec le logo et les cercles -->
+  <div class="left-panel col-lg-6">
+    <img src="../../../assets/images/logo.png" alt="Logo" class="logo mt-5">
+    <div class="circle-decorations">
+      <div class="circle circle1"></div>
+      <div class="circle circle2"></div>
+    </div>
+  </div>
+
+  <!-- Colonne droite avec le formulaire de connexion -->
+  <div class="right-panel d-flex ">
+    <div class="login-form-container">
+      <h2 class="text-center mb-4">Connexion</h2>
+      <form #form="ngForm" (ngSubmit)="login(form)" class="w-100">
+        <!-- Email Field -->
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            placeholder="exemple@domaine.com"
+            [(ngModel)]="loginData.email"
+            name="email"
+            required
+            #email="ngModel">
+          <div *ngIf="email.invalid && email.touched" class="invalid-feedback">
+            Veuillez entrer un email valide.
+          </div>
+        </div>
+
+        <!-- Password Field -->
+        <div class="mb-3">
+          <label for="password" class="form-label">Mot de passe</label>
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            placeholder="Mot de passe"
+            [(ngModel)]="loginData.password"
+            name="password"
+            required
+            #password="ngModel">
+          <div *ngIf="password.invalid && password.touched" class="invalid-feedback">
+            Le mot de passe est requis.
+          </div>
+        </div>
+
+        <!-- Forgot Password Link -->
+        <div class="text-end mb-3">
+          <a href="#" class="forgot-password-link">Mot de passe oublié ?</a>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-orange w-100">Se connecter</button>
+      </form>
+
+      <!-- Signup Link -->
+      <div class="text-center mt-4">
+        <p class="text-muted mb-1">
+          Si vous n'avez pas de compte, <a href="/register" class="signup-link">S'inscrire</a>
+        </p>
+        <a href="#" class="connect-later-link">Se connecter plus tard</a>
       </div>
     </div>
-
-    <div class="input-group">
-      <label for="password">Mot de passe:</label>
-      <input
-        id="password"
-        type="password"
-        [(ngModel)]="loginData.password"
-        name="password"
-        placeholder="Entrez votre mot de passe"
-        required
-        #password="ngModel" />
-      <div *ngIf="password.invalid && password.touched" class="error-message">
-        Le mot de passe est requis.
-      </div>
-    </div>
-
-    <div *ngIf="errorMessage" class="error-message">
-      {{ errorMessage }}
-    </div>
-
-    <button type="submit" class="submit-btn">Se connecter</button>
-  </form>
-
-  <div class="register-link">
-    Pas encore de compte ? <a [href]="['/register']">S'inscrire</a>
   </div>
 </div>

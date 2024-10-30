@@ -1,17 +1,74 @@
-<div class="ticket-details" *ngIf="ticketDetails">
-  <a href="/src/app/components/tickets/tickets.component.html">retour</a>
-  <h2>Détails du billet</h2>
-  <p><strong>Nom de l'événement :</strong> {{ ticketDetails.event_name }}</p>
-  <p><strong>Date :</strong> {{ ticketDetails.event_date }}</p>
-  <p><strong>Lieu :</strong> {{ ticketDetails.event_location }}</p>
-  <p><strong>Prix :</strong> {{ ticketDetails.event_price | currency:'XOF' }}</p>
-  <p><strong>Quantité :</strong> {{ ticketDetails.quantity }}</p>
-  <p><strong>ticket_status :</strong>{{ ticketDetails.ticket_status }}</p>
+<header>
+  <h3>
+    <a [href]="'/tickets'">Tickets</a> > Détails du Ticket
+  </h3>
+  <img src="../../../assets/images/logo.png" class="logo" alt="Logo" />
+</header>
 
-  <qrcode [qrdata]="ticketDetails.qr_code" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
 
-</div>
+<div class="ticket-details-page">
+  <!-- Image de l'événement et QR code -->
+  <div class="event-image">
+    <!-- Event Image: Hidden on mobile -->
+    <img *ngIf="ticketDetails?.event?.event_banner"
+    [src]="'http://127.0.0.1:8000' + ticketDetails.event.event_banner"
+    alt="Image de l'événement"
+    class="desktop-event-image" />
+    <!-- QR Code: Displayed on mobile -->
+    <div class="qr-code-overlay mobile-qr-code">
+      <div class="qr-code-overlay">
+        <qrcode *ngIf="ticketDetails?.event"
+                [qrdata]="generateQRCodeData()"
+                [width]="200"
+                [errorCorrectionLevel]="'M'">
+        </qrcode>
+      </div>
+          </div>
+  </div>
 
-<div *ngIf="!ticketDetails">
-  <p>Chargement des détails du billet...</p>
+  <!-- Contenu principal -->
+  <div class="ticket-content">
+    <!-- En-tête de l'événement -->
+    <div class="event-header">
+      <h1>{{ ticketDetails.event.event_name }}</h1>
+    </div>
+
+    <div class="event-meta">
+      <span class="event-location"><i class="icon-location"></i>{{ ticketDetails.event.event_location }}</span>
+    </div>
+
+    <!-- Détails de l'événement -->
+    <div class="ticket-overview">
+      <div class="overview-item">
+        <i class="icon-calendar"></i>
+        <span>Date : {{ ticketDetails.event.event_date | date: 'dd/MM/yyyy' }}</span>
+      </div>
+      <div class="overview-item">
+        <i class="icon-price"></i>
+        <span>Prix : {{ ticketDetails.event.event_price | currency: 'XOF' }}</span>
+      </div>
+      <div class="overview-item">
+        <i class="icon-ticket"></i>
+        <span>{{ ticketDetails.quantity }} Billet(s)</span>
+      </div>
+    </div>
+
+    <!-- Description de l'événement -->
+    <div class="event-description">
+      <h2>Description</h2>
+      <p>{{ ticketDetails.event.event_description }}</p>
+    </div>
+
+    <!-- Détails de l'acheteur -->
+    <div class="buyer-details">
+      <h2>Acheteur</h2>
+      <p><strong>Nom :</strong> {{ ticketDetails.buyer.name }}</p>
+      <p><strong>Email :</strong> {{ ticketDetails.buyer.email }}</p>
+      <p><strong>Statut :</strong> <span [class]="ticketDetails.is_paid ? 'paid' : 'unpaid'">{{ ticketDetails.is_paid ? 'Payé' : 'Non payé' }}</span></p>
+      <p><strong>Date d'achat :</strong> {{ ticketDetails.purchase_date }}</p>
+    </div>
+
+    <!-- Bouton retour -->
+    <!-- <a class="back-button" [href]="'/tickets'">Retour aux Tickets</a> -->
+  </div>
 </div>

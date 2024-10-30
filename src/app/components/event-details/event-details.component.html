@@ -1,6 +1,6 @@
-<div class="container" *ngIf="event">
+<div class="event-details-page" *ngIf="event">
   <div class="event-header">
-    <img [src]="'http://127.0.0.1:8000' + event.banner" alt="image-event" class="event-image" />
+    <img *ngIf="event.banner" [src]="'http://127.0.0.1:8000' + event.banner" alt="image-event" class="event-image" />
     <div class="event-info">
       <div class="event-category">
         <p><i class="fas fa-music"></i> Musique</p>
@@ -19,7 +19,7 @@
       <div class="event-description">
         <h2>{{ event.name }}</h2>
         <p>{{ event.description }}</p>
-        <p class="ticket-available"><strong>Nombre de billet disponible : </strong><span id="ticket-available">{{ ticketAvailable }} places</span></p>
+        <p class="ticket-available"><strong>Nombre de billet disponible : </strong><span id="ticket-available">{{ ticketsRemaining }} places</span></p>
       </div>
       <div class="ticket-purchase">
         <h3>Acheter mon billet</h3>

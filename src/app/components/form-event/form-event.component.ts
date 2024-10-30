@@ -25,6 +25,7 @@ export class FormEventComponent implements OnInit {
   selectedWallets: number[] = [];
   errorMessage: string = '';
   bannerPreview: string | null = null;
+  successMessage: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -81,9 +82,10 @@ export class FormEventComponent implements OnInit {
 
   onSubmit() {
     if (this.eventForm.invalid) {
-      console.log('Formulaire invalide');
+      this.errorMessage = 'Le formulaire est invalide. Veuillez vérifier les champs.';
       return;
     }
+
 
     const formData = new FormData();
     // Les données principales de l'événement sous forme de JSON pour "body"
@@ -91,6 +93,8 @@ export class FormEventComponent implements OnInit {
       name: this.eventForm.get('name')?.value,
       date: this.eventForm.get('date')?.value,
       time: this.eventForm.get('time')?.value,
+      categories: this.selectedCategories,
+      wallets: this.selectedWallets,
       location: this.eventForm.get('location')?.value,
       ticket_price: this.eventForm.get('ticket_price')?.value,
       ticket_quantity: this.eventForm.get('ticket_quantity')?.value,
@@ -98,8 +102,8 @@ export class FormEventComponent implements OnInit {
     }));
 
     // Les catégories et wallets sous forme de tableau JSON
-    formData.append('categories', JSON.stringify(this.selectedCategories));
-    formData.append('wallets', JSON.stringify(this.selectedWallets));
+    // formData.append('categories', JSON.stringify(this.selectedCategories));
+    // formData.append('wallets', JSON.stringify(this.selectedWallets));
 
     // Charger le fichier de bannière
     const bannerFile = this.eventForm.get('banner')?.value;
@@ -109,16 +113,13 @@ export class FormEventComponent implements OnInit {
 
     this.eventService.createEvent(formData).subscribe({
       next: (response) => {
-        console.log('Événement créé avec succès:', response);
+        this.successMessage = 'Événement créé avec succès';
+        this.clearMessagesAfterDelay();
         this.router.navigate(['/events']).then(() => window.location.reload());
       },
       error: (error: HttpErrorResponse) => {
-        console.error('Erreur lors de la création de l\'événement:', error);
         if (error.status === 422 && error.error.errors) {
-          // Log des erreurs détaillées de validation
-          console.log('Erreurs de validation précises :', error.error.errors);
           this.errorMessage = 'Erreurs de validation :';
-
           const validationErrors = error.error.errors as Record<string, string[]>;
           for (const [field, messages] of Object.entries(validationErrors)) {
             this.errorMessage += `\n${field} : ${messages.join(', ')}`;
@@ -126,8 +127,9 @@ export class FormEventComponent implements OnInit {
         } else {
           this.errorMessage = 'Une erreur est survenue lors de la création de l\'événement.';
         }
+        this.clearMessagesAfterDelay();
       }
-      
+
     });
   }
 
@@ -141,5 +143,12 @@ export class FormEventComponent implements OnInit {
       };
       reader.readAsDataURL(file);
     }
+  }
+
+  clearMessagesAfterDelay() {
+    setTimeout(() => {
+      this.successMessage = '';
+      this.errorMessage = '';
+    }, 5000); // Efface les messages après 5 secondes
   }
 }

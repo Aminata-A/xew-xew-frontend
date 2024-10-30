@@ -9,8 +9,8 @@
   overflow: hidden; /* Permettre le scroll en modifiant */
 }
 
-.container {
-  .container {
+.event-details-page {
+  .event-details-page {
     width: 100%; /* S'assurer que la largeur prend tout l'espace disponible */
     max-width: 1200px; /* Limiter la largeur pour que ça soit plus lisible sur grand écran */
     margin: 0 auto;
@@ -350,7 +350,7 @@
   }
 
   @media (min-width: 768px) {
-    .container {
+    .event-details-page {
       margin: auto;
       background: white;
       overflow: hidden;
@@ -390,8 +390,9 @@
     }
     .event-details {
       padding: 2em;
-      width: 50%;
+      // width: 50%;
       position: relative;
+      width: 50%;
     }
     .button-container{
       .purchase-button{

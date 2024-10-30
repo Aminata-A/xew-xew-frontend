@@ -9,6 +9,7 @@ import { EventCardComponent } from '../event-card/event-card.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CategoryService } from 'src/app/services/category.service';
 import { jwtDecode } from 'jwt-decode';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -28,6 +29,9 @@ export class MyEventsComponent implements OnInit {
   newCategory: string = '';
   errorMessage: string = '';
   showCategoryForm: boolean = false;
+  deleteMessage: string = '';
+  public ticketsRemaining: number = 0;
+
 
   // Pagination
   currentPage: number = 1;
@@ -107,19 +111,69 @@ export class MyEventsComponent implements OnInit {
     return Math.ceil(eventsArray.length / this.eventsPerPage);
   }
 
-  onEditEvent(eventId: number) {
-    this.router.navigate(['/form-event-edit', eventId]);
+  // Méthode de modification d'un événement
+  onEditEvent(eventId: number, ticketsSold: number) {
+    if (ticketsSold > 0) {
+      this.message = "Il y a déjà un ticket acheté pour cet événement. Vous ne pouvez pas le modifier. Si c'est urgent, appelez le service client.";
+      setTimeout(() => {
+        this.message = ''; // Cache le message après 5 secondes
+      }, 5000);
+      return; // Arrête la fonction
+    }
+    this.router.navigate(['/form-event-edit', eventId]); // Redirige si pas de ticket vendu
   }
 
-  onDeleteEvent(eventId: number) {
-    this.eventService.deleteEvent(eventId).subscribe(
-      () => {
-        this.loadEvents();
+  // Méthode de suppression d'un événement
+  onDeleteEvent(eventId: number, ticketsSold: number, eventDate: string): void {
+    const currentDate = new Date();
+    const isEventPast = new Date(eventDate) <= currentDate;
+
+    // Afficher la confirmation de suppression avec SweetAlert2
+    Swal.fire({
+      title: '<strong style="color: #FF773D;">Êtes-vous sûr?</strong>',
+      html: `<p style="color: #1b1b1b;">Voulez-vous vraiment supprimer cet événement?</p>`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Oui, supprimer',
+      cancelButtonText: 'Non, annuler',
+      customClass: {
+        confirmButton: 'styled-confirm-btn',
+        cancelButton: 'styled-cancel-btn',
+        popup: 'styled-popup',
       },
-      (error: HttpErrorResponse) => {
-        console.error("Erreur lors de la suppression de l'événement :", error);
-        this.loadEvents();
+      buttonsStyling: false, // Désactive les styles par défaut pour appliquer des styles personnalisés
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Si l'utilisateur confirme, procéder avec la suppression
+        if (!isEventPast && ticketsSold > 0) {
+          this.message = "Il y a déjà un ticket acheté pour cet événement. Vous ne pouvez pas le supprimer. Si c'est urgent, appelez le service client.";
+          setTimeout(() => {
+            this.message = ''; // Cache le message après 5 secondes
+          }, 5000);
+          return; // Arrête la fonction si l'événement n'est pas passé et des tickets sont vendus
+        }
+
+        // Effectuer la suppression si l'événement est passé ou si aucun ticket n'a été vendu
+        this.eventService.deleteEvent(eventId).subscribe(
+          () => {
+            this.deleteMessage = 'Événement supprimé avec succès';
+            setTimeout(() => {
+              this.deleteMessage = '';
+            }, 3000);
+            this.loadEvents(); // Recharger les événements après suppression
+          },
+          (error) => {
+            console.error("Erreur lors de la suppression de l'événement :", error);
+          }
+        );
       }
-    );
+    });
   }
+  getEventImage(event: any): string {
+    return event.banner
+    ? 'http://127.0.0.1:8000' + event.banner
+    : 'https://img.freepik.com/premium-photo/indian-republic-day-concept-indian-flag-print-air-balloon-with-copy-space-banner_742418-20690.jpg?w=1060';
+  }
+
+
 }

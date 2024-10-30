@@ -1,49 +1,33 @@
-<!-- <div class="container">
-  <h1>Profile</h1>
+<div class="background-decor">
+  <div class="decor decor-1"></div>
+  <div class="decor decor-2"></div>
+  <div class="decor decor-3"></div>
+</div>
 
-  <div class="profile-section"> -->
-    <!-- Image de profil -->
-    <!-- <img [src]="profileImage" alt="Photo de profile" class="profile-img" /> -->
 
-    <!-- Formulaire de profil pré-rempli avec les valeurs de l'utilisateur -->
-    <!-- <form class="profile-form" (ngSubmit)="onSubmit()">
-      <div class="input-group">
-        <label for="name">Nom complet</label>
-        <input type="text" id="name" [(ngModel)]="user.name" name="name" required />
-      </div>
-
-      <div class="input-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" [(ngModel)]="user.email" name="email" required />
-      </div>
-
-      <div class="input-group">
-        <label for="phone">Numéro de téléphone</label>
-        <input type="tel" id="phone" [(ngModel)]="user.phone" name="phone" required />
-      </div>
-
-      <div class="input-group">
-        <label for="role">Rôle</label>
-        <select id="role" [(ngModel)]="user.role" name="role" required class="form-select">
-          <option value="organisateur">Organisateur</option>
-          <option value="participant">Participant</option>
-        </select>
-      </div>
-
-      <button type="submit" class="submit-btn">Modifier</button>
-    </form>
+<div class="head">
+  <div class="header">
+    <a href="previousPage.html" class="back-button">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    <h1>Profil</h1>
   </div>
-</div> -->
+  <div class="right"></div>
+</div>
 
-<div class="container">
-  <h1>Profile</h1>
-
+<div class="profile-container">
   <div class="profile-section">
-    <!-- Image de profil -->
-    <img [src]="profileImage" alt="Photo de profile" class="profile-img" />
+    <div class="profile-image-container">
+      <img
+      class="profile-img"
+      [src]="profileImage ? 'http://127.0.0.1:8000' + profileImage : 'https://img.freepik.com/vecteurs-premium/icone-utilisateur-orange-sans-icone-arriere-plan_1076610-85993.jpg?w=740'"
+      alt="{{ user.name }}"
+    />
 
-    <!-- Formulaire de profil pré-rempli avec les valeurs de l'utilisateur -->
-    <form class="profile-form">
+    <!-- <button class="change-photo-btn">Changer de photo</button> -->
+    </div>
+
+    <form class="profile-form" (ngSubmit)="onSubmit()">
       <div class="input-group">
         <label for="name">Nom complet</label>
         <input type="text" id="name" [(ngModel)]="user.name" name="name" required />
@@ -67,7 +51,7 @@
         </select>
       </div>
 
-      <button type="submit" class="submit-btn">Modifier</button>
+      <button type="submit" class="submit-btn">Enregistrer les modifications</button>
     </form>
   </div>
 </div>

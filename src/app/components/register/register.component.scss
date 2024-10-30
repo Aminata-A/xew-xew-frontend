@@ -1,221 +1,162 @@
-/* Global styles */
-$primary-color: hsl(16, 100%, 50%);
-$background-color: #F4F4F4;
-$text-color: #1B1B1B;
-$placeholder-color: #bbb;
-$font-family: 'cabinet-grotesk', sans-serif;
+$primary-color: #FF773D;
+$background-light: #fff;
+$font-color: #1b1b1b;
+$font-family: 'Cabinet Grotesk', sans-serif;
 
-:host {
+.registration-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   font-family: $font-family;
-  background-color: white;
-  padding: 20px;
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background-color: $background-light;
   min-height: 100vh;
-}
+  max-height: 100vh; // Limite la hauteur pour permettre le défilement
+  overflow-y: auto; // Active le défilement vertical
 
-.container {
-  width: 100%;
-  max-width: 600px; /* Slightly increased for better web display */
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-.error-message {
-  color: red;
-  font-size: 0.9em;
-  margin-top: 5px;
-}
-
-/* Form styles */
-form {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  margin: 0 auto;
-
-  label {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: $text-color;
-  }
-
-  input,
-  select {
+  .left-panel {
+    background-color: $background-light;
+    display: flex;
+    flex-direction: column;
+    // justify-content: center;
+    // align-items: center;
+    position: relative;
+    padding: 0 4em;
     width: 100%;
-    padding: 15px;
-    border-radius: 10px;
-    border: 1px solid #ccc; /* Added border for visibility */
-    background-color: $background-color;
-    font-size: 1rem;
-    color: $text-color;
-    margin-top: 10px;
-    margin-bottom: 20px;
-    box-sizing: border-box;
 
-    &::placeholder {
-      color: $placeholder-color;
+    .logo {
+      width: 120px;
+      margin-top: 2rem;
+    }
+
+    .circle-decorations {
+      position: absolute;
+      top: 30%;
+      right: 10%;
+
+      .circle {
+        background-color: rgba(255, 119, 61, 0.2);
+        border-radius: 50%;
+      }
+
+      .circle1 {
+        width: 80px;
+        height: 80px;
+      }
+
+      .circle2 {
+        width: 120px;
+        height: 120px;
+        position: absolute;
+        top: 40px;
+        left: 40px;
+      }
     }
   }
-}
 
-.email-verification {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  color: $text-color;
+  .right-panel {
+    background-color: white;
+    // box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    border: none;
+    padding: 2rem;
+    max-width: 400px;
+    width: 100%;
+    // text-align: center;
+    min-height: 90vh;
+    justify-content: center;
 
-  .info {
-    span {
-      font-weight: bold;
+    h2 {
+      color: $font-color;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      font-family: 'Clash Display', sans-serif;
     }
-  }
 
-  .countdown {
-    span {
+    .form-label {
+      font-weight: 500;
+      color: $font-color;
+    }
+
+    .form-control {
+      background-color: #f0f0f0;
+      border: none;
+      padding: 15px;
+      border-radius: 5px;
+      margin-top: 10px;
+      font-size: 1rem;
+    }
+
+    .profile-pic-upload {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 1rem;
+
+      .profile-preview {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 1rem;
+      }
+
+
+      .btn-outline-secondary {
+        color: $font-color;
+        border-color: $primary-color;
+
+        &:hover {
+          background-color: lighten($primary-color, 40%);
+          color: $primary-color;
+        }
+      }
+    }
+
+    .btn-primary {
+      background-color: $primary-color;
+      color: white;
+      font-size: 1rem;
+      padding: 12px;
+      border-radius: 5px;
+      border: none;
+      margin-top: 1.5rem;
+      font-weight: 500;
+
+      &:hover {
+        background-color: darken($primary-color, 10%);
+      }
+    }
+
+    .invalid-feedback {
       color: $primary-color;
-      font-weight: bold;
+      font-size: 0.9rem;
     }
   }
 }
 
-/* Submit button styles */
-.submit-btn {
-  background-color: $primary-color;
-  color: white;
-  padding: 15px;
-  border: none;
-  border-radius: 10px;
-  font-size: 1rem;
-  cursor: pointer;
-  margin-top: 20px;
-
-  &:hover {
-    background-color: darken($primary-color, 10%);
-  }
-}
-
-/* Additional links styles */
-.additional-links {
-  text-align: center;
-  font-size: 0.9rem;
-
-  a {
-    color: $primary-color;
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-
-  .connect-later {
-    margin-top: 10px;
-    display: block;
-  }
-}
-
-/* Profile picture upload */
-.profile-pic-upload {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 200px;
-  background-color: $background-color;
-  border-radius: 10px;
-  border: 1px dashed $placeholder-color;
-  cursor: pointer;
-  margin-bottom: 20px;
-
-  input[type='file'] {
+/* Responsive Design */
+@media (max-width: 768px) {
+  .left-panel {
     display: none;
   }
 
-  label {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-
-    span {
-      font-size: 1rem;
-      color: $placeholder-color;
-    }
-  }
-}
-
-/* Responsive Styles */
-@media (max-width: 1024px) {
-  .container {
-    max-width: 90%;
-    padding: 15px;
-  }
-
-  form input,
-  form select {
-    padding: 12px;
-  }
-
-  .submit-btn {
-    font-size: 0.9rem;
-    padding: 12px;
-  }
-}
-
-@media (max-width: 768px) {
-  .container {
-    max-width: 95%; /* Nearly full width for tablets */
-    padding: 10px;
-  }
-
-  form input,
-  form select {
-    padding: 10px;
-    font-size: 0.9rem;
-  }
-
-  .submit-btn {
-    font-size: 0.9rem;
-    padding: 10px;
-  }
-
-  .profile-pic-upload {
-    height: 150px; /* Smaller height for tablets */
+  .right-panel {
+    padding: 1.5rem;
   }
 }
 
 @media (max-width: 480px) {
-  .container {
+  .registration-page {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .right-panel {
+    padding: 1rem;
     max-width: 100%;
-    padding: 10px;
   }
 
-  form label {
-    font-size: 1rem; /* Slightly smaller labels */
-  }
-
-  form input,
-  form select {
-    padding: 8px;
+  .btn-primary {
     font-size: 0.9rem;
-  }
-
-  .submit-btn {
-    font-size: 0.8rem;
     padding: 10px;
-  }
-
-  .profile-pic-upload {
-    height: 120px; /* Smaller height for mobile */
-  }
-
-  .profile-pic-upload label span {
-    font-size: 0.8rem;
   }
 }

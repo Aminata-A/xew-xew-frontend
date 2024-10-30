@@ -1,185 +1,158 @@
-/* Global styles */
-$primary-color: hsl(16, 100%, 50%);
-$background-color: #f4f4f4;
-$text-color: #1b1b1b;
-$placeholder-color: #bbb;
-$font-family: 'cabinet-grotesk', sans-serif;
+$primary-color: #FF773D;
+$background-light: #fff;
+$font-color: #1b1b1b;
+$font-family: 'Cabinet Grotesk', sans-serif;
 
-:host {
+.login-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   font-family: $font-family;
-  background-color: white;
-  padding: 20px;
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background-color: $background-light;
   min-height: 100vh;
-}
+  max-height: 100vh;
+  overflow-y: auto;
 
-.container {
-  width: 100%;
-  max-width: 400px;
-  padding: 20px;
-}
+  .left-panel {
+    background-color: $background-light;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding: 0 4em;
+    width: 100%;
 
-.login-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: $text-color;
-}
+    .logo {
+      width: 120px;
+      margin-top: 2rem;
+    }
 
-/* Form styles */
-form {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  margin: 0 auto;
+    .circle-decorations {
+      position: absolute;
+      top: 30%;
+      right: 10%;
 
-  label {
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: $text-color;
+      .circle {
+        background-color: rgba(255, 119, 61, 0.2);
+        border-radius: 50%;
+      }
+
+      .circle1 {
+        width: 80px;
+        height: 80px;
+      }
+
+      .circle2 {
+        width: 120px;
+        height: 120px;
+        position: absolute;
+        top: 40px;
+        left: 40px;
+      }
+    }
   }
 
-  input,
-  select {
-    width: 93%;
-    padding: 15px;
-    border-radius: 10px;
+  .right-panel {
+    background-color: white;
     border: none;
-    background-color: $background-color;
-    font-size: 1rem;
-    color: $text-color;
-    outline: none;
-    margin: 20px 0 2em 0;
+    padding: 2rem;
+    max-width: 400px;
+    width: 100%;
+    min-height: 90vh;
+    justify-content: center;
+    flex-direction: column;
 
-    &::placeholder {
-      color: $placeholder-color;
+    h2 {
+      color: $font-color;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      font-family: 'Clash Display', sans-serif;
+    }
+
+    .form-label {
+      font-weight: 500;
+      color: $font-color;
+    }
+
+    .form-control {
+      background-color: #f0f0f0;
+      border: none;
+      padding: 15px;
+      border-radius: 5px;
+      margin-top: 10px;
+      font-size: 1rem;
+    }
+
+    .btn-primary {
+      background-color: $primary-color;
+      color: white;
+      font-size: 1rem;
+      padding: 12px;
+      border-radius: 5px;
+      border: none;
+      margin-top: 1.5rem;
+      font-weight: 500;
+
+      &:hover {
+        background-color: darken($primary-color, 10%);
+      }
+    }
+
+    .invalid-feedback {
+      color: $primary-color;
+      font-size: 0.9rem;
+    }
+
+    .forgot-password-link {
+      color: $primary-color;
+      text-decoration: none;
+      font-size: 0.9rem;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    .signup-link, .connect-later-link {
+      color: $primary-color;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
+  .invalid-feedback {
+    color: #FF773D; /* Votre couleur d'erreur */
+    font-size: 0.9rem;
+    display: block; /* S'assure que le message est visible */
+  }
+
 }
 
-/* Responsive adjustments */
+/* Responsive Design */
 @media (max-width: 768px) {
-  /* Adjust form input width on tablets */
-  form input,
-  form select {
-    width: 100%; /* Full width on medium screens */
-  }
-
-  .container {
-    max-width: 90%; /* Wider container for better use of screen space */
-  }
-}
-
-@media (max-width: 480px) {
-  /* Mobile specific styles */
-  .container {
-    padding: 10px;
-  }
-
-  form label {
-    font-size: 1rem; /* Slightly smaller text on mobile */
-  }
-
-  form input,
-  form select {
-    padding: 10px;
-    font-size: 0.9rem;
-  }
-
-  .submit-btn {
-    padding: 10px;
-    font-size: 0.9rem;
-  }
-}
-
-/* Submit button styles */
-.submit-btn {
-  background-color: $primary-color;
-  color: white;
-  padding: 15px;
-  border: none;
-  border-radius: 10px;
-  font-size: 1rem;
-  cursor: pointer;
-  margin-top: 20px;
-
-  &:hover {
-    background-color: darken($primary-color, 10%);
-  }
-}
-
-/* Additional links styles */
-.additional-links {
-  text-align: center;
-  font-size: 0.9rem;
-
-  a {
-    color: $primary-color;
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-
-  .connect-later {
-    margin-top: 10px;
-    display: block;
-  }
-}
-
-/* Profile picture upload */
-.profile-pic-upload {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 200px;
-  background-color: $background-color;
-  border-radius: 10px;
-  border: 1px dashed $placeholder-color;
-  cursor: pointer;
-
-  input[type='file'] {
+  .left-panel {
     display: none;
   }
 
-  label {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-
-    span {
-      font-size: 1rem;
-      color: $placeholder-color;
-    }
-  }
-}
-
-/* Responsive adjustments for profile upload */
-@media (max-width: 768px) {
-  .profile-pic-upload {
-    height: 150px; /* Reduce height on smaller screens */
-  }
-
-  .profile-pic-upload label span {
-    font-size: 0.9rem; /* Adjust text size */
+  .right-panel {
+    padding: 1.5rem;
   }
 }
 
 @media (max-width: 480px) {
-  .profile-pic-upload {
-    height: 120px; /* Even smaller height on mobile */
+  .login-page {
+    flex-direction: column;
+    justify-content: center;
   }
 
-  .profile-pic-upload label span {
-    font-size: 0.8rem;
+  .right-panel {
+    padding: 1rem;
+    max-width: 100%;
+  }
+
+  .btn-primary {
+    font-size: 0.9rem;
+    padding: 10px;
   }
 }
