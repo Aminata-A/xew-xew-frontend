@@ -10,7 +10,7 @@
     height: 100vh;
     background-color: #333;
     .sidebar {
-        width: 80px;
+        width: 65px;
         background-color: #ffffff;
         display: flex;
         flex-direction: column;
@@ -20,7 +20,7 @@
         .logo {
             margin-bottom: 20px;
             img {
-                height: 25px;
+                height: 20px;
             }
         }
 
@@ -31,7 +31,7 @@
                 margin: 20px 0;
                 a {
                     display: block;
-                    padding: 10px;
+                    // padding: 10px;
                     text-align: center;
                     color: #333;
                 }
@@ -149,6 +149,17 @@
 
   .menu li a {
     color: #ff4b2b;
-    font-size: 1.5rem;
+    font-size: 1rem;
   }
+}
+.menu li a.active {
+  color: #FF773D; // Couleur orange pour l'élément actif
+}
+
+.menu li a svg {
+  transition: color 0.3s ease;
+}
+
+.menu li a.active svg {
+  color: #FF773D; // Appliquer la couleur orange à l'icône SVG de l'élément actif
 }

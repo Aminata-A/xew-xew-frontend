@@ -1,7 +1,7 @@
 <div class="event-page">
   <!-- Sidebar component -->
     <!-- Contenu ici visible uniquement si isAuthenticated est vrai -->
-    <app-sidebar *ngIf="isAuthenticated"></app-sidebar>
+    <app-sidebar *ngIf="isLoggedIn" class="sidebar"></app-sidebar>
 
   <div class="main-content">
     <app-header></app-header>
@@ -24,7 +24,7 @@
         <!-- Section "À la Une" -->
         <section class="featured-events">
           <h2>Événements à la une</h2>
-          <div class="event-list">
+          <div class="event-list event">
             <app-event-card
               *ngFor="let event of featuredEvents"
               [event]="event"
@@ -36,7 +36,7 @@
         <!-- Section "Nouveaux Événements" -->
         <section class="new-events">
           <h2>Nouveaux Événements</h2>
-          <div class="event-list">
+          <div class="event-list new-event">
             <app-event-card
               *ngFor="let event of newEvents"
               [event]="event"
@@ -45,10 +45,9 @@
           </div>
         </section>
 
-        <!-- Section "Tous les événements" -->
         <section class="all-events">
           <h2>Nos Événements</h2>
-          <div class="event-list">
+          <div class="event-list event">
             <app-event-card
               *ngFor="let event of allEvents"
               [event]="event"

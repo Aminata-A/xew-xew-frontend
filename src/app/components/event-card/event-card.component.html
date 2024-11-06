@@ -7,7 +7,10 @@
 
   <div *ngSwitchCase="2" class="event-card-2">
     <div class="card-title">
-      <img [src]="'http://127.0.0.1:8000' + event.organizer.user.photo" alt="photo de profile" class="profile-photo" />
+      <img
+        [src]="event.organizer.user.photo ? 'http://127.0.0.1:8000' + event.organizer.user.photo : profileImage"
+        alt="Image de profil"
+      />
       <h4>{{ event.organizer.user.name }}</h4> <!-- Nom du créateur -->
     </div>
     <img [src]="'http://127.0.0.1:8000' + event.banner" alt="image-event" class="event-image" />

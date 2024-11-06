@@ -1,0 +1,101 @@
+// Container principal
+.container {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  text-align: center;
+}
+
+// Titre principal
+h1 {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+// Sélecteur de caméra
+select.form-select {
+  font-size: 1rem;
+  padding: 8px;
+  margin-bottom: 15px;
+}
+
+// Visionneuse du scanner QR Code
+.scanner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+
+  ngx-scanner-qrcode {
+    width: 100%;
+    max-width: 500px;
+  }
+}
+
+// Boutons de contrôle
+.control-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    padding: 10px;
+    transition: background-color 0.3s;
+
+    &.btn-info {
+      background-color: #17a2b8;
+      color: #fff;
+    }
+
+    &.btn-warning {
+      background-color: #ffc107;
+      color: #fff;
+    }
+
+    &:hover {
+      filter: brightness(90%);
+    }
+
+    img {
+      width: 24px;
+      height: 24px;
+    }
+  }
+}
+
+// Indicateur de chargement
+p {
+  font-size: 1.2rem;
+  color: #666;
+}
+
+// Message de retour de validation
+.alert {
+  font-size: 1.1rem;
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 5px;
+
+  &.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+  }
+
+  &.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+  }
+}

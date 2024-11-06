@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './../../services/auth.service'; // Importer le service d'authentification
 import { EventCardComponent } from '../event-card/event-card.component';
-import { CommonModule, NgFor, NgIf } from '@angular/common';
+import { CommonModule, NgClass, NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
@@ -11,12 +11,13 @@ import { RouterLink } from '@angular/router';
   styleUrls: ['./sidebar.component.scss'],
   providers: [CommonModule,FormsModule, NgFor,AuthService, EventCardComponent, NgIf],
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, NgClass, CommonModule],
 })
 export class SidebarComponent implements OnInit {
   isLoggedIn: boolean = false;
   profileImage: string = 'https://img.freepik.com/vecteurs-premium/icone-utilisateur-orange-sans-icone-arriere-plan_1076610-85993.jpg?w=740'; // Image par défaut
   userName: string = ''; // Stocker le nom de l'utilisateur
+  activeMenu: string = ''; // Nouveau : menu actif
 
   constructor(private authService: AuthService) {}
 
@@ -45,6 +46,9 @@ export class SidebarComponent implements OnInit {
     }
   }
 
+  setActiveMenu(menu: string) {
+    this.activeMenu = menu;
+  }
   // Méthode pour déconnecter l'utilisateur
   logout() {
     const token = localStorage.getItem('authToken');

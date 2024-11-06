@@ -1,0 +1,349 @@
+$primary-font: 'Cabinet-Grotesk', sans-serif;
+$secondary-font: 'clash-display', sans-serif;
+$primary-color: #FF773D;
+$wave-color: #49D2FA;
+$orange-money-color: #FF7900;
+$free-money-color: #C81A19;
+$white-color: #fff;
+$card-radius: 15px;
+$background-light: #f9f9f9;
+$border-color: #e6e6e6;
+// Variables
+$modal-overlay-color: rgba(0, 0, 0, 0.4);
+$modal-bg-color: #ffffff;
+$modal-border-radius: 10px;
+$modal-padding: 20px;
+.wallet-page {
+  display: flex;
+  max-width: 100%;
+  // flex-direction: column;
+  overflow-y: auto; // Permet le défilement vertical
+}
+
+.content-wrapper {
+  width: 100%;
+  max-width: 100%;
+  overflow-y: auto; // Permet le défilement vertical dans le conteneur principal
+  padding-bottom: 20px; // Espace pour éviter que le contenu touche le bas de l’écran
+
+}
+
+.content {
+  padding: 15px;
+  font-family: $primary-font;
+  max-width: 100%;
+  overflow-y: auto; // Défilement vertical pour le contenu
+  flex: 1; // Permet au contenu de s’étendre et de se réduire avec la page
+}
+
+.total-balance {
+  display: flex;
+  flex-direction: column;
+  // align-items: center;
+  gap: 8px;
+  position: relative;
+  margin-bottom: 1em;
+
+  .balance {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+
+  p {
+    font-size: 1em;
+    font-weight: 500;
+    margin: 0;
+    text-decoration: underline;
+  }
+
+  h3 {
+    font-size: 20px;
+    color: $primary-color;
+    font-family: $secondary-font;
+  }
+
+  .add-wallet-btn {
+    background-color: rgba(255, 119, 61, 0.15);
+    color: $primary-color;
+    font-size: 18px;
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+    &:hover {
+      background-color: rgba(255, 119, 61, 0.3);
+    }
+  }
+}
+
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: $modal-overlay-color;
+  z-index: 1000;
+}
+
+.modal-content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: $modal-bg-color;
+  padding: $modal-padding;
+  border-radius: $modal-border-radius;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 23em;
+  z-index: 1001;
+
+  h4 {
+    color: $primary-color;
+    margin-bottom: 1rem;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      label {
+        font-size: 14px;
+        color: #333;
+      }
+      input,
+      select {
+        color: #1b1b1b;
+        background-color: #f3f3f3;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        transition: border-color 0.2s;
+
+        &:focus {
+          border-color: $primary-color;
+        }
+      }
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: space-between;
+
+      .submit-btn {
+        background-color: $primary-color;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+
+        &:hover {
+          background-color: darken($primary-color, 10%);
+        }
+      }
+
+      .cancel-btn {
+        background-color: #ddd;
+        padding: 8px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+
+        &:hover {
+          background-color: #bbb;
+        }
+      }
+    }
+  }
+}
+
+
+.wallets-container {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto; // Ajoute le défilement horizontal uniquement pour les wallets
+  padding-bottom: 15px;
+  max-width: 100%; // Empêche la largeur de la page de dépasser
+
+
+  &::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+  }
+}
+
+.wallets {
+  display: inline-flex;
+  gap: 20px;
+}
+
+.wallet-card {
+  min-width: 280px;
+  height: 170px;
+  border-radius: $card-radius;
+  color: $white-color;
+  font-weight: bold;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+
+  &.wave-wallet {
+    background-color: $wave-color;
+  }
+
+  &.orange-money-wallet {
+    background-color: $orange-money-color;
+  }
+
+  &.free-money-wallet {
+    background-color: $free-money-color;
+  }
+}
+
+.wallet-header {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  position: relative;
+  height: 50%;
+  width: 100%;
+
+  h5{
+    margin: 0;
+    font-size: 1em;
+    font-family: $secondary-font;
+    color: #fff;
+  }
+
+  .wallet-logo {
+    width: 40px;
+    height: auto;
+    margin-right: 10px;
+  }
+
+  .chip-container {
+    position: absolute;
+    right: 15px;
+    bottom: -15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  }
+
+  .chip-img {
+    max-height: 50px;
+  }
+}
+
+.wallet-details {
+  background-color: #000;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 50%;
+  border-radius: 0 0 $card-radius $card-radius;
+
+  div {
+    display: flex;
+    flex-direction: column;
+
+    h5 {
+      font-size: 0.9em;
+      font-family: $secondary-font;
+      margin: 0;
+      color: #ddd;
+    }
+
+    p {
+      font-size: .9em;
+      margin: 5px 0 0;
+      color: $white-color;
+    }
+  }
+}
+
+.transactions-section {
+  margin-top: 20px;
+
+  h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+
+  .transactions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+
+  .transaction {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: $background-light;
+    padding: 15px;
+    border-radius: $card-radius;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    .event-info .event-type {
+      font-size: 10px;
+      color: $primary-color;
+      margin: 0;
+    }
+
+    .event-info .event-name,
+    .event-info .event-date {
+      font-family: $secondary-font;
+      color: #777;
+      font-size: small;
+      margin: 0;
+    }
+
+    .transaction-amount {
+      font-size: 16px;
+      font-family: $secondary-font;
+      color: $primary-color;
+      text-align: left;
+    }
+  }
+}
+// wallet-list.component.scss
+
+.success-message {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 15px 20px;
+  background-color: #28a745; // Couleur verte pour succès
+  color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-size: 16px;
+  z-index: 1002;
+}

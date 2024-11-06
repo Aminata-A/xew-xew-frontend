@@ -3,12 +3,12 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
+  padding: 15px;
   background-color: #ffffff;
 
   h3 {
     margin: 0;
-    font-size: 1.3em;
+    font-size: 1em; /* Taille réduite */
     font-weight: 500;
     font-family: 'clash-display', sans-serif;
     color: #1b1b1b;
@@ -26,15 +26,15 @@ header {
   }
 
   img {
-    height: 50px;
+    height: 40px; /* Taille de logo réduite */
   }
 }
 
 /* Main container */
 .ticket-details-page {
-  max-width: 1100px;
+  max-width: 1000px; /* Largeur réduite */
   margin: auto;
-  padding: 20px;
+  padding: 15px;
   display: flex;
   flex-direction: row;
   font-family: 'cabinet-grotesk', sans-serif;
@@ -43,57 +43,53 @@ header {
 /* Event image and QR code */
 .event-image {
   position: relative;
-  width: 50%;
-  margin-right: 20px;
+  width: 45%; /* Taille réduite */
+  margin-right: 15px;
 }
 
 .event-image img {
   width: 100%;
   height: 100%;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px; /* Légèrement plus petit */
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
 }
 
 .qr-code-overlay {
   position: absolute;
-  bottom: 10px;
-  right: 10px;
+  bottom: 8px;
+  right: 8px;
   background-color: white;
-  padding: 10px;
-  border-radius: 10px;
+  padding: 8px; /* Padding réduit */
+  border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 /* Ticket content */
 .ticket-content {
-  width: 50%;
+  width: 55%; /* Taille réduite */
   display: flex;
   flex-direction: column;
 }
 
-.event-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.event-header h1 {
+  font-size: 1.5em; /* Taille réduite */
+  font-weight: bold;
+  margin-bottom: 8px;
+  font-family: 'clash-display', sans-serif;
 }
 
-.event-header h1 {
-  font-size: 2.5em;
-  font-weight: bold;
-  margin-bottom: 10px;
-  font-family: 'clash-display', sans-serif;
-}
-h2{
-  font-size: 1.5em;
+h2 {
+  font-size: 1.2em; /* Taille réduite */
   font-weight: 600;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   font-family: 'clash-display', sans-serif;
 }
+
 .event-meta {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 1rem;
+  font-size: 0.7rem; /* Taille réduite */
   font-family: 'clash-display', sans-serif;
   color: #1b1b1b;
   font-weight: 500;
@@ -104,47 +100,44 @@ h2{
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  padding: 10px 0;
+  padding: 8px 0; /* Padding réduit */
   border-bottom: 1px solid #eaeaea;
-  margin-bottom: 20px;
+  margin-bottom: 15px; /* Marge réduite */
 }
 
 .overview-item {
   width: 45%;
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .overview-item i {
-  margin-right: 8px;
+  margin-right: 6px; /* Espace réduit */
   color: #ff773d;
 }
 
 /* Description and buyer details */
 .event-description,
 .buyer-details {
-  margin-bottom: 20px;
+  margin-bottom: 15px; /* Marge réduite */
 }
-
 
 /* Responsive Design */
 @media (max-width: 768px) {
   .ticket-details-page {
     flex-direction: column;
+    padding: 10px; /* Padding réduit */
   }
 
   .event-image {
     width: 100%;
     margin-right: 0;
-    margin-bottom: 20px;
+    margin-bottom: 15px; /* Marge réduite */
   }
 
   .qr-code-overlay {
-    bottom: 5px;
-    right: 5px;
-    width: 80px;
-    height: 80px;
+    width: 60%;
   }
 
   .ticket-content {
@@ -154,10 +147,12 @@ h2{
   .event-meta {
     flex-direction: column;
     align-items: flex-start;
+    font-size: 0.5rem; /* Taille réduite pour mobile */
   }
 
   .ticket-overview {
     flex-direction: column;
+    padding: 5px 0;
   }
 
   .overview-item {

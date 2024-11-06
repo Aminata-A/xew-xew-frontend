@@ -21,6 +21,10 @@ export class TicketsComponent implements OnInit {
   isAuthenticated: boolean = false; // Indiquer si l'utilisateur est authentifié ou non
   user: any = null; // Stocker les informations de l'utilisateur connecté
   ticketId!: number;
+  upcomingTickets: any[] = [];
+  pastTickets: any[] = [];
+  isLoggedIn: boolean = false;
+
 
   constructor(
     private route: ActivatedRoute,
@@ -30,10 +34,10 @@ export class TicketsComponent implements OnInit {
 
   ngOnInit(): void {
     const token = localStorage.getItem('jwt_token'); // Récupérer le token JWT depuis le localStorage
-    // console.log('JWT Token:', token); // Vérifier si le token est bien récupéré
+    this.isLoggedIn = !!token; // Met à jour l'état de connexion
+    
     this.ticketId = +this.route.snapshot.paramMap.get('id')!;
     // Utilisez ticketId pour charger les détails du ticket
-    // console.log('Ticket ID:', this.ticketId);
 
     if (token) {
       try {
@@ -59,31 +63,29 @@ export class TicketsComponent implements OnInit {
 
   // Charger les tickets de l'utilisateur connecté
   loadUserTickets(): void {
-    // console.log("Chargement des tickets pour l'utilisateur:", this.user.id); // Log pour voir si l'utilisateur est bien chargé
-
     this.ticketService.getUserTickets().subscribe(
       (response) => {
-        // console.log("Réponse de l'API tickets:", response); // Afficher la réponse de l'API
-        this.tickets = response.tickets; // Stocker les tickets dans le tableau
-        // console.log('Structure des tickets:', this.tickets); // Vérifiez si chaque ticket a un ID
+        this.tickets = response.tickets; // Stocker les tickets
         if (this.tickets.length === 0) {
-          // console.log('Aucun ticket trouvé.'); // Log si aucun ticket n'est trouvé
           this.message = "Vous n'avez pas encore acheté de tickets. Merci.";
-        } else {
-          // console.log('Tickets chargés avec succès:', this.tickets); // Log les tickets si trouvés
         }
+        // Appeler categorizeTickets après avoir récupéré les tickets
+        this.categorizeTickets();
       },
       (error: HttpErrorResponse) => {
-        console.error('Erreur lors du chargement des tickets:', error); // Afficher l'erreur si la requête échoue
-        if (error.status === 401) {
-          this.message = 'Vous devez être authentifié pour voir vos tickets.';
-        } else {
-          this.message = 'Erreur lors du chargement des billets.';
-        }
+        console.error('Erreur lors du chargement des tickets:', error);
+        this.message = error.status === 401
+          ? 'Vous devez être authentifié pour voir vos tickets.'
+          : 'Erreur lors du chargement des billets.';
       }
     );
   }
 
+  categorizeTickets(): void {
+    const currentDate = new Date();
+    this.upcomingTickets = this.tickets.filter(ticket => new Date(ticket.event_date) > currentDate);
+    this.pastTickets = this.tickets.filter(ticket => new Date(ticket.event_date) <= currentDate);
+  }
   // Fonction pour naviguer vers les détails d'un ticket
   goToTicketDetails(ticketId: number): void {
     // console.log("Naviguer vers les détails du ticket avec l'ID:", ticketId);

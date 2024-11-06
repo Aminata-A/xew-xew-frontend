@@ -1,3 +1,4 @@
+import { AuthService } from 'src/app/services/auth.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -9,7 +10,7 @@ const baseURL = 'http://127.0.0.1:8000/api';
 })
 export class WalletService {
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('jwt_token');
@@ -22,7 +23,6 @@ export class WalletService {
     const headers = this.getAuthHeaders();
     return this.http.get(`${baseURL}/wallets`, { headers });
   }
-
   createWallet(wallet: any): Observable<any> {
     const headers = this.getAuthHeaders();
     return this.http.post(`${baseURL}/wallets`, wallet, { headers });

@@ -1,45 +1,67 @@
-<div class="my-events-page">
-  <app-sidebar class="sidebar"></app-sidebar>
+<div *ngIf="isLoggedIn" class="my-events-page">
+  <app-sidebar  class="sidebar"></app-sidebar>
   <div class="content-wrapper">
     <app-header class="header"></app-header>
 
     <div class="content">
       <div class="title">
-        <h2>Mes Événements</h2>
         <p>Découvrez et gérez tous vos événements facilement ici.</p>
       </div>
 
       <!-- Message de connexion -->
       <div *ngIf="!isAuthenticated">
-        <p class="no-events-message">Connectez-vous pour voir vos événements.</p>
+        <p class="no-events-message">
+          Connectez-vous pour voir vos événements.
+        </p>
       </div>
 
-            <!-- Message de succès de suppression -->
-            <div *ngIf="deleteMessage" class="delete-message">
-              {{ deleteMessage }}
-            </div>
+      <!-- Message de succès de suppression -->
+      <div *ngIf="deleteMessage" class="delete-message">
+        {{ deleteMessage }}
+      </div>
 
       <!-- Section des événements à venir -->
       <div *ngIf="isAuthenticated">
         <h3>Événements à venir</h3>
-        <div *ngIf="paginatedUpcomingEvents.length > 0; else noUpcomingEvents" class="events-grid">
-          <div *ngFor="let event of paginatedUpcomingEvents" class="event-card">
+        <div class="events-grid">
+          <div class="event-card"  *ngFor="let event of paginatedUpcomingEvents">
+            <a [routerLink]="['/event-dashboard', event.id]" class="event-link">
             <div class="event-image">
-              <img [src]="'http://127.0.0.1:8000' + event.banner || 'https://img.freepik.com/premium-photo/indian-republic-day-concept-indian-flag-print-air-balloon-with-copy-space-banner_742418-20690.jpg?w=1060'" alt="{{ event.name }}" />
+              <img
+                [src]="
+                  'http://127.0.0.1:8000' + event.banner ||
+                  'https://img.freepik.com/premium-photo/indian-republic-day-concept-indian-flag-print-air-balloon-with-copy-space-banner_742418-20690.jpg?w=1060'
+                "
+                alt="{{ event.name }}"
+              />
+              <div class="event-overlay">
+                <div class="event-date-icon">
+                  <i class="fa-regular fa-clock"></i
+                  ><!-- Icône catégorie -->
+                  <span>{{ event.date | date : "dd MMM yyyy" }}</span>
+                </div>
+              </div>
             </div>
+          </a>
             <div class="event-details">
               <h4>{{ event.name }}</h4>
-              <p class="event-date">{{ event.date | date }}</p>
-              <p class="event-location">Lieu : {{ event.location }}</p>
-              <p class="event-price">Prix : {{ event.ticket_price === 0 ? 'Gratuit' : (event.ticket_price | currency:'XOF') }}</p>
-              <p class="event-remaining">Places restantes : {{ event.ticket_quantity - event.tickets_sold }}</p>
+              <p class="event-location">{{ event.location }}</p>
+              <p class="event-address"><i class="fa-solid fa-chair"></i> {{ ticketsRemaining }} places restante</p>
             </div>
-            <div class="event-actions">
-              <a [href]="['/form-event-edit/' + event.id]" class="btn edit-btn">
-                <i class="fas fa-edit"></i> Modifier
+
+            <!-- Boutons d'actions (modification et suppression) -->
+            <div class="action-buttons">
+              <a
+                [href]="['/form-event-edit/' + event.id]"
+                class="action-btn edit-btn"
+              >
+                <i class="fas fa-edit"></i>
               </a>
-              <button (click)="onDeleteEvent(event.id, event.ticketsSold, event.date)" class="btn delete-btn">
-                <i class="fas fa-trash-alt"></i> Supprimer
+              <button
+                (click)="onDeleteEvent(event.id, event.ticketsSold, event.date)"
+                class="action-btn delete-btn"
+              >
+                <i class="fas fa-trash-alt"></i>
               </button>
             </div>
           </div>
@@ -48,7 +70,10 @@
         <!-- Pagination des événements à venir -->
         <div class="pagination" *ngIf="totalPages(upcomingEvents) > 1">
           <button
-            *ngFor="let page of [].constructor(totalPages(upcomingEvents)); let i = index"
+            *ngFor="
+              let page of [].constructor(totalPages(upcomingEvents));
+              let i = index
+            "
             (click)="setPage(i + 1)"
             [class.active]="i + 1 === currentPage"
           >
@@ -56,22 +81,40 @@
           </button>
         </div>
         <ng-template #noUpcomingEvents>
-          <p class="no-events-message">Aucun événement à venir pour le moment.</p>
+          <p class="no-events-message">
+            Aucun événement à venir pour le moment.
+          </p>
         </ng-template>
 
         <!-- Section des événements passés -->
         <h3>Événements passés</h3>
-        <div *ngIf="paginatedPastEvents.length > 0; else noPastEvents" class="events-grid">
-          <div *ngFor="let event of paginatedPastEvents" class="event-card past-event-card"
-          [style.background-image]="'url(' + getEventImage(event) + ')'">
-          <div class="delete-icon" (click)="onDeleteEvent(event.id, event.ticketsSold, event.date)">
+        <div
+          *ngIf="paginatedPastEvents.length > 0; else noPastEvents"
+          class="events-grid"
+        >
+          <div
+            *ngFor="let event of paginatedPastEvents"
+            class="event-card past-event-card"
+            [style.background-image]="'url(' + getEventImage(event) + ')'"
+          >
+            <div
+              class="delete-icon"
+              (click)="onDeleteEvent(event.id, event.ticketsSold, event.date)"
+            >
               <i class="fas fa-trash-alt"></i>
             </div>
             <div class="event-overlay">
               <h4>{{ event.name }}</h4>
               <p class="event-date">{{ event.date | date }}</p>
               <p class="event-location">Lieu : {{ event.location }}</p>
-              <p class="event-price">Prix : {{ event.ticket_price === 0 ? 'Gratuit' : (event.ticket_price | currency:'XOF') }}</p>
+              <p class="event-price">
+                Prix :
+                {{
+                  event.ticket_price === 0
+                    ? "Gratuit"
+                    : (event.ticket_price | currency : "XOF")
+                }}
+              </p>
             </div>
           </div>
         </div>
@@ -79,7 +122,10 @@
         <!-- Pagination des événements passés -->
         <div class="pagination" *ngIf="totalPages(pastEvents) > 1">
           <button
-            *ngFor="let page of [].constructor(totalPages(pastEvents)); let i = index"
+            *ngFor="
+              let page of [].constructor(totalPages(pastEvents));
+              let i = index
+            "
             (click)="setPage(i + 1)"
             [class.active]="i + 1 === currentPage"
           >

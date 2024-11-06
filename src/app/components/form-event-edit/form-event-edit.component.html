@@ -1,6 +1,6 @@
-<div class="container">
+<div *ngIf="isLoggedIn" class="form-event-edit">
 <!-- Sidebar uniquement si l'utilisateur est connecté -->
-<app-sidebar *ngIf="isLoggedIn" (userLoggedOut)="isLoggedIn = false"></app-sidebar>
+<app-sidebar class="sidebar"></app-sidebar>
 
   <div class="content">
     <app-header></app-header>

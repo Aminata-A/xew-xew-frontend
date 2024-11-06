@@ -9,6 +9,9 @@
         "@ionic/angular-toolkit:page": {
           "styleext": "scss",
           "standalone": true
+        },
+        "@ionic/angular-toolkit:component": {
+          "styleext": "scss"
         }
       },
       "root": "",
@@ -20,7 +23,7 @@
           "options": {
             "outputPath": "www",
             "index": "src/index.html",
-            "browser": "src/main.ts",
+            "main": "src/main.ts",
             "polyfills": ["src/polyfills.ts"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
@@ -33,7 +36,8 @@
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "src/global.scss", "src/theme/variables.scss"
+              "src/global.scss",
+              "src/theme/variables.scss"
             ],
             "scripts": [
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"

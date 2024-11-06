@@ -1,4 +1,4 @@
-<div class="form-event-page">
+<div *ngIf="isLoggedIn"  class="form-event-page">
   <app-sidebar class="sidebar"></app-sidebar>
 
   <div class="content">
@@ -13,7 +13,6 @@
       </div>
 
       <div class="title">
-        <h2>Créer un événement</h2>
         <p>Remplissez les détails de votre événement.</p>
       </div>
 

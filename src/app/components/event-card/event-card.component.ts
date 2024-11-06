@@ -14,6 +14,7 @@ import { Event } from 'src/app/services/interfaces';
 export class EventCardComponent implements OnInit {
   @Input() public variant!: number;
   @Input() public event!: Event;
+  public profileImage: string = 'https://img.freepik.com/vecteurs-premium/icone-utilisateur-orange-sans-icone-arriere-plan_1076610-85993.jpg?w=740';
 
   events: Event[] = [];
 

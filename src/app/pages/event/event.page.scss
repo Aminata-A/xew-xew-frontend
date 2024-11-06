@@ -35,7 +35,7 @@
         justify-content: center; /* Aligne à gauche */
         align-items: center;
         background-color: #fff;
-        padding: 20px 0;
+        padding: 10px 0;
         border-bottom: 1px solid #eee;
         width: 100%;
         overflow-x: auto; /* Ajout du défilement horizontal */
@@ -63,7 +63,7 @@
               text-align: center;
               text-decoration: none;
               color: #333;
-              font-size: 1.2em;
+              font-size: .8em;
               font-weight: 600;
               transition: color 0.3s ease;
 
@@ -76,7 +76,7 @@
       }
 
       .event-page-container {
-        padding: 20px;
+        padding: 40px;
         display: flex;
         flex-direction: column;
         flex-grow: 1; /* Permet de prendre toute la hauteur disponible */
@@ -89,23 +89,56 @@
         }
 
         h2{
-          font-size: 1.5em;
-          font-weight: 600;
+          font-size: 1.3em;
+          font-weight: 500;
           margin-bottom: 20px;
+          font-family: 'clash-display', sans-serif;
         }
-
-        .event-list {
+        .new-event {
           display: flex;
-          flex-direction: column;
+          width: 100%;
+          flex-wrap: wrap;
           gap: 20px;
           align-items: center;
+          width: 100%;
+          justify-content: space-between;
+        }
+        .event {
+          display: flex;
+          flex-direction: column;
+          gap: 30px;
+          align-items: center;
+          width: 100%;
+          justify-content: space-between;
+        }
+        @media screen and (max-width: 515px) {
+          .new-event {
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+          }
+
+          .event-list {
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+                      width: 100%;
+
+
+            gap: 20px;
+          }
         }
 
         @media (min-width: 768px) {
           .event-list {
             flex-direction: row;
             flex-wrap: wrap;
-            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 3em;
+            justify-content: center;
+
+            // justify-content: space-between;
           }
         }
 

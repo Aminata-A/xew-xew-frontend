@@ -10,22 +10,20 @@ $font-family: 'Cabinet Grotesk', sans-serif;
   font-family: $font-family;
   background-color: $background-light;
   min-height: 100vh;
-  max-height: 100vh; // Limite la hauteur pour permettre le défilement
-  overflow-y: auto; // Active le défilement vertical
+  max-height: 100vh;
+  overflow-y: auto;
 
   .left-panel {
     background-color: $background-light;
     display: flex;
     flex-direction: column;
-    // justify-content: center;
-    // align-items: center;
     position: relative;
-    padding: 0 4em;
+    padding: 0 3em; /* Reduced padding */
     width: 100%;
 
     .logo {
-      width: 120px;
-      margin-top: 2rem;
+      width: 100px; /* Reduced width */
+      margin-top: 1.5rem; /* Reduced top margin */
     }
 
     .circle-decorations {
@@ -39,66 +37,65 @@ $font-family: 'Cabinet Grotesk', sans-serif;
       }
 
       .circle1 {
-        width: 80px;
-        height: 80px;
+        width: 60px; /* Reduced size */
+        height: 60px;
       }
 
       .circle2 {
-        width: 120px;
-        height: 120px;
+        width: 100px; /* Reduced size */
+        height: 100px;
         position: absolute;
-        top: 40px;
-        left: 40px;
+        top: 30px;
+        left: 30px;
       }
     }
   }
 
   .right-panel {
     background-color: white;
-    // box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
     border: none;
-    padding: 2rem;
-    max-width: 400px;
+    padding: 1.5rem; /* Reduced padding */
+    max-width: 360px; /* Reduced max-width */
     width: 100%;
-    // text-align: center;
-    min-height: 90vh;
+    min-height: 85vh;
     justify-content: center;
 
     h2 {
       color: $font-color;
       font-weight: 600;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem; /* Reduced margin */
       font-family: 'Clash Display', sans-serif;
+      font-size: 1.4rem; /* Reduced font size */
     }
 
     .form-label {
       font-weight: 500;
       color: $font-color;
+      font-size: 0.9rem; /* Reduced font size */
     }
 
     .form-control {
       background-color: #f0f0f0;
       border: none;
-      padding: 15px;
+      padding: 12px; /* Reduced padding */
       border-radius: 5px;
-      margin-top: 10px;
-      font-size: 1rem;
+      margin-top: 8px; /* Reduced margin */
+      font-size: 0.9rem; /* Reduced font size */
     }
 
     .profile-pic-upload {
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-top: 1rem;
+      margin-top: 0.8rem; /* Reduced margin */
 
       .profile-preview {
-        width: 100px;
-        height: 100px;
+        width: 80px; /* Reduced size */
+        height: 80px;
         border-radius: 50%;
         object-fit: cover;
-        margin-bottom: 1rem;
+        margin-bottom: 0.8rem; /* Reduced margin */
       }
-
 
       .btn-outline-secondary {
         color: $font-color;
@@ -114,11 +111,11 @@ $font-family: 'Cabinet Grotesk', sans-serif;
     .btn-primary {
       background-color: $primary-color;
       color: white;
-      font-size: 1rem;
-      padding: 12px;
+      font-size: 0.9rem; /* Reduced font size */
+      padding: 10px; /* Reduced padding */
       border-radius: 5px;
       border: none;
-      margin-top: 1.5rem;
+      margin-top: 1rem; /* Reduced margin */
       font-weight: 500;
 
       &:hover {
@@ -128,7 +125,7 @@ $font-family: 'Cabinet Grotesk', sans-serif;
 
     .invalid-feedback {
       color: $primary-color;
-      font-size: 0.9rem;
+      font-size: 0.8rem; /* Reduced font size */
     }
   }
 }
@@ -140,7 +137,7 @@ $font-family: 'Cabinet Grotesk', sans-serif;
   }
 
   .right-panel {
-    padding: 1.5rem;
+    padding: 1.2rem; /* Reduced padding */
   }
 }
 
@@ -151,12 +148,12 @@ $font-family: 'Cabinet Grotesk', sans-serif;
   }
 
   .right-panel {
-    padding: 1rem;
+    padding: 0.8rem; /* Reduced padding */
     max-width: 100%;
   }
 
   .btn-primary {
-    font-size: 0.9rem;
-    padding: 10px;
+    font-size: 0.8rem; /* Further reduced font size */
+    padding: 8px; /* Further reduced padding */
   }
 }

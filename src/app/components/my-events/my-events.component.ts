@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms'; // Import FormsModule
+import { FormsModule } from '@angular/forms';
 import { EventService } from 'src/app/services/event.service';
 import { Router, RouterLink } from '@angular/router';
 import { SidebarComponent } from '../sidebar/sidebar.component';
@@ -8,16 +8,16 @@ import { HeaderComponent } from '../header/header.component';
 import { EventCardComponent } from '../event-card/event-card.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CategoryService } from 'src/app/services/category.service';
-import { jwtDecode } from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
 import Swal from 'sweetalert2';
-
+import { DashboardComponent } from '../dashboard/dashboard.component';
 
 @Component({
   selector: 'app-my-events',
   templateUrl: './my-events.component.html',
   styleUrls: ['./my-events.component.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, SidebarComponent, HeaderComponent, EventCardComponent, RouterLink], // Add FormsModule here
+  imports: [CommonModule, FormsModule, SidebarComponent, HeaderComponent, EventCardComponent, RouterLink, DashboardComponent],
 })
 export class MyEventsComponent implements OnInit {
   events: any[] = [];
@@ -30,12 +30,13 @@ export class MyEventsComponent implements OnInit {
   errorMessage: string = '';
   showCategoryForm: boolean = false;
   deleteMessage: string = '';
-  public ticketsRemaining: number = 0;
+  ticketsRemaining: number = 0;
+  isLoggedIn: boolean = false;
 
 
   // Pagination
   currentPage: number = 1;
-  eventsPerPage: number = 12;
+  eventsPerPage: number = 10;
   paginatedUpcomingEvents: any[] = [];
   paginatedPastEvents: any[] = [];
 
@@ -47,7 +48,7 @@ export class MyEventsComponent implements OnInit {
 
   ngOnInit() {
     const token = localStorage.getItem('jwt_token');
-
+    this.isLoggedIn = !!token; // Met à jour l'état de connexion
     if (token) {
       try {
         const decodedToken: any = jwtDecode(token);
@@ -79,6 +80,7 @@ export class MyEventsComponent implements OnInit {
       (data: any[]) => {
         this.events = data;
         this.filterEvents();
+        this.calculateTicketsRemaining(); // Correction ici pour éviter l'erreur `response` introuvable
       },
       (error: HttpErrorResponse) => {
         if (error.status === 401) {
@@ -89,6 +91,11 @@ export class MyEventsComponent implements OnInit {
         }
       }
     );
+  }
+
+  // Ajout d'une fonction pour calculer les tickets restants
+  calculateTicketsRemaining() {
+    this.ticketsRemaining = this.events.reduce((total, event) => total + (event.tickets_remaining || 0), 0);
   }
 
   filterEvents() {
@@ -111,24 +118,21 @@ export class MyEventsComponent implements OnInit {
     return Math.ceil(eventsArray.length / this.eventsPerPage);
   }
 
-  // Méthode de modification d'un événement
   onEditEvent(eventId: number, ticketsSold: number) {
     if (ticketsSold > 0) {
       this.message = "Il y a déjà un ticket acheté pour cet événement. Vous ne pouvez pas le modifier. Si c'est urgent, appelez le service client.";
       setTimeout(() => {
         this.message = ''; // Cache le message après 5 secondes
       }, 5000);
-      return; // Arrête la fonction
+      return;
     }
-    this.router.navigate(['/form-event-edit', eventId]); // Redirige si pas de ticket vendu
+    this.router.navigate(['/form-event-edit', eventId]);
   }
 
-  // Méthode de suppression d'un événement
   onDeleteEvent(eventId: number, ticketsSold: number, eventDate: string): void {
     const currentDate = new Date();
     const isEventPast = new Date(eventDate) <= currentDate;
 
-    // Afficher la confirmation de suppression avec SweetAlert2
     Swal.fire({
       title: '<strong style="color: #FF773D;">Êtes-vous sûr?</strong>',
       html: `<p style="color: #1b1b1b;">Voulez-vous vraiment supprimer cet événement?</p>`,
@@ -141,26 +145,24 @@ export class MyEventsComponent implements OnInit {
         cancelButton: 'styled-cancel-btn',
         popup: 'styled-popup',
       },
-      buttonsStyling: false, // Désactive les styles par défaut pour appliquer des styles personnalisés
+      buttonsStyling: false,
     }).then((result) => {
       if (result.isConfirmed) {
-        // Si l'utilisateur confirme, procéder avec la suppression
         if (!isEventPast && ticketsSold > 0) {
           this.message = "Il y a déjà un ticket acheté pour cet événement. Vous ne pouvez pas le supprimer. Si c'est urgent, appelez le service client.";
           setTimeout(() => {
-            this.message = ''; // Cache le message après 5 secondes
+            this.message = '';
           }, 5000);
-          return; // Arrête la fonction si l'événement n'est pas passé et des tickets sont vendus
+          return;
         }
 
-        // Effectuer la suppression si l'événement est passé ou si aucun ticket n'a été vendu
         this.eventService.deleteEvent(eventId).subscribe(
           () => {
             this.deleteMessage = 'Événement supprimé avec succès';
             setTimeout(() => {
               this.deleteMessage = '';
             }, 3000);
-            this.loadEvents(); // Recharger les événements après suppression
+            this.loadEvents();
           },
           (error) => {
             console.error("Erreur lors de la suppression de l'événement :", error);
@@ -169,11 +171,10 @@ export class MyEventsComponent implements OnInit {
       }
     });
   }
+
   getEventImage(event: any): string {
     return event.banner
-    ? 'http://127.0.0.1:8000' + event.banner
-    : 'https://img.freepik.com/premium-photo/indian-republic-day-concept-indian-flag-print-air-balloon-with-copy-space-banner_742418-20690.jpg?w=1060';
+      ? 'http://127.0.0.1:8000' + event.banner
+      : 'https://img.freepik.com/premium-photo/indian-republic-day-concept-indian-flag-print-air-balloon-with-copy-space-banner_742418-20690.jpg?w=1060';
   }
-
-
 }

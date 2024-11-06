@@ -19,6 +19,7 @@ export class TicketDetailsComponent implements OnInit {
   errorMessage: string = '';
   isLoading: boolean = true;
 
+
   constructor(
     private route: ActivatedRoute,
     private ticketService: TicketService,

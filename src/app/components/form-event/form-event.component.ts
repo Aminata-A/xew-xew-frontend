@@ -26,6 +26,7 @@ export class FormEventComponent implements OnInit {
   errorMessage: string = '';
   bannerPreview: string | null = null;
   successMessage: string = '';
+  isLoggedIn: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -36,6 +37,7 @@ export class FormEventComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+
     this.eventForm = this.fb.group({
       name: ['', Validators.required],
       date: ['', Validators.required],
@@ -48,6 +50,9 @@ export class FormEventComponent implements OnInit {
     });
     this.loadCategories();
     this.loadWallets();
+
+    const token = localStorage.getItem('jwt_token');
+    this.isLoggedIn = !!token; // Met à jour l'état de connexion
   }
 
   loadCategories() {

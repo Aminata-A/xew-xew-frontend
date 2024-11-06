@@ -2,13 +2,13 @@ import { ModalController, IonicModule } from '@ionic/angular';
 import { CommonModule, NgIf } from '@angular/common';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Category, Event } from 'src/app/services/interfaces';
+import { Event } from 'src/app/services/interfaces';
 import { EventService } from 'src/app/services/event.service';
 import { HttpClient } from '@angular/common/http';
 import { PurchaseModalComponent } from '../purchase-modal/purchase-modal.component';
-import { FormsModule, NgModel } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { jwtDecode } from 'jwt-decode'; // Import de jwt-decode
+import {jwtDecode} from 'jwt-decode';
 
 @Component({
   selector: 'app-event-details',
@@ -26,17 +26,12 @@ export class EventDetailsComponent implements OnInit {
   public isAuthenticated: boolean = false;
   public userName: string = '';
   public userEmail: string = '';
-  public similarEvents: any[] = [];
   public pageWidth!: number;
   public onDesktop = false;
   public currentPageNumber: number = 0;
   public paymentUrl: string | null = null;
   public ticketsRemaining: number = 0;
-
-  // Initialiser le constructeur
-  // Injecter les services
-  // Initialiser les variables
-  // Charger les données
+  public similarEvents: Event[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -46,14 +41,13 @@ export class EventDetailsComponent implements OnInit {
     private router: Router
   ) {}
 
-  // Charger les données
   ngOnInit() {
     const eventId = this.route.snapshot.paramMap.get('id');
     this.pageWidth = window.innerWidth;
-    this.isAuthenticated = !!localStorage.getItem('jwt_token'); // Vérifier si l'utilisateur est connecté
+    this.isAuthenticated = !!localStorage.getItem('jwt_token');
 
     if (this.isAuthenticated) {
-      this.loadUserInfo(); // Charger les informations de l'utilisateur à partir du token
+      this.loadUserInfo();
     }
 
     if (this.pageWidth >= 768) {
@@ -63,28 +57,37 @@ export class EventDetailsComponent implements OnInit {
     if (eventId) {
       this.fetchEvent(Number(eventId));
     }
-
-    if (this.event && this.event.categories) {
-      this.loadSimilarEvents(this.event.categories);
-    }
   }
 
   @HostListener('window:resize', ['$event'])
-  onResize(event: Event) {
+  onResize() {
     this.pageWidth = window.innerWidth;
   }
 
-
-
   fetchEvent(id: number) {
     this.eventService.getEvent(id).subscribe(
-      (response: any) => {
-        console.log(response); // Vérifiez la structure de la réponse
+      (response: { event: Event; tickets_remaining: number }) => {
         this.event = response.event;
-        this.ticketsRemaining = response.tickets_remaining; // Assignez tickets_remaining ici
+        this.ticketsRemaining = response.tickets_remaining;
+
+        // Appel à loadSimilarEvents uniquement si l'ID de l'événement est défini
+        if (this.event.id) {
+          this.loadSimilarEvents(this.event.id);
+        }
       },
       (error) => {
-        console.error('Erreur lors de la récupération des détails de l\'événement :', error);
+        console.error("Erreur lors de la récupération des détails de l'événement :", error);
+      }
+    );
+  }
+
+  loadSimilarEvents(eventId: number) {
+    this.eventService.getSimilarEvents(eventId).subscribe(
+      (events: Event[]) => {
+        this.similarEvents = events;
+      },
+      (error) => {
+        console.error("Erreur lors de la récupération des événements similaires :", error);
       }
     );
   }
@@ -94,12 +97,12 @@ export class EventDetailsComponent implements OnInit {
     if (token) {
       try {
         const decodedToken: any = jwtDecode(token);
-        this.userName = decodedToken.name || 'Utilisateur Anonyme'; // Extraire le nom du token
-        this.userEmail = decodedToken.email || 'email@exemple.com'; // Extraire l'email du token
+        this.userName = decodedToken.name || 'Utilisateur Anonyme';
+        this.userEmail = decodedToken.email || 'email@exemple.com';
       } catch (error) {
         console.error('Erreur lors du décodage du token JWT', error);
         this.isAuthenticated = false;
-        localStorage.removeItem('jwt_token'); // Supprimer le token corrompu
+        localStorage.removeItem('jwt_token');
       }
     } else {
       this.isAuthenticated = false;
@@ -128,7 +131,7 @@ export class EventDetailsComponent implements OnInit {
         userName: this.userName,
         userEmail: this.userEmail,
       },
-      presentingElement: this.presentingElement
+      presentingElement: this.presentingElement,
     });
     return await modal.present();
   }
@@ -137,38 +140,24 @@ export class EventDetailsComponent implements OnInit {
     this.currentPageNumber = page;
   }
 
-  loadSimilarEvents(categories: number[]) {
-    this.eventService.getEventsByCategories(categories).subscribe(
-      (response) => {
-        this.similarEvents = response;
-      },
-      (error) => {
-        console.error('Error fetching similar events', error);
-      }
-    );
-  }
-
-  // Gérer l'achat de ticket
   purchaseTicket() {
     const token = localStorage.getItem('jwt_token');
-
 
     const ticketData = {
       event_id: this.event.id,
       quantity: this.quantity,
       name: this.userName,
-      email: this.userEmail
+      email: this.userEmail,
     };
 
     const headers = {
-      Authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     };
 
     this.http.post('http://127.0.0.1:8000/api/tickets', ticketData, { headers }).subscribe(
       (response: any) => {
         console.log('Achat réussi', response);
 
-        // Si l'événement est gratuit
         if (this.event.ticket_price === 0) {
           alert('Billet acheté avec succès.');
           this.router.navigate(['/tickets']);
@@ -177,12 +166,11 @@ export class EventDetailsComponent implements OnInit {
         }
       },
       (error) => {
-        console.error('Erreur lors de l\'achat', error);
-        alert('Une erreur est survenue lors de l\'achat du billet.');
+        console.error("Erreur lors de l'achat", error);
+        alert("Une erreur est survenue lors de l'achat du billet.");
       }
     );
   }
-
 
   updateUserInfo(name: string, email: string) {
     this.userName = name;
@@ -190,8 +178,7 @@ export class EventDetailsComponent implements OnInit {
   }
 
   close() {
-    console.log('Fermeture du modal');
-    this.modalController.dismiss(); // Assurez-vous que cette ligne est appelée
+    this.modalController.dismiss();
   }
 
   cancel() {

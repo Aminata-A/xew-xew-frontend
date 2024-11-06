@@ -1,24 +1,21 @@
 import { Observable } from 'rxjs';
-import { HttpClient , HttpHeaders} from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Event, Register } from '../services/interfaces';
 
-
 const baseURL = 'http://127.0.0.1:8000/api';
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class EventService {
-
   private http = inject(HttpClient);
 
-  constructor() { }
-
+  constructor() {}
 
   getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('jwt_token');
     return new HttpHeaders({
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
   }
 
@@ -26,9 +23,20 @@ export class EventService {
     return this.http.get<Event[]>(`${baseURL}/events`);
   }
 
-  getEvent(id: number) {
-    return this.http.get<Event>(`${baseURL}/events/${id}`);
+  // Dans EventService
+  getEvent(
+    id: number
+  ): Observable<{ event: Event; tickets_remaining: number }> {
+    return this.http.get<{ event: Event; tickets_remaining: number }>(
+      `http://127.0.0.1:8000/api/events/${id}`
+    );
   }
+
+  getSimilarEvents(id: number): Observable<Event[]> {
+    return this.http.get<Event[]>(`${baseURL}/events/${id}/similar`);
+  }
+
+
 
   createEvent(eventData: FormData): Observable<any> {
     const headers = this.getAuthHeaders();
@@ -38,14 +46,18 @@ export class EventService {
   updateEvent(eventId: number, eventData: FormData): Observable<any> {
     const token = localStorage.getItem('jwt_token');
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
 
     // Suppression de `Content-Type` pour laisser Angular le gérer automatiquement
-    return this.http.post(`${baseURL}/events/${eventId}/update`, eventData, { headers });
+    return this.http.post(`${baseURL}/events/${eventId}/update`, eventData, {
+      headers,
+    });
   }
 
-
+  getEventDashboard(id: number): Observable<any> {
+    return this.http.get(`${baseURL}/events/${id}/dashboard`);
+  }
 
   getOrganizers(): Observable<any[]> {
     return this.http.get<any[]>(`${baseURL}/users`);
@@ -61,12 +73,13 @@ export class EventService {
   }
   // fonction pour recuperer les evenements d'une catégorie
   getEventsByCategory(categoryId: number): Observable<Event[]> {
-    return this.http.get<Event[]>(`${baseURL}/events?category=${categoryId}`);
+    return this.http.get<Event[]>(`${baseURL}/events?category_id=${categoryId}`);
   }
+
 
   // fonction pour recuperer les evenements d'une catForSegue
   getEventsByCategories(categoryIds: number[]): Observable<Event[]> {
-    const params = categoryIds.map(id => `category=${id}`).join('&');
+    const params = categoryIds.map((id) => `category=${id}`).join('&');
     return this.http.get<Event[]>(`${baseURL}/events?${params}`);
   }
 
@@ -74,5 +87,4 @@ export class EventService {
     const headers = this.getAuthHeaders();
     return this.http.delete(`${baseURL}/events/${id}`, { headers });
   }
-
 }

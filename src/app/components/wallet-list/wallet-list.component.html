@@ -1,0 +1,103 @@
+<div *ngIf="isLoggedIn" class="wallet-page">
+  <!-- Sidebar uniquement pour bureau -->
+  <app-sidebar  class="sidebar"></app-sidebar>
+
+  <div class="content-wrapper">
+    <app-header></app-header>
+
+    <div class="content">
+      <div class="title">
+        <p>
+          Neque porro quisquam est qui dolorem ipsum quia dolor sit amet,
+          consectetur, adipisci velit.
+        </p>
+        <div class="total-balance">
+          <p>Solde total</p>
+          <div  class="balance">
+          <h3>400 000 F CFA</h3>
+          <button
+            class="add-wallet-btn"
+            (click)="showWalletForm = !showWalletForm"
+          >
+            +
+          </button>
+        </div>
+        </div>
+
+        <ng-container *ngIf="showSuccessMessage">
+          <div class="success-message">Porte feuille créé avec succès !</div>
+        </ng-container>
+
+        <ng-container *ngIf="showWalletForm">
+          <div class="modal-backdrop" (click)="showWalletForm = false"></div>
+          <div class="modal-content">
+            <h4>Créer un nouveau portefeuille</h4>
+            <form (submit)="createWallet()">
+              <div class="form-group">
+                <label for="name">Nom du portefeuille</label>
+                <select [(ngModel)]="walletData.name" name="name" required>
+                  <option *ngFor="let name of walletNames" [value]="name">{{ name }}</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="identifier">Identifiant</label>
+                <input
+                  id="identifier"
+                  type="text"
+                  [(ngModel)]="walletData.identifier"
+                  name="identifier"
+                  required
+                />
+              </div>
+              <div class="modal-actions">
+                <button type="submit" class="submit-btn">Créer</button>
+                <button type="button" (click)="showWalletForm = false" class="cancel-btn">
+                  Annuler
+                </button>
+              </div>
+            </form>
+          </div>
+        </ng-container>
+
+        <div class="wallets-container">
+          <div class="wallets">
+            <div *ngFor="let wallet of wallets" class="wallet-card" [ngClass]="getWalletClass(wallet.name)">
+              <div class="wallet-header">
+                <img [src]="getWalletLogo(wallet.name)" alt="{{ wallet.name }} logo" class="wallet-logo" />
+                <h5>{{ wallet.name }}</h5>
+                <div class="chip-container">
+                  <img src="data:image/png;base64,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" alt="Chip" class="chip-img" />
+                </div>
+              </div>
+              <div class="wallet-details">
+                <div>
+                  <h5 class="wallet-number">Numéro</h5>
+                  <p>{{ wallet.identifier }}</p>
+                </div>
+                <div>
+                  <h5 class="wallet-number">Solde</h5>
+                  <p>{{ wallet.balance | currency : "XOF" }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <section class="transactions-section">
+          <h2>Liste des transactions</h2>
+          <div class="transactions">
+            <div class="transaction" *ngFor="let transaction of transactions">
+              <div class="event-info">
+                <p class="event-type">{{ transaction.eventType }}</p>
+                <p class="event-name">{{ transaction.eventName }}</p>
+                <p class="event-date">{{ transaction.eventDate }}</p>
+                <div class="transaction-amount">{{ transaction.amount }}</div>
+
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>

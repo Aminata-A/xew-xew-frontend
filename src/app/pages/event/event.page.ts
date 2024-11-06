@@ -7,7 +7,8 @@ import { EventService } from 'src/app/services/event.service';
 import { Event } from 'src/app/services/interfaces';
 import { NgFor, NgIf } from '@angular/common';
 import { HeaderComponent } from 'src/app/components/header/header.component';
-
+import { ActivatedRoute, Router } from '@angular/router';
+import { Chart } from 'chart.js/auto';
 @Component({
   selector: 'app-event',
   templateUrl: './event.page.html',
@@ -21,7 +22,9 @@ export class EventPage implements OnInit {
   allEvents: Event[] = [];       // Tous les événements
   categories: any[] = [];        // Ajout pour les catégories
   token: string | null = null;   // Variable pour le token
-  public isAuthenticated: boolean = false;
+  isLoggedIn: boolean = false;
+
+  // public isAuthenticated: boolean = false;
 
 
   constructor(
@@ -31,25 +34,15 @@ export class EventPage implements OnInit {
 
   ngOnInit(): void {
     // Vérifier la connexion de l'utilisateur
-    this.isAuthenticated = !!localStorage.getItem('jwt_token'); // Vérifie la présence d'un token
+    const token = localStorage.getItem('jwt_token');
+    this.isLoggedIn = !!token; // Met à jour l'état de connexion
 
-    if (this.isAuthenticated) {
       this.loadEvents();
       this.loadCategories();
-    } else {
-      console.warn("Utilisateur non authentifié : le contenu protégé ne sera pas affiché.");
-    }
+
   }
 
 
-  checkUserConnection() {
-    this.token = localStorage.getItem('jwt_token'); // Récupérer le token depuis localStorage
-    if (this.token) {
-      // console.log('Token récupéré depuis localStorage:', this.token);
-    } else {
-      console.warn('Aucun token trouvé, utilisateur non connecté');
-    }
-  }
 
   loadEvents() {
     // console.log('Chargement des événements...');
@@ -99,39 +92,25 @@ export class EventPage implements OnInit {
       }
     );
   }
-
   filterEvents(categoryId: any): void {
-    // console.log(`Filtrage des événements pour la catégorie ID: ${categoryId}`);
     if (categoryId === 'all') {
-      this.loadEvents();  // Recharger tous les événements si "Voir Tous"
+      this.loadEvents();
     } else {
       this.eventService.getEventsByCategory(categoryId).subscribe(
         (events: Event[]) => {
-          // console.log(`Événements récupérés pour la catégorie ID: ${categoryId}`, events);
-
-          // Filtrer les événements futurs uniquement
           const today = new Date();
           const upcomingEvents = events.filter(event => new Date(event.date) >= today);
-
-          // Mettre à jour la liste des événements affichés
           this.allEvents = upcomingEvents;
-
-          // Trier par la quantité de billets pour la section "À la une"
-          const sortedByTicketQuantity = upcomingEvents.sort((a, b) => b.ticket_quantity - a.ticket_quantity);
-          this.featuredEvents = sortedByTicketQuantity.slice(0, 3);
-
-          // Section des nouveaux événements pour la catégorie (derniers 7 jours)
+          this.featuredEvents = upcomingEvents.slice(0, 3);
           const oneWeekAgo = new Date(today);
           oneWeekAgo.setDate(today.getDate() - 7);
-          this.newEvents = upcomingEvents
-            .filter(event => new Date(event.date) >= oneWeekAgo)
-            .slice(0, 8);
+          this.newEvents = upcomingEvents.filter(event => new Date(event.date) >= oneWeekAgo).slice(0, 8);
         },
         (error) => {
           console.error('Erreur lors du filtrage des événements par catégorie', error);
         }
       );
     }
-}
+  }
 
 }

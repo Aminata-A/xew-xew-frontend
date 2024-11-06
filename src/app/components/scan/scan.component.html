@@ -1,0 +1,49 @@
+<div class="container text-center">
+  <h1>Scannez votre Ticket</h1>
+
+  <!-- Sélection de l'Appareil -->
+  <div class="row justify-content-center mb-3">
+    <div class="col-md-6 col-lg-4">
+      <select #select1 (change)="action.playDevice(select1.value)" class="form-select form-select-md">
+        <option [value]="null" selected>Sélectionnez un appareil</option>
+        <option *ngFor="let c of action.devices.value; let i = index" [value]="c.deviceId" [selected]="i === action.deviceIndexActive">{{ c.label }}</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Visionneuse du scanner QR Code -->
+  <div class="scanner-container">
+    <ngx-scanner-qrcode #action="scanner" [config]="config" (event)="onEvent($event)"></ngx-scanner-qrcode>
+  </div>
+
+  <!-- Indicateur de chargement -->
+  <p *ngIf="action.isLoading">⌛ Chargement en cours...</p>
+
+  <!-- Boutons de contrôle de la caméra -->
+  <div class="control-buttons d-flex justify-content-center mt-3">
+    <!-- Démarrer/Arrêter la caméra -->
+    <button class="btn mx-1" [class.btn-info]="!action.isStart" [class.btn-warning]="action.isStart" [disabled]="action.isLoading" (click)="handle(action, action.isStart ? 'stop' : 'start')">
+      <img [src]="action.isStart ? 'https://id1945.github.io/images/svg/camera-off.svg' : 'https://id1945.github.io/images/svg/camera-on.svg'" width="30px"/>
+    </button>
+
+    <!-- Pause/Play -->
+    <button class="btn mx-1" [class.btn-info]="!action.isStart" [class.btn-warning]="action.isStart" [disabled]="!action.isStart" (click)="handle(action, action.isPause ? 'play' : 'pause')">
+      <img [src]="action.isPause ? 'https://id1945.github.io/images/svg/play.svg': 'https://id1945.github.io/images/svg/pause.svg'" width="30px"/>
+    </button>
+
+    <!-- Allumer/Éteindre la torche -->
+    <button class="btn mx-1" [class.btn-info]="!action.isStart" [class.btn-warning]="action.isStart" [disabled]="!action.isStart" (click)="action.isTorch = !action.isTorch; handle(action, 'torcher')">
+      <img [src]="action.isTorch ? 'https://id1945.github.io/images/svg/flash-off.svg' : 'https://id1945.github.io/images/svg/flash-on.svg'" width="30px"/>
+    </button>
+
+    <!-- Télécharger une capture -->
+    <button class="btn mx-1" [class.btn-info]="!action.isStart" [class.btn-warning]="action.isStart" [disabled]="!action.isStart" (click)="onDowload(action)">
+      <img src="https://id1945.github.io/images/svg/capture.svg" width="30px"/>
+    </button>
+  </div>
+
+  <!-- Message de retour de validation -->
+  <div *ngIf="responseMessage" class="alert mt-4" [ngClass]="{'alert-success': responseMessage.includes('succès'), 'alert-danger': responseMessage.includes('Erreur')}">
+    {{ responseMessage }}
+  </div>
+</div>

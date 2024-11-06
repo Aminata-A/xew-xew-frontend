@@ -1,5 +1,10 @@
+$primary-color: #FF773D;
+$background-light: #fff;
+$font-color: #1b1b1b;
+$font-family: 'Cabinet Grotesk', sans-serif;
+
 :host {
-  font-family: 'cabinet-grotesk', sans-serif;
+  font-family: $font-family;
   margin: 0;
   padding: 0;
   display: flex;
@@ -7,8 +12,8 @@
   align-items: center;
   min-height: 100vh;
   background: linear-gradient(135deg, #f5f7fa, #ffffff);
-  position: relative; /* Assure la position pour les décorations */
-  overflow: hidden; /* Empêche le débordement des décorations */
+  position: relative;
+  overflow: hidden;
 }
 
 .background-decor {
@@ -17,36 +22,36 @@
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -1; /* Place les décorations derrière le contenu */
+  z-index: -1;
 }
 
 .decor {
   position: absolute;
   border-radius: 50%;
-  opacity: 0.15; /* Rend les décorations plus subtiles */
-  background: radial-gradient(circle, #ff6f3c, #ff7e4d);
+  opacity: 0.1;
+  background: radial-gradient(circle, $primary-color, lighten($primary-color, 15%));
   animation: float 8s ease-in-out infinite;
 }
 
 .decor-1 {
-  width: 250px;
-  height: 250px;
+  width: 140px;
+  height: 140px;
   top: 10%;
   left: 15%;
   animation-delay: 0s;
 }
 
 .decor-2 {
-  width: 350px;
-  height: 350px;
+  width: 200px;
+  height: 200px;
   bottom: 15%;
   right: 20%;
   animation-delay: 2s;
 }
 
 .decor-3 {
-  width: 200px;
-  height: 200px;
+  width: 100px;
+  height: 100px;
   top: 60%;
   left: 25%;
   animation-delay: 4s;
@@ -57,58 +62,7 @@
     transform: translateY(0px);
   }
   50% {
-    transform: translateY(15px);
-  }
-}
-
-.background-decor {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  z-index: -1;
-}
-
-.decor {
-  position: absolute;
-  border-radius: 50%;
-  opacity: 0.2;
-  background: radial-gradient(circle, #ff6f3c, #ff7e4d);
-  animation: float 8s ease-in-out infinite;
-}
-
-.decor-1 {
-  width: 200px;
-  height: 200px;
-  top: 10%;
-  left: 15%;
-  animation-delay: 0s;
-}
-
-.decor-2 {
-  width: 300px;
-  height: 300px;
-  bottom: 5%;
-  right: 10%;
-  animation-delay: 2s;
-}
-
-.decor-3 {
-  width: 150px;
-  height: 150px;
-  bottom: 15%;
-  left: 25%;
-  animation-delay: 4s;
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(15px);
+    transform: translateY(8px);
   }
 }
 
@@ -122,30 +76,30 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 55%;
-  padding: 1em 1em 1em 3em;
+  width: 50%;
+  padding: 0.5em 0.8em;
   h1 {
-    font-family: 'clash-display', sans-serif;
-    font-size: 2rem;
-    color: #333;
+    font-family: 'Clash Display', sans-serif;
+    font-size: 1.3rem;
+    color: $font-color;
     font-weight: 700;
   }
 }
 
 .back-button {
-  font-size: 1.5em;
-  color: #ff6f3c;
+  font-size: 1em;
+  color: $primary-color;
   text-decoration: none;
-  margin-right: 10px;
+  margin-right: 6px;
 }
 
 .profile-container {
-  background-color: #fff;
-  padding: 2em;
-  border-radius: 15px;
-  max-width: 500px;
-  width: 100%;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  background-color: $background-light;
+  padding: 1em;
+  border-radius: 10px;
+  max-width: 350px;
+  width: 90%;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
   position: relative;
   z-index: 1;
@@ -154,32 +108,32 @@
 .profile-section .profile-image-container {
   position: relative;
   display: inline-block;
-  margin-bottom: 2em;
+  margin-bottom: 1em;
 }
 
 .profile-img {
-  width: 120px;
-  height: 120px;
-  border-radius: 10px;
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
   object-fit: cover;
-  border: 4px solid #ff773d;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  border: 2px solid $primary-color;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease;
 }
 
 .profile-img:hover {
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
 }
 
 .change-photo-btn {
   position: absolute;
-  bottom: -15px;
+  bottom: -12px;
   left: 50%;
   transform: translateX(-50%);
-  background-color: #ff773d;
-  color: #fff;
-  font-size: 0.8rem;
-  padding: 0.4em 1em;
+  background-color: $primary-color;
+  color: $background-light;
+  font-size: 0.7rem;
+  padding: 0.3em 0.8em;
   border-radius: 5px;
   border: none;
   cursor: pointer;
@@ -187,13 +141,13 @@
 }
 
 .change-photo-btn:hover {
-  background-color: #e66b32;
+  background-color: darken($primary-color, 10%);
 }
 
 .profile-form {
   display: flex;
   flex-direction: column;
-  gap: 1.5em;
+  gap: 0.8em;
 }
 
 .input-group {
@@ -203,42 +157,75 @@
 }
 
 label {
-  font-size: 1rem;
+  font-size: 0.8rem;
   color: #666;
-  margin-bottom: 0.4em;
+  margin-bottom: 0.2em;
   font-weight: bold;
 }
 
 input,
 select {
-  padding: 0.75em;
+  padding: 0.5em;
   border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 1rem;
-  color: #1b1b1b;
-  background-color: #fff;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: $font-color;
+  background-color: $background-light;
   transition: border-color 0.3s ease;
-  width: 100%;
+  // width: 100%;
 }
 
 input:focus,
 select:focus {
-  border-color: #ff773d;
-  box-shadow: 0 0 0 2px rgba(255, 119, 61, 0.3);
+  border-color: $primary-color;
+  box-shadow: 0 0 0 1px rgba(255, 119, 61, 0.3);
 }
 
 .submit-btn {
-  background-color: #ff773d;
-  color: #fff;
-  padding: 0.8em;
+  background-color: $primary-color;
+  color: $background-light;
+  padding: 0.6em;
   border: none;
-  border-radius: 8px;
-  font-size: 1rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
   cursor: pointer;
   font-weight: bold;
   transition: background-color 0.3s ease;
 }
 
 .submit-btn:hover {
-  background-color: #e66b32;
+  background-color: darken($primary-color, 10%);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .header {
+    width: 100%;
+    padding: 0.4em 0.6em;
+  }
+
+  .profile-container {
+    padding: 0.8em;
+  }
+
+  .submit-btn {
+    font-size: 0.75rem;
+    padding: 0.5em;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-container {
+    padding: 0.5em;
+  }
+
+  .profile-img {
+    width: 70px;
+    height: 70px;
+  }
+
+  .submit-btn {
+    font-size: 0.75rem;
+    padding: 0.5em;
+  }
 }

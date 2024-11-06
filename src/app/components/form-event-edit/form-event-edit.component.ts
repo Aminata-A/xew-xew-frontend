@@ -29,6 +29,7 @@ export class FormEventEditComponent implements OnInit {
   eventId!: number;
   isLoggedIn: boolean = false;
 
+
   public event!: Event;
 
   constructor(
@@ -46,6 +47,9 @@ export class FormEventEditComponent implements OnInit {
     this.loadEvent();
     this.loadCategories();
     this.loadWallets();
+
+    const token = localStorage.getItem('jwt_token');
+    this.isLoggedIn = !!token; // Met à jour l'état de connexion
   }
 
   initializeForm() {

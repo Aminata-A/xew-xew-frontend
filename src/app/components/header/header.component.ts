@@ -53,6 +53,10 @@ export class HeaderComponent implements OnInit {
       this.title = 'Mes Billets';
     } else if (this.router.url.includes('my-events')) {
       this.title = 'Mes evenements';
+    } else if (this.router.url.includes('wallet')) {
+      this.title = 'Porte feuille';
+    } else if (this.router.url.includes('form-event')) {
+      this.title = 'Créer un événement';
     } else{
       this.title = 'Home';
     }
@@ -91,12 +95,13 @@ export class HeaderComponent implements OnInit {
   }
 
   login() {
-    this.router.navigate(['/login']);
+    this.router.navigate(['/login']).then(() => window.location.reload());
     window.location.reload();
   }
 
   viewProfile() {
-    this.router.navigate(['/profile']);
+    this.router.navigate(['/profile']).then(() => window.location.reload());
+
     this.showProfileMenu = false;
   }
 }

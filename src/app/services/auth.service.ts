@@ -11,6 +11,15 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
+  getToken() {
+    return localStorage.getItem('jwtToken'); // Vérifie si un token est stocké
+  }
+
+
+  isAuthenticated(): boolean {
+    return !!this.getToken(); // Retourne vrai si l'utilisateur est connecté
+  }
+
   verifyEmail(email: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/auth/verify-email`, { email });
   }
