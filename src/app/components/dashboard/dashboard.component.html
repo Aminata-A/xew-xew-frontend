@@ -1,13 +1,17 @@
-<header>
+<!-- <header>
   <h3>
     <a [href]="'/my-events'">Mes Événements</a> > Détails de l'événement
     <span> > {{ event.name }}</span>
   </h3>
   <img src="../../../assets/images/logo.png" class="logo" alt="Logo" />
-</header>
+</header> -->
 
 <div class="dashboard-container">
   <!-- Statistiques en haut -->
+     <!-- Bouton pour scanner un ticket -->
+  <div class="scan-button">
+    <button (click)="navigateToScan()">Scanner un Ticket</button>
+  </div>
   <div class="stats-container">
     <div class="stat-card">
       <div class="stat-icon">
@@ -108,8 +112,5 @@
     </div>
   </div>
 
-  <!-- Bouton pour scanner un ticket -->
-  <div class="scan-button">
-    <button (click)="navigateToScan()">Scanner un Ticket</button>
-  </div>
+
 </div>

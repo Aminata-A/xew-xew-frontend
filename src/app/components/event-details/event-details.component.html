@@ -1,6 +1,6 @@
 <header>
   <h3>
-    <a [href]="'/events'">Evenements</a> > Détails du Ticket
+    <a [href]="'/events'">Evenements</a> > Détails de l'événement
   </h3>
   <img src="../../../assets/images/logo.png" class="logo" alt="Logo" />
 </header>
@@ -13,17 +13,17 @@
     <img *ngIf="event.banner" [src]="'http://127.0.0.1:8000' + event.banner" alt="image-event" class="event-image" />
     <div class="event-info">
       <div class="event-category">
-        <p><i class="fas fa-music"></i> Musique</p>
-        <p><i class="fas fa-festival"></i> Festival</p>
+        <p>Musique</p>
+        <p>Festival</p>
       </div>
       <h1>{{ event.name }}</h1>
       <div class="event-date">
         <p>
-          <span class="iconify" data-icon="mdi:map-marker" data-width="20" data-height="20"></span>
+          <span class="iconify" data-icon="mdi:map-marker" data-width="15" data-height="15"></span>
           {{ event.location }}
         </p>
         <p>
-          <span class="iconify" data-icon="mdi:calendar" data-width="20" data-height="20"></span>
+          <span class="iconify" data-icon="mdi:calendar" data-width="15" data-height="15"></span>
           {{ event.date }}
         </p>
       </div>

@@ -46,7 +46,7 @@ export class EventService {
   updateEvent(eventId: number, eventData: FormData): Observable<any> {
     const token = localStorage.getItem('jwt_token');
     const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
+      'Authorization': `Bearer ${token}`
     });
 
     // Suppression de `Content-Type` pour laisser Angular le gérer automatiquement

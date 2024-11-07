@@ -177,4 +177,10 @@ export class MyEventsComponent implements OnInit {
       ? 'http://127.0.0.1:8000' + event.banner
       : 'https://img.freepik.com/premium-photo/indian-republic-day-concept-indian-flag-print-air-balloon-with-copy-space-banner_742418-20690.jpg?w=1060';
   }
+
+  goToEventDashboard(eventId: number) {
+    this.router.navigate(['/event-dashboard', eventId]).then(() => {
+      window.location.reload();
+    });
+  }
 }

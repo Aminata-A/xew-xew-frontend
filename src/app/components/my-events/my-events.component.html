@@ -24,8 +24,8 @@
       <div *ngIf="isAuthenticated">
         <h3>Événements à venir</h3>
         <div class="events-grid">
-          <div class="event-card"  *ngFor="let event of paginatedUpcomingEvents">
-            <a [routerLink]="['/event-dashboard', event.id]" class="event-link">
+          <div class="event-card"  *ngFor="let event of paginatedUpcomingEvents" (click)="goToEventDashboard(event.id)">
+            <a class="event-link">
             <div class="event-image">
               <img
                 [src]="

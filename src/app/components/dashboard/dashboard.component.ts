@@ -43,6 +43,20 @@ export class DashboardComponent implements OnInit {
       }
     );
   }
+
+  renderSalesChart() {
+    const ctx = document.getElementById('salesChart') as HTMLCanvasElement;
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb'],
+        datasets: [
+          { label: 'arrival', data: [300, 200, 465, 150, 210, 300], backgroundColor: '#1f77b4' },
+          { label: 'spending', data: [200, 150, 250, 130, 180, 200], backgroundColor: '#ff7f0e' }
+        ]
+      }
+    });
+  }
   // Fonction pour obtenir le type de portefeuille
   getWalletType(type: string): string {
     switch (type) {
@@ -59,7 +73,7 @@ export class DashboardComponent implements OnInit {
 
   // Fonction pour naviguer vers le composant de scan
   navigateToScan() {
-    this.router.navigate(['/scan']);
+    this.router.navigate(['/scan']).then(() => window.location.reload());
   }
 
   loadCharts() {

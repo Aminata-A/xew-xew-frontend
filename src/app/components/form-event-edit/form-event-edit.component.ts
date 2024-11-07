@@ -28,6 +28,13 @@ export class FormEventEditComponent implements OnInit {
   bannerPreview: string | null = null;
   eventId!: number;
   isLoggedIn: boolean = false;
+  successMessage: string = '';
+  clearMessagesAfterDelay() {
+    setTimeout(() => {
+      this.errorMessage = '';
+      this.successMessage = '';
+    }, 3000);
+  }
 
 
   public event!: Event;
@@ -109,22 +116,51 @@ export class FormEventEditComponent implements OnInit {
 
   onUpdate() {
     if (this.eventForm.invalid) {
+      this.errorMessage = 'Le formulaire est invalide. Veuillez vérifier les champs.';
       return;
     }
 
     const formData = new FormData();
-    this.addFormFieldsToFormData(formData);
+    formData.append('name', this.eventForm.get('name')?.value);
+    formData.append('date', this.eventForm.get('date')?.value);
+    formData.append('time', this.eventForm.get('time')?.value);
+    formData.append('location', this.eventForm.get('location')?.value);
+    formData.append('ticket_price', this.eventForm.get('ticket_price')?.value);
+    formData.append('ticket_quantity', this.eventForm.get('ticket_quantity')?.value);
+    formData.append('description', this.eventForm.get('description')?.value);
+
+    // Envoie les catégories et portefeuilles sous forme de tableau JSON
+    formData.append('categories', JSON.stringify(this.selectedCategories));
+    formData.append('wallets', JSON.stringify(this.selectedWallets));
+
+    // Envoie le fichier de bannière si disponible
+    const bannerFile = this.eventForm.get('banner')?.value;
+    if (bannerFile && bannerFile instanceof File) { // Vérifie si c’est bien un fichier
+      formData.append('banner', bannerFile);
+    }
 
     this.eventService.updateEvent(this.eventId, formData).subscribe({
       next: (response) => {
-        this.router.navigate(['/events']);
+        this.successMessage = 'Événement mis à jour avec succès';
+        this.clearMessagesAfterDelay();
+        this.router.navigate(['/events']).then(() => window.location.reload());
       },
       error: (error: HttpErrorResponse) => {
-        console.error("Erreur lors de la mise à jour de l'événement:", error);
-        this.errorMessage = "Une erreur est survenue lors de la mise à jour de l'événement.";
+        if (error.status === 422 && error.error.errors) {
+          this.errorMessage = 'Erreurs de validation :';
+          const validationErrors = error.error.errors as Record<string, string[]>;
+          for (const [field, messages] of Object.entries(validationErrors)) {
+            this.errorMessage += `\n${field} : ${messages.join(', ')}`;
+          }
+        } else {
+          this.errorMessage = 'Une erreur est survenue lors de la mise à jour de l\'événement.';
+        }
+        this.clearMessagesAfterDelay();
       }
     });
   }
+
+
 
   addFormFieldsToFormData(formData: FormData) {
     formData.append('name', this.eventForm.get('name')?.value);
@@ -171,12 +207,15 @@ export class FormEventEditComponent implements OnInit {
   onBannerUpload(event: any) {
     const file = event.target.files[0];
     if (file) {
-      this.eventForm.patchValue({ banner: file });
+      this.eventForm.patchValue({ banner: file }); // Passe bien un fichier
       const reader = new FileReader();
       reader.onload = () => {
         this.bannerPreview = reader.result as string;
       };
       reader.readAsDataURL(file);
+    } else {
+      this.eventForm.patchValue({ banner: null }); // Remet à `null` si pas de fichier
     }
   }
+
 }
