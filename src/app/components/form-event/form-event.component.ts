@@ -1,21 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, FormArray,Validators } from '@angular/forms';
 import { EventService } from 'src/app/services/event.service';
 import { CategoryService } from 'src/app/services/category.service';
 import { WalletService } from 'src/app/services/wallet.service';
-import { CommonModule } from '@angular/common';
-import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { SidebarComponent } from '../sidebar/sidebar.component';
+import { HttpErrorResponse } from '@angular/common/http';
 import { HeaderComponent } from '../header/header.component';
+import { SidebarComponent } from '../sidebar/sidebar.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-form-event',
   templateUrl: './form-event.component.html',
   styleUrls: ['./form-event.component.scss'],
-  providers: [EventService, CategoryService, WalletService],
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, SidebarComponent, HeaderComponent]
+  imports: [HeaderComponent, SidebarComponent, CommonModule, ReactiveFormsModule],
 })
 export class FormEventComponent implements OnInit {
   eventForm!: FormGroup;
@@ -37,22 +36,46 @@ export class FormEventComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.initializeForm();
+    this.addTicketType(); // Ajout initial d'un type de billet
+    this.loadCategories();
+    this.loadWallets();
+    this.checkLoginStatus();
+}
 
-    this.eventForm = this.fb.group({
+
+initializeForm() {
+  this.eventForm = this.fb.group({
       name: ['', Validators.required],
       date: ['', Validators.required],
       time: ['', Validators.required],
       location: ['', Validators.required],
-      ticket_price: ['', Validators.required],
-      ticket_quantity: ['', Validators.required],
-      description: [''],
-      banner: ['', Validators.required]
-    });
-    this.loadCategories();
-    this.loadWallets();
+      description: ['', Validators.required],
+      banner: [null, Validators.required],
+      ticket_types: this.fb.array([]) // Tableau requis pour types de tickets
+  });
+}
 
-    const token = localStorage.getItem('jwt_token');
-    this.isLoggedIn = !!token; // Met à jour l'état de connexion
+
+
+  // Méthode pour obtenir le tableau de tickets
+  get ticketTypes(): FormArray {
+    return this.eventForm.get('ticket_types') as FormArray;
+  }
+
+  // Méthode pour ajouter un ticket au tableau
+  addTicketType() {
+    const ticketGroup = this.fb.group({
+      type: ['', Validators.required],
+      price: ['', [Validators.required, Validators.min(0)]],
+      quantity: ['', [Validators.required, Validators.min(1)]]
+    });
+    this.ticketTypes.push(ticketGroup);
+  }
+
+  // Méthode pour supprimer un ticket du tableau
+  removeTicketType(index: number) {
+    this.ticketTypes.removeAt(index);
   }
 
   loadCategories() {
@@ -67,6 +90,11 @@ export class FormEventComponent implements OnInit {
       (data: any) => this.wallets = data,
       (error: any) => console.error('Erreur lors du chargement des wallets:', error)
     );
+  }
+
+  checkLoginStatus() {
+    const token = localStorage.getItem('jwt_token');
+    this.isLoggedIn = !!token;
   }
 
   onCategoryChange(event: any, categoryId: number) {
@@ -87,56 +115,50 @@ export class FormEventComponent implements OnInit {
 
   onSubmit() {
     if (this.eventForm.invalid) {
-      this.errorMessage = 'Le formulaire est invalide. Veuillez vérifier les champs.';
-      return;
+        this.errorMessage = 'Le formulaire est invalide. Veuillez vérifier les champs suivants :';
+        const controls = this.eventForm.controls;
+
+        Object.keys(controls).forEach(field => {
+            const control = controls[field];
+            if (control.invalid) {
+                this.errorMessage += `\n- ${field}`;
+            }
+        });
+        return;
     }
 
+    // Affichage des données pour vérification
+    console.log('Form data:', this.eventForm.value);
 
     const formData = new FormData();
-    // Les données principales de l'événement sous forme de JSON pour "body"
-    formData.append('body', JSON.stringify({
-      name: this.eventForm.get('name')?.value,
-      date: this.eventForm.get('date')?.value,
-      time: this.eventForm.get('time')?.value,
-      categories: this.selectedCategories,
-      wallets: this.selectedWallets,
-      location: this.eventForm.get('location')?.value,
-      ticket_price: this.eventForm.get('ticket_price')?.value,
-      ticket_quantity: this.eventForm.get('ticket_quantity')?.value,
-      description: this.eventForm.get('description')?.value,
-    }));
+    const eventData = {
+        name: this.eventForm.get('name')?.value,
+        date: this.eventForm.get('date')?.value,
+        time: this.eventForm.get('time')?.value,
+        location: this.eventForm.get('location')?.value,
+        description: JSON.stringify(this.eventForm.get('description')?.value),
+        ticket_types: this.ticketTypes.value,
+        categories: this.selectedCategories,
+        wallets: this.selectedWallets
+    };
+    formData.append('body', JSON.stringify(eventData));
 
-    // Les catégories et wallets sous forme de tableau JSON
-    // formData.append('categories', JSON.stringify(this.selectedCategories));
-    // formData.append('wallets', JSON.stringify(this.selectedWallets));
-
-    // Charger le fichier de bannière
     const bannerFile = this.eventForm.get('banner')?.value;
     if (bannerFile) {
-      formData.append('banner', bannerFile);
+        formData.append('banner', bannerFile);
     }
 
     this.eventService.createEvent(formData).subscribe({
-      next: (response) => {
-        this.successMessage = 'Événement créé avec succès';
-        this.clearMessagesAfterDelay();
-        this.router.navigate(['/events']).then(() => window.location.reload());
-      },
-      error: (error: HttpErrorResponse) => {
-        if (error.status === 422 && error.error.errors) {
-          this.errorMessage = 'Erreurs de validation :';
-          const validationErrors = error.error.errors as Record<string, string[]>;
-          for (const [field, messages] of Object.entries(validationErrors)) {
-            this.errorMessage += `\n${field} : ${messages.join(', ')}`;
-          }
-        } else {
-          this.errorMessage = 'Une erreur est survenue lors de la création de l\'événement.';
+        next: (response) => {
+            this.successMessage = 'Événement créé avec succès';
+            this.clearMessagesAfterDelay();
+            this.router.navigate(['/events']).then(() => window.location.reload());
+        },
+        error: (error: HttpErrorResponse) => {
+            this.handleError(error);
         }
-        this.clearMessagesAfterDelay();
-      }
-
     });
-  }
+}
 
   onBannerUpload(event: any): void {
     const file = event.target.files[0];
@@ -150,10 +172,23 @@ export class FormEventComponent implements OnInit {
     }
   }
 
+  handleError(error: HttpErrorResponse) {
+    if (error.status === 422 && error.error.errors) {
+      this.errorMessage = 'Erreurs de validation :';
+      const validationErrors = error.error.errors as Record<string, string[]>;
+      for (const [field, messages] of Object.entries(validationErrors)) {
+        this.errorMessage += `\n${field} : ${messages.join(', ')}`;
+      }
+    } else {
+      this.errorMessage = 'Une erreur est survenue lors de la création de l\'événement.';
+    }
+    this.clearMessagesAfterDelay();
+  }
+
   clearMessagesAfterDelay() {
     setTimeout(() => {
       this.successMessage = '';
       this.errorMessage = '';
-    }, 5000); // Efface les messages après 5 secondes
+    }, 5000);
   }
 }

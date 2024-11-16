@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventService } from 'src/app/services/event.service';
 import { CategoryService } from 'src/app/services/category.service';
@@ -16,7 +16,7 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
   styleUrls: ['./form-event-edit.component.scss'],
   providers: [EventService, CategoryService, WalletService],
   standalone: true,
-  imports:[ReactiveFormsModule, CommonModule, HeaderComponent, SidebarComponent]
+  imports: [CommonModule, HeaderComponent, SidebarComponent, ReactiveFormsModule, ],
 })
 export class FormEventEditComponent implements OnInit {
   eventForm!: FormGroup;
@@ -24,19 +24,11 @@ export class FormEventEditComponent implements OnInit {
   wallets: any[] = [];
   selectedCategories: number[] = [];
   selectedWallets: number[] = [];
-  errorMessage: string = '';
   bannerPreview: string | null = null;
   eventId!: number;
-  isLoggedIn: boolean = false;
+  errorMessage: string = '';
   successMessage: string = '';
-  clearMessagesAfterDelay() {
-    setTimeout(() => {
-      this.errorMessage = '';
-      this.successMessage = '';
-    }, 3000);
-  }
-
-
+  isLoggedIn: boolean = false;
   public event!: Event;
 
   constructor(
@@ -44,8 +36,8 @@ export class FormEventEditComponent implements OnInit {
     private eventService: EventService,
     private categoryService: CategoryService,
     private walletService: WalletService,
-    private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -54,9 +46,7 @@ export class FormEventEditComponent implements OnInit {
     this.loadEvent();
     this.loadCategories();
     this.loadWallets();
-
-    const token = localStorage.getItem('jwt_token');
-    this.isLoggedIn = !!token; // Met à jour l'état de connexion
+    this.isLoggedIn = !!localStorage.getItem('jwt_token');
   }
 
   initializeForm() {
@@ -65,58 +55,97 @@ export class FormEventEditComponent implements OnInit {
       date: ['', Validators.required],
       time: ['', Validators.required],
       location: ['', Validators.required],
-      ticket_price: ['', Validators.required],
-      ticket_quantity: ['', Validators.required],
       description: [''],
-      banner: [null]
+      ticket_types: this.fb.array([]),
+      banner: [null],
     });
+  }
+
+  get ticketTypes(): FormArray {
+    return this.eventForm.get('ticket_types') as FormArray;
+  }
+
+  addTicketType(ticketType: any = { type: '', price: '', quantity: '' }) {
+    this.ticketTypes.push(
+      this.fb.group({
+        type: [ticketType.type, Validators.required],
+        price: [ticketType.price, [Validators.required, Validators.min(0)]],
+        quantity: [ticketType.quantity, [Validators.required, Validators.min(1)]],
+      })
+    );
+  }
+
+  removeTicketType(index: number) {
+    this.ticketTypes.removeAt(index);
   }
 
   loadEvent() {
     this.eventService.getEvent(this.eventId).subscribe(
       (response: any) => {
-        this.event = response.event;
-        if (!this.event) {
-          console.error("Événement non trouvé.");
-          return;
-        }
+        const event = response.event;
         this.eventForm.patchValue({
-          name: this.event.name,
-          date: this.event.date,
-          time: this.event.time,
-          location: this.event.location,
-          ticket_price: this.event.ticket_price,
-          ticket_quantity: this.event.ticket_quantity,
-          description: this.event.description,
-          banner: this.event.banner ? this.event.banner : null,
+          name: event.name,
+          date: event.date,
+          time: event.time,
+          location: event.location,
+          description: event.description,
         });
-        this.selectedCategories = this.event.categories ? this.event.categories.map((cat: any) => cat.id) : [];
-        this.selectedWallets = this.event.wallets ? this.event.wallets.map((wallet: any) => wallet.id) : [];
+        this.bannerPreview = event.banner;
+        this.selectedCategories = event.categories.map((cat: any) => cat.id);
+        this.selectedWallets = event.wallets.map((wallet: any) => wallet.id);
+        event.ticket_types.forEach((ticketType: any) => this.addTicketType(ticketType));
       },
       (error: HttpErrorResponse) => {
-        console.error("Erreur lors du chargement de l'événement :", error);
-        this.errorMessage = "Impossible de charger les données de l'événement.";
+        this.errorMessage = 'Erreur lors du chargement de l\'événement.';
       }
     );
   }
 
   loadCategories() {
     this.categoryService.getCategories().subscribe(
-      (data: any) => this.categories = data,
-      (error: any) => console.error('Erreur lors du chargement des catégories:', error)
+      (data: any) => (this.categories = data),
+      (error: any) => console.error(error)
     );
   }
 
   loadWallets() {
     this.walletService.getWallets().subscribe(
-      (data: any) => this.wallets = data,
-      (error: any) => console.error('Erreur lors du chargement des wallets:', error)
+      (data: any) => (this.wallets = data),
+      (error: any) => console.error(error)
     );
+  }
+
+  onBannerUpload(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.eventForm.patchValue({ banner: file });
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.bannerPreview = reader.result as string;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  onCategoryChange(event: any, categoryId: number) {
+    if (event.target.checked) {
+      this.selectedCategories.push(categoryId);
+    } else {
+      this.selectedCategories = this.selectedCategories.filter((id) => id !== categoryId);
+    }
+  }
+
+  onWalletChange(event: any, walletId: number) {
+    if (event.target.checked) {
+      this.selectedWallets.push(walletId);
+    } else {
+      this.selectedWallets = this.selectedWallets.filter((id) => id !== walletId);
+    }
   }
 
   onUpdate() {
     if (this.eventForm.invalid) {
-      this.errorMessage = 'Le formulaire est invalide. Veuillez vérifier les champs.';
+      this.errorMessage = 'Veuillez remplir tous les champs obligatoires correctement.';
       return;
     }
 
@@ -125,59 +154,39 @@ export class FormEventEditComponent implements OnInit {
     formData.append('date', this.eventForm.get('date')?.value);
     formData.append('time', this.eventForm.get('time')?.value);
     formData.append('location', this.eventForm.get('location')?.value);
-    formData.append('ticket_price', this.eventForm.get('ticket_price')?.value);
-    formData.append('ticket_quantity', this.eventForm.get('ticket_quantity')?.value);
     formData.append('description', this.eventForm.get('description')?.value);
-
-    // Envoie les catégories et portefeuilles sous forme de tableau JSON
+    formData.append('ticket_types', JSON.stringify(this.ticketTypes.value));
     formData.append('categories', JSON.stringify(this.selectedCategories));
     formData.append('wallets', JSON.stringify(this.selectedWallets));
 
-    // Envoie le fichier de bannière si disponible
-    const bannerFile = this.eventForm.get('banner')?.value;
-    if (bannerFile && bannerFile instanceof File) { // Vérifie si c’est bien un fichier
-      formData.append('banner', bannerFile);
+    const banner = this.eventForm.get('banner')?.value;
+    if (banner && banner instanceof File) {
+      formData.append('banner', banner);
     }
 
     this.eventService.updateEvent(this.eventId, formData).subscribe({
-      next: (response) => {
-        this.successMessage = 'Événement mis à jour avec succès';
-        this.clearMessagesAfterDelay();
-        this.router.navigate(['/events']).then(() => window.location.reload());
+      next: () => {
+        this.successMessage = 'Événement mis à jour avec succès.';
+        this.router.navigate(['/events']);
       },
       error: (error: HttpErrorResponse) => {
-        if (error.status === 422 && error.error.errors) {
-          this.errorMessage = 'Erreurs de validation :';
-          const validationErrors = error.error.errors as Record<string, string[]>;
-          for (const [field, messages] of Object.entries(validationErrors)) {
-            this.errorMessage += `\n${field} : ${messages.join(', ')}`;
-          }
+        console.error('Erreur lors de la mise à jour de l\'événement :', error);
+        if (error.status === 422) {
+          this.errorMessage = 'Erreur de validation : veuillez vérifier les champs saisis.';
+        } else if (error.status === 404) {
+          this.errorMessage = 'Événement introuvable ou supprimé.';
+        } else if (error.status === 403) {
+          this.errorMessage = 'Vous n\'êtes pas autorisé à modifier cet événement.';
         } else {
-          this.errorMessage = 'Une erreur est survenue lors de la mise à jour de l\'événement.';
+          this.errorMessage = 'Une erreur inattendue s\'est produite. Veuillez réessayer plus tard.';
         }
-        this.clearMessagesAfterDelay();
-      }
+      },
     });
   }
 
 
-
-  addFormFieldsToFormData(formData: FormData) {
-    formData.append('name', this.eventForm.get('name')?.value);
-    formData.append('date', this.eventForm.get('date')?.value);
-    formData.append('time', this.eventForm.get('time')?.value);
-    formData.append('location', this.eventForm.get('location')?.value);
-    formData.append('ticket_price', this.eventForm.get('ticket_price')?.value);
-    formData.append('ticket_quantity', this.eventForm.get('ticket_quantity')?.value);
-    formData.append('description', this.eventForm.get('description')?.value);
-
-    this.selectedCategories.forEach((categoryId) => formData.append('categories[]', categoryId.toString()));
-    this.selectedWallets.forEach((walletId) => formData.append('wallets[]', walletId.toString()));
-
-    const bannerFile = this.eventForm.get('banner')?.value;
-    if (bannerFile) {
-      formData.append('banner', bannerFile);
-    }
+  onCancel() {
+    this.router.navigate(['/events']);
   }
 
   isSelectedCategory(categoryId: number): boolean {
@@ -187,35 +196,4 @@ export class FormEventEditComponent implements OnInit {
   isSelectedWallet(walletId: number): boolean {
     return this.selectedWallets.includes(walletId);
   }
-
-  onCategoryChange(event: any, categoryId: number) {
-    if (event.target.checked) {
-      this.selectedCategories.push(categoryId);
-    } else {
-      this.selectedCategories = this.selectedCategories.filter(id => id !== categoryId);
-    }
-  }
-
-  onWalletChange(event: any, walletId: number) {
-    if (event.target.checked) {
-      this.selectedWallets.push(walletId);
-    } else {
-      this.selectedWallets = this.selectedWallets.filter(id => id !== walletId);
-    }
-  }
-
-  onBannerUpload(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      this.eventForm.patchValue({ banner: file }); // Passe bien un fichier
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.bannerPreview = reader.result as string;
-      };
-      reader.readAsDataURL(file);
-    } else {
-      this.eventForm.patchValue({ banner: null }); // Remet à `null` si pas de fichier
-    }
-  }
-
 }

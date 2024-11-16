@@ -35,7 +35,7 @@ export class TicketsComponent implements OnInit {
   ngOnInit(): void {
     const token = localStorage.getItem('jwt_token'); // Récupérer le token JWT depuis le localStorage
     this.isLoggedIn = !!token; // Met à jour l'état de connexion
-    
+
     this.ticketId = +this.route.snapshot.paramMap.get('id')!;
     // Utilisez ticketId pour charger les détails du ticket
 
@@ -65,21 +65,20 @@ export class TicketsComponent implements OnInit {
   loadUserTickets(): void {
     this.ticketService.getUserTickets().subscribe(
       (response) => {
-        this.tickets = response.tickets; // Stocker les tickets
+        this.tickets = response.tickets;
         if (this.tickets.length === 0) {
-          this.message = "Vous n'avez pas encore acheté de tickets. Merci.";
+          this.message = "Vous n'avez pas encore acheté de tickets.";
         }
-        // Appeler categorizeTickets après avoir récupéré les tickets
         this.categorizeTickets();
       },
       (error: HttpErrorResponse) => {
-        console.error('Erreur lors du chargement des tickets:', error);
         this.message = error.status === 401
           ? 'Vous devez être authentifié pour voir vos tickets.'
           : 'Erreur lors du chargement des billets.';
       }
     );
   }
+
 
   categorizeTickets(): void {
     const currentDate = new Date();

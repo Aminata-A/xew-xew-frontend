@@ -130,6 +130,15 @@ h3{
   color: #ff4b2b;
   font-size: 1.5rem;
 }
+.message{
+  p{
+    font-size: larger;
+    color: #ff4b2b;
+    font-weight: 500;
+    font-family: 'clash-display', sans-serif;
+    text-align: center;
+  }
+}
 @media (max-width: 767px) {
   .tickets {
     width: 100%;

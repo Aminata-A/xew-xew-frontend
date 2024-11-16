@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventService } from 'src/app/services/event.service';
 import { Chart } from 'chart.js/auto';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-dashboard',
@@ -10,13 +10,14 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./dashboard.component.scss'],
   providers: [EventService],
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, NgIf],
 })
 export class DashboardComponent implements OnInit {
   event: any = {};
-  statistics: any = {}; // Déclaration pour `statistics`
+  statistics: any = {};
   ticketHolders: any[] = [];
-  durationSincePublication: number | null = null;
+  durationSincePublication: string | null = null;
+  published_date: string | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -27,6 +28,9 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     const eventId = this.route.snapshot.params['id'];
     this.loadEventDashboard(eventId);
+  }
+  navigateToScan() {
+    this.router.navigate(['/scan']);
   }
 
   loadEventDashboard(eventId: number) {
@@ -44,94 +48,61 @@ export class DashboardComponent implements OnInit {
     );
   }
 
-  renderSalesChart() {
-    const ctx = document.getElementById('salesChart') as HTMLCanvasElement;
-    new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ['Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb'],
-        datasets: [
-          { label: 'arrival', data: [300, 200, 465, 150, 210, 300], backgroundColor: '#1f77b4' },
-          { label: 'spending', data: [200, 150, 250, 130, 180, 200], backgroundColor: '#ff7f0e' }
-        ]
-      }
-    });
-  }
-  // Fonction pour obtenir le type de portefeuille
-  getWalletType(type: string): string {
-    switch (type) {
-      case 'orange_money':
-        return 'Orange Money';
-      case 'free_money':
-        return 'Free Money';
-      case 'wave':
-        return 'Wave';
-      default:
-        return 'Autre';
-    }
-  }
-
-  // Fonction pour naviguer vers le composant de scan
-  navigateToScan() {
-    this.router.navigate(['/scan']).then(() => window.location.reload());
-  }
-
   loadCharts() {
-    this.loadSalesChart();
-    this.loadTransactionsChart();
+    this.loadTicketChart();
+    this.loadScanChart();
   }
 
-  loadSalesChart() {
-    const ctx = document.getElementById('salesChart') as HTMLCanvasElement;
-    new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-        datasets: [
-          {
-            label: 'Ventes',
-            data: [100, 150, 200, 250, 300, 400],
-            backgroundColor: 'rgba(73, 210, 250, 0.2)',
-            borderColor: '#49D2FA',
-            borderWidth: 2,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          y: {
-            beginAtZero: true,
-          },
-        },
-      },
-    });
-  }
-
-  loadTransactionsChart() {
-    const ctx = document.getElementById(
-      'transactionsChart'
-    ) as HTMLCanvasElement;
+  loadTicketChart() {
+    const ctx = document.getElementById('ticketChart') as HTMLCanvasElement;
     new Chart(ctx, {
       type: 'pie',
       data: {
-        labels: ['Orange Money', 'Free Money', 'Wave'],
+        labels: ['Tickets Vendus', 'Tickets Restants'],
         datasets: [
           {
-            data: [100, 75, 50],
-            backgroundColor: ['#FF7900', '#C81A19', '#49D2FA'],
+            data: [
+              this.statistics.tickets_sold,
+              this.statistics.tickets_remaining,
+            ],
+            backgroundColor: ['#FF773D', '#1b1b1b'],
           },
         ],
       },
       options: {
         responsive: true,
-        maintainAspectRatio: false,
+      },
+    });
+  }
+
+  loadScanChart() {
+    const ctx = document.getElementById('scanChart') as HTMLCanvasElement;
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Scannés', 'Non Scannés'],
+        datasets: [
+          {
+            label: 'Statut des Tickets',
+            data: [
+              this.statistics.scanned_tickets,
+              this.statistics.unscanned_tickets,
+            ],
+            backgroundColor: ['#FF773D', '#1b1b1b'],
+          },
+        ],
+      },
+      options: {
+        responsive: true,
       },
     });
   }
 
   goBack() {
-    this.router.navigate(['/my-events']);
+    this.router.navigate(['/my-events']).then(() => {
+      window.location.reload(); // Rechargement de la page après redirection
+    }).catch(err => {
+      console.error('Erreur lors de la redirection:', err);
+    });
   }
 }

@@ -2,6 +2,8 @@ import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Event, Register } from '../services/interfaces';
+import { TicketType } from './interfaces'; // Assurez-vous que le chemin est correct
+
 
 const baseURL = 'http://127.0.0.1:8000/api';
 @Injectable({
@@ -22,19 +24,21 @@ export class EventService {
   getEvents() {
     return this.http.get<Event[]>(`${baseURL}/events`);
   }
-
+  // getEvent(id: number): Observable<{ event: Event; ticket_types: TicketType[]; tickets_remaining: number }> {
+  //   return this.http.get<{ event: Event; ticket_types: TicketType[]; tickets_remaining: number }>(`${baseURL}/events/${id}`);
+  // }
   // Dans EventService
-  getEvent(
-    id: number
-  ): Observable<{ event: Event; tickets_remaining: number }> {
-    return this.http.get<{ event: Event; tickets_remaining: number }>(
-      `http://127.0.0.1:8000/api/events/${id}`
-    );
-  }
+// event.service.ts
+getEvent(id: number): Observable<{ event: Event; ticket_types: TicketType[]; tickets_remaining: number }> {
+  return this.http.get<{ event: Event; ticket_types: TicketType[]; tickets_remaining: number }>(`${baseURL}/events/${id}`);
+}
 
-  getSimilarEvents(id: number): Observable<Event[]> {
-    return this.http.get<Event[]>(`${baseURL}/events/${id}/similar`);
-  }
+
+// event.service.ts (exemple)
+getSimilarEvents(eventId: number): Observable<Event[]> {
+  return this.http.get<Event[]>(`${baseURL}/events/${eventId}/similar`);
+}
+
 
 
 

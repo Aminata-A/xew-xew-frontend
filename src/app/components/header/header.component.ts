@@ -90,7 +90,11 @@ export class HeaderComponent implements OnInit {
   logout() {
     localStorage.removeItem('jwt_token');
     this.isAuthenticated = false;
-    this.router.navigate(['/login']);
+    this.router.navigate(['/login']).then(() => {
+      window.location.reload(); // Rechargement de la page après redirection
+    }).catch(err => {
+      console.error('Erreur lors de la redirection:', err);
+    });
     this.showProfileMenu = false;
   }
 

@@ -58,8 +58,35 @@
             </form>
           </div>
         </ng-container>
+        <button class="add-category-btn" (click)="showCategoryForm = !showCategoryForm">+ Ajouter Catégorie</button>
 
+        <ng-container *ngIf="showCategoryForm">
+            <div class="modal-backdrop" (click)="showCategoryForm = false"></div>
+            <div class="modal-content">
+                <h4>Créer une nouvelle catégorie</h4>
+                <form (submit)="createCategory()">
+                    <div class="form-group">
+                        <label for="categoryLabel">Nom de la catégorie</label>
+                        <input
+                            id="categoryLabel"
+                            type="text"
+                            [(ngModel)]="newCategoryLabel"
+                            name="categoryLabel"
+                            required
+                        />
+                    </div>
+                    <div class="modal-actions">
+                        <button type="submit" class="submit-btn">Créer</button>
+                        <button type="button" (click)="showCategoryForm = false" class="cancel-btn">
+                            Annuler
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </ng-container>
         <div class="wallets-container">
+          <!-- Add Button for Category Creation -->
+
           <div class="wallets">
             <div *ngFor="let wallet of wallets" class="wallet-card" [ngClass]="getWalletClass(wallet.name)">
               <div class="wallet-header">

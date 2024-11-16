@@ -8,16 +8,17 @@ $white-color: #fff;
 $card-radius: 15px;
 $background-light: #f9f9f9;
 $border-color: #e6e6e6;
-// Variables
 $modal-overlay-color: rgba(0, 0, 0, 0.4);
 $modal-bg-color: #ffffff;
 $modal-border-radius: 10px;
 $modal-padding: 20px;
+
 .wallet-page {
+  
   display: flex;
   max-width: 100%;
-  // flex-direction: column;
   overflow-y: auto; // Permet le défilement vertical
+
 }
 
 .content-wrapper {
@@ -25,6 +26,7 @@ $modal-padding: 20px;
   max-width: 100%;
   overflow-y: auto; // Permet le défilement vertical dans le conteneur principal
   padding-bottom: 20px; // Espace pour éviter que le contenu touche le bas de l’écran
+  overflow-y: auto;
 
 }
 
@@ -346,4 +348,10 @@ $modal-padding: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   font-size: 16px;
   z-index: 1002;
+}
+.add-category-btn{
+  background-color: $primary-color;
+  border: none;
+  margin-bottom: 2em;
+  border-radius: 4px;
 }

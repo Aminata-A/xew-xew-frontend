@@ -1,134 +1,128 @@
-<div *ngIf="isLoggedIn" class="form-event-edit">
-<!-- Sidebar uniquement si l'utilisateur est connecté -->
-<app-sidebar class="sidebar"></app-sidebar>
+<div *ngIf="isLoggedIn" class="form-event-page">
+  <app-sidebar class="sidebar"></app-sidebar>
 
   <div class="content">
     <app-header></app-header>
 
     <div class="form-content">
-      <div class="alert error" *ngIf="errorMessage">
-        {{ errorMessage }}
-      </div>
-
       <div class="title">
-        <h2>Modifier l'événement</h2>
-        <p>Modifiez les détails de l'événement facilement.</p>
+        <p>Mettez à jour les détails de votre événement.</p>
       </div>
 
+      <!-- Formulaire pour la mise à jour de l'événement -->
       <form [formGroup]="eventForm" (ngSubmit)="onUpdate()" enctype="multipart/form-data">
         <div class="step">
           <h3>Informations de l'événement</h3>
 
-          <!-- Affichage et gestion de l'image de la bannière -->
           <div class="form-group">
             <label for="bannerUpload" class="banner-label">
               <img
-                *ngIf="!bannerPreview && eventForm.get('banner')?.value; else selectedBanner"
-                [src]="'http://127.0.0.1:8000' + eventForm.get('banner')?.value"
-                alt="Image de la bannière actuelle"
+                *ngIf="!bannerPreview; else selectedBanner"
+                [src]="event.banner || 'https://img.freepik.com/premium-photo/indian-republic-day-concept-indian-flag-print-air-balloon-with-copy-space-banner_742418-20690.jpg?w=1060'"
+                alt="Image par défaut"
                 class="banner-preview"
               />
               <ng-template #selectedBanner>
-                <img [src]="bannerPreview" alt="Aperçu de la nouvelle bannière" class="banner-preview" />
+                <img [src]="bannerPreview" alt="Banner Preview" class="banner-preview" />
               </ng-template>
             </label>
             <input id="bannerUpload" type="file" (change)="onBannerUpload($event)" style="display: none;" />
-            <div *ngIf="eventForm.get('banner')?.invalid && eventForm.get('banner')?.touched" class="error-message">
-              La bannière est requise.
-            </div>
           </div>
 
-          <!-- Champ Nom -->
           <div class="form-group">
             <label for="name">Nom de l'événement</label>
             <input type="text" formControlName="name" placeholder="Nom de l'événement" />
-            <div *ngIf="eventForm.get('name')?.invalid && eventForm.get('name')?.touched" class="error-message">
-              Le nom de l'événement est requis.
-            </div>
           </div>
 
-          <!-- Champ Date et Heure -->
           <div class="form-group-inline">
             <div class="form-group">
               <label for="date">Date</label>
               <input type="date" formControlName="date" />
-              <div *ngIf="eventForm.get('date')?.invalid && eventForm.get('date')?.touched" class="error-message">
-                La date est requise.
-              </div>
             </div>
+
             <div class="form-group">
               <label for="time">Heure</label>
               <input type="time" formControlName="time" />
-              <div *ngIf="eventForm.get('time')?.invalid && eventForm.get('time')?.touched" class="error-message">
-                L'heure est requise.
-              </div>
             </div>
           </div>
 
-          <!-- Champ Lieu -->
           <div class="form-group">
             <label for="location">Lieu</label>
             <input type="text" formControlName="location" placeholder="Lieu de l'événement" />
-            <div *ngIf="eventForm.get('location')?.invalid && eventForm.get('location')?.touched" class="error-message">
-              Le lieu de l'événement est requis.
-            </div>
           </div>
 
-          <!-- Champ Description -->
           <div class="form-group">
             <label for="description">Description</label>
             <textarea formControlName="description" placeholder="Description de l'événement"></textarea>
-            <div *ngIf="eventForm.get('description')?.invalid && eventForm.get('description')?.touched" class="error-message">
-              La description est requise.
-            </div>
           </div>
         </div>
 
-        <!-- Section Détails des billets -->
         <div class="step">
           <h3>Détails des billets</h3>
-          <div class="form-group">
-            <label for="ticket_price">Prix du billet</label>
-            <input type="number" formControlName="ticket_price" placeholder="Prix en XOF" />
-            <div *ngIf="eventForm.get('ticket_price')?.invalid && eventForm.get('ticket_price')?.touched" class="error-message">
-              Le prix du billet est requis et doit être un nombre positif.
+          <div formArrayName="ticket_types">
+            <div *ngFor="let ticket of ticketTypes.controls; let i = index" [formGroupName]="i" class="ticket-type">
+              <div class="form-group">
+                <label for="ticket_type">Type de billet</label>
+                <input type="text" formControlName="type" placeholder="Type de billet" />
+              </div>
+
+              <div class="form-group">
+                <label for="ticket_price">Prix du billet</label>
+                <input type="number" formControlName="price" placeholder="Prix en XOF" />
+              </div>
+
+              <div class="form-group">
+                <label for="ticket_quantity">Quantité de billets</label>
+                <input type="number" formControlName="quantity" placeholder="Quantité de billets disponibles" />
+              </div>
+
+              <button type="button" (click)="removeTicketType(i)" class="btn-remove">Supprimer ce type de billet</button>
             </div>
           </div>
-          <div class="form-group">
-            <label for="ticket_quantity">Quantité de billets</label>
-            <input type="number" formControlName="ticket_quantity" placeholder="Nombre de billets disponibles" />
-            <div *ngIf="eventForm.get('ticket_quantity')?.invalid && eventForm.get('ticket_quantity')?.touched" class="error-message">
-              La quantité de billets est requise et doit être un nombre positif.
-            </div>
-          </div>
+
+          <button type="button" (click)="addTicketType()" class="btn-add">Ajouter un type de billet</button>
         </div>
 
-        <!-- Section Catégories et Portefeuilles -->
         <div class="step">
           <h3>Catégories et Portefeuilles</h3>
           <div class="form-group">
             <label for="categories">Catégories</label>
             <div class="checkbox-group">
               <div *ngFor="let category of categories">
-                <input type="checkbox" [checked]="isSelectedCategory(category.id)" (change)="onCategoryChange($event, category.id)" />
+                <input
+                  type="checkbox"
+                  [checked]="isSelectedCategory(category.id)"
+                  (change)="onCategoryChange($event, category.id)"
+                />
                 <label>{{ category.label }}</label>
               </div>
             </div>
           </div>
+
           <div class="form-group">
             <label for="wallets">Portefeuilles de paiement</label>
             <div class="checkbox-group">
               <div *ngFor="let wallet of wallets">
-                <input type="checkbox" [checked]="isSelectedWallet(wallet.id)" (change)="onWalletChange($event, wallet.id)" />
+                <input
+                  type="checkbox"
+                  [checked]="isSelectedWallet(wallet.id)"
+                  (change)="onWalletChange($event, wallet.id)"
+                />
                 <label>{{ wallet.name }}</label>
               </div>
             </div>
           </div>
+        </div>
 
-          <!-- Bouton de soumission -->
-          <div class="form-actions">
-            <button type="submit" class="btn-submit">Mettre à jour l'événement</button>
-          </div>
+        <div class="alert success" *ngIf="successMessage">
+          {{ successMessage }}
+        </div>
+        <div class="alert error" *ngIf="errorMessage">
+          {{ errorMessage }}
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-submit">Mettre à jour</button>
         </div>
       </form>
     </div>

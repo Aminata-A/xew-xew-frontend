@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  ionic-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ionic-frontend
+    ports:
+      - "4200:4200" # Expose l'application sur le port 4200
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

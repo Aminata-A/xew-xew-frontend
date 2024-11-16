@@ -5,12 +5,6 @@
     <app-header></app-header>
 
     <div class="form-content">
-      <div class="alert success" *ngIf="successMessage">
-        {{ successMessage }}
-      </div>
-      <div class="error-message alert error" *ngIf="errorMessage">
-        {{ errorMessage }}
-      </div>
 
       <div class="title">
         <p>Remplissez les détails de votre événement.</p>
@@ -84,22 +78,39 @@
 
         <div class="step">
           <h3>Détails des billets</h3>
-          <div class="form-group">
-            <label for="ticket_price">Prix du billet</label>
-            <input type="number" formControlName="ticket_price" placeholder="Prix en XOF" />
-            <div *ngIf="eventForm.get('ticket_price')?.invalid && eventForm.get('ticket_price')?.touched" class="error-message">
-              Le prix du billet est requis et doit être un nombre positif.
+          <div formArrayName="ticket_types">
+            <div *ngFor="let ticket of ticketTypes.controls; let i = index" [formGroupName]="i" class="ticket-type">
+              <div class="form-group">
+                <label for="ticket_type">Type de billet</label>
+                <input type="text" formControlName="type" placeholder="Type de billet" />
+                <div *ngIf="ticket.get('type')?.invalid && ticket.get('type')?.touched" class="error-message">
+                  Le type de billet est requis.
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="ticket_price">Prix du billet</label>
+                <input type="number" formControlName="price" placeholder="Prix en XOF" />
+                <div *ngIf="ticket.get('price')?.invalid && ticket.get('price')?.touched" class="error-message">
+                  Le prix du billet est requis et doit être un nombre positif.
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="ticket_quantity">Quantité de billets</label>
+                <input type="number" formControlName="quantity" placeholder="Quantité de billets disponibles" />
+                <div *ngIf="ticket.get('quantity')?.invalid && ticket.get('quantity')?.touched" class="error-message">
+                  La quantité de billets est requise et doit être un nombre positif.
+                </div>
+              </div>
+
+              <button type="button" (click)="removeTicketType(i)" class="btn-remove">Supprimer ce type de billet</button>
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="ticket_quantity">Quantité de billets</label>
-            <input type="number" formControlName="ticket_quantity" placeholder="Nombre de billets disponibles" />
-            <div *ngIf="eventForm.get('ticket_quantity')?.invalid && eventForm.get('ticket_quantity')?.touched" class="error-message">
-              La quantité de billets est requise et doit être un nombre positif.
-            </div>
-          </div>
+          <button type="button" (click)="addTicketType()" class="btn-add">Ajouter un type de billet</button>
         </div>
+
 
         <div class="step">
           <h3>Catégories et Portefeuilles</h3>
@@ -122,7 +133,12 @@
               </div>
             </div>
           </div>
-
+          <div class="alert success" *ngIf="successMessage">
+            {{ successMessage }}
+          </div>
+          <div class="error-message alert error" *ngIf="errorMessage">
+            {{ errorMessage }}
+          </div>
           <div class="form-actions">
             <button type="submit" class="btn-submit">Créer l'événement</button>
           </div>

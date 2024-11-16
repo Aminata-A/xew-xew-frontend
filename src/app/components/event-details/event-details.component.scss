@@ -6,7 +6,10 @@
   font-size: 1em;
   min-height: 100vh;
   background-color: #f9f9f9;
-  overflow-y: auto; /* Permettre le défilement global */
+  overflow: auto; /* Permettre le défilement global */
+  &::-webkit-scrollbar{
+    width: 0px;
+  }
 }
 /* Header styles */
 header {
@@ -184,12 +187,12 @@ header {
 
   .button-container {
     padding: 15px;
-    position: absolute;
+    // position: absolute;
     bottom: 0;
     width: 100%;
 
     .purchase-button {
-      width: 93%;
+      width: 100%;
       padding: 5px;
       background-color: #FF773D;
       color: white;
@@ -269,6 +272,7 @@ header {
   .event-details{
       padding: 15px;
       max-height: calc(100vh - 100px); /* Limite la hauteur pour autoriser le scroll si nécessaire */
+      overflow: auto;
       &::-webkit-scrollbar {
         width: 0px;
         height: 0px;
@@ -297,26 +301,38 @@ header {
         }
       }
     }
-    .ticket-info{
-
-      .ticket-details{
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 10px;
-      }
-      .total-amount{
-        display: block;
-        // align-items: center;
-        span{
-          margin-right: 1em;
-          font-size: 1.2em;
-          font-family: 'clash-display', sans-serif;
-          font-weight: 600;
-          color: #FF773D;
-        }
-      }
+    .ticket-info {
+      margin-top: 20px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 15px;
+      background-color: #f9f9f9;
+      margin-bottom: 1em;
     }
+
+    .ticket-details table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .ticket-details th,
+    .ticket-details td {
+      text-align: left;
+      padding: 8px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .ticket-details th {
+      background-color: #f3f3f3;
+      font-weight: bold;
+    }
+
+    .total-amount {
+      margin-top: 15px;
+      font-size: 1.2em;
+      text-align: right;
+    }
+
     form{
       display: flex;
       justify-content: space-between;
@@ -393,6 +409,7 @@ header {
   }
 
   @media (min-width: 768px) {
+
     .event-details-page {
       // margin: auto;
       background: white;
@@ -426,7 +443,7 @@ header {
       justify-content: space-between;
     }
     .ticket-price{
-      margin-bottom: 3em;
+      margin-bottom: 1em;
       // width: 97%;
     }
 
@@ -445,4 +462,16 @@ header {
 /* Styles supplémentaires pour améliorer la présentation */
 .similar-events-section {
   padding-top: 20px;
+}
+@media (max-width: 768px){
+  .container-event-details{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: auto;
+
+    &::-webkit-scrollbar{
+      width: 0px;
+    }
+  }
 }

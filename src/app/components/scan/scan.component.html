@@ -1,10 +1,17 @@
-<div class="container text-center">
-  <h1>Scannez votre Ticket</h1>
+<header>
+  <h3>
+    <a [href]="'/events'">Evenements</a> > Détails de l'événement
+  </h3>
+  <img src="../../../assets/images/logo.png" class="logo" alt="Logo" />
+</header>
+
+<div class="container scanner-container text-center my-5">
+  <h1 class="mb-4 title">Scannez votre Ticket</h1>
 
   <!-- Sélection de l'Appareil -->
-  <div class="row justify-content-center mb-3">
+  <div class="row justify-content-center mb-4">
     <div class="col-md-6 col-lg-4">
-      <select #select1 (change)="action.playDevice(select1.value)" class="form-select form-select-md">
+      <select #select1 (change)="action.playDevice(select1.value)" class="form-select form-select-md shadow-sm">
         <option [value]="null" selected>Sélectionnez un appareil</option>
         <option *ngFor="let c of action.devices.value; let i = index" [value]="c.deviceId" [selected]="i === action.deviceIndexActive">{{ c.label }}</option>
       </select>
@@ -12,33 +19,26 @@
   </div>
 
   <!-- Visionneuse du scanner QR Code -->
-  <div class="scanner-container">
+  <div class="scanner-video mb-4">
     <ngx-scanner-qrcode #action="scanner" [config]="config" (event)="onEvent($event)"></ngx-scanner-qrcode>
   </div>
 
   <!-- Indicateur de chargement -->
-  <p *ngIf="action.isLoading">⌛ Chargement en cours...</p>
+  <p *ngIf="action.isLoading" class="text-secondary">⌛ Chargement en cours...</p>
 
   <!-- Boutons de contrôle de la caméra -->
-  <div class="control-buttons d-flex justify-content-center mt-3">
-    <!-- Démarrer/Arrêter la caméra -->
-    <button class="btn mx-1" [class.btn-info]="!action.isStart" [class.btn-warning]="action.isStart" [disabled]="action.isLoading" (click)="handle(action, action.isStart ? 'stop' : 'start')">
-      <img [src]="action.isStart ? 'https://id1945.github.io/images/svg/camera-off.svg' : 'https://id1945.github.io/images/svg/camera-on.svg'" width="30px"/>
+  <div class="control-buttons d-flex justify-content-center flex-wrap mt-4">
+    <button class="btn control-btn mx-2" [class.btn-primary]="!action.isStart" [class.btn-secondary]="action.isStart" [disabled]="action.isLoading" (click)="handle(action, action.isStart ? 'stop' : 'start')">
+      <img [src]="action.isStart ? 'https://id1945.github.io/images/svg/camera-off.svg' : 'https://id1945.github.io/images/svg/camera-on.svg'" width="25px"/>
     </button>
-
-    <!-- Pause/Play -->
-    <button class="btn mx-1" [class.btn-info]="!action.isStart" [class.btn-warning]="action.isStart" [disabled]="!action.isStart" (click)="handle(action, action.isPause ? 'play' : 'pause')">
-      <img [src]="action.isPause ? 'https://id1945.github.io/images/svg/play.svg': 'https://id1945.github.io/images/svg/pause.svg'" width="30px"/>
+    <button class="btn control-btn mx-2" [class.btn-primary]="!action.isStart" [class.btn-secondary]="action.isStart" [disabled]="!action.isStart" (click)="handle(action, action.isPause ? 'play' : 'pause')">
+      <img [src]="action.isPause ? 'https://id1945.github.io/images/svg/play.svg': 'https://id1945.github.io/images/svg/pause.svg'" width="25px"/>
     </button>
-
-    <!-- Allumer/Éteindre la torche -->
-    <button class="btn mx-1" [class.btn-info]="!action.isStart" [class.btn-warning]="action.isStart" [disabled]="!action.isStart" (click)="action.isTorch = !action.isTorch; handle(action, 'torcher')">
-      <img [src]="action.isTorch ? 'https://id1945.github.io/images/svg/flash-off.svg' : 'https://id1945.github.io/images/svg/flash-on.svg'" width="30px"/>
+    <button class="btn control-btn mx-2" [class.btn-primary]="!action.isStart" [class.btn-secondary]="action.isStart" [disabled]="!action.isStart" (click)="action.isTorch = !action.isTorch; handle(action, 'torcher')">
+      <img [src]="action.isTorch ? 'https://id1945.github.io/images/svg/flash-off.svg' : 'https://id1945.github.io/images/svg/flash-on.svg'" width="25px"/>
     </button>
-
-    <!-- Télécharger une capture -->
-    <button class="btn mx-1" [class.btn-info]="!action.isStart" [class.btn-warning]="action.isStart" [disabled]="!action.isStart" (click)="onDowload(action)">
-      <img src="https://id1945.github.io/images/svg/capture.svg" width="30px"/>
+    <button class="btn control-btn mx-2" [class.btn-primary]="!action.isStart" [class.btn-secondary]="action.isStart" [disabled]="!action.isStart" (click)="onDowload(action)">
+      <img src="https://id1945.github.io/images/svg/capture.svg" width="25px"/>
     </button>
   </div>
 

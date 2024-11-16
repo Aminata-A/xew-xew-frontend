@@ -4,18 +4,17 @@
 }
 
 :host {
-  font-family: 'Cabinet Grotesk', sans-serif;
-  margin: 0;
-  padding: 0;
+  font-family: "Cabinet Grotesk", sans-serif;
   width: 100%;
 }
 
 .form-event-page {
   display: flex;
-  font-family: 'Cabinet Grotesk', sans-serif;
+  font-family: "Cabinet Grotesk", sans-serif;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
+
 
   .sidebar {
     display: none;
@@ -36,17 +35,37 @@
       max-height: calc(100vh - 60px);
 
       &::-webkit-scrollbar {
-        width: 0px;
-        background: transparent;
+        width: 1px;
+        // background: transparent;
+      }
+      &::-webkit-scrollbar-thumb {
+        background-color: #ff773d;
+        border-radius: 10px;
       }
 
       .title {
-        margin-bottom: 15px;
-        font-size: 1rem;
-        font-weight: 500;
-        color: #1b1b1b;
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 20px;
+        // text-align: center;
+      }
+      .alert {
+        padding: 10px;
+        border-radius: 5px;
+        font-size: 0.9rem;
+        margin-bottom: 10px;
       }
 
+      .success {
+        background-color: #d4edda;
+        color: #155724;
+      }
+
+      .error {
+        background-color: #f8d7da;
+        color: #721c24;
+      }
       .banner-preview {
         max-width: 100%;
         height: auto;
@@ -56,23 +75,28 @@
 
       form {
         .step {
-          margin-bottom: 15px;
+          margin-bottom: 4em;
 
           h3 {
-            font-size: 1.1rem;
-            color: #555;
-            margin-bottom: 10px;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #666;
+            border-bottom: 2px solid #ff773d;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
           }
 
           .form-group,
           .form-group-inline {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
 
             label {
-              display: block;
-              font-size: 0.8rem;
-              color: #666;
-              margin-bottom: 4px;
+              width: 100%;
+              font-size: 0.85rem;
+              font-weight: 600;
+              color: #555;
+              margin-bottom: 5px;
+              display: inline-block;
             }
 
             input[type="text"],
@@ -81,44 +105,34 @@
             input[type="number"],
             textarea {
               width: 100%;
-              padding: 6px;  /* Reduced padding for compact inputs */
-              font-size: 0.85rem;  /* Reduced font size for compact inputs */
+              padding: 10px;
+              font-size: 0.9rem;
               border: 1px solid #ddd;
+              border-radius: 6px;
               background-color: #f9f9f9;
-              border-radius: 4px;
-              color: #1b1b1b;
-              outline: none;
+              color: #333;
               transition: border-color 0.3s;
 
               &:focus {
                 border-color: #ff773d;
+                outline: none;
+                background-color: #fff;
               }
             }
 
             .banner-preview {
               width: 100%;
               height: 30vh;
-              margin-top: 8px;
-              border-radius: 5px;
-              z-index: 0;
-              position: relative;
-
-              &::after {
-                content: "";
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background-color: rgba(0, 0, 0, 0.3);
-                z-index: 1;
-              }
+              margin-top: 10px;
+              border-radius: 8px;
+              object-fit: cover;
+              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             }
           }
 
           .form-group-inline {
             display: flex;
-            gap: 10px;
+            gap: 15px;
 
             .form-group {
               flex: 1;
@@ -128,21 +142,62 @@
           .checkbox-group {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 12px;
 
             div {
               display: flex;
               align-items: center;
+              font-size: 0.85rem;
+              color: #333;
 
               input[type="checkbox"] {
                 margin-right: 6px;
               }
-
-              label {
-                font-size: 0.8rem;
-                color: #1b1b1b;
-              }
             }
+          }
+        }
+
+        .ticket-type {
+          border: 1px solid #ddd;
+          padding: 15px;
+          border-radius: 8px;
+          margin-bottom: 10px;
+          background-color: #fafafa;
+          position: relative;
+
+          .btn-remove {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff4d4d;
+            color: #fff;
+            font-size: 0.8rem;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+
+            &:hover {
+              background-color: #e43f3f;
+            }
+          }
+        }
+
+        .btn-add {
+          background-color: #ff773d;
+          color: #fff;
+          font-size: 0.9rem;
+          font-weight: bold;
+          border: none;
+          border-radius: 5px;
+          padding: 10px 15px;
+          cursor: pointer;
+          margin-top: 10px;
+          transition: background-color 0.3s;
+
+          &:hover {
+            background-color: #e0672a;
           }
         }
 
@@ -151,13 +206,13 @@
           justify-content: flex-end;
 
           .btn-submit {
-            padding: 8px 15px;
+            padding: 12px 20px;
             background-color: #ff773d;
             color: #fff;
-            font-size: 0.85rem; /* Reduced font size for the button */
+            font-size: 1rem;
             font-weight: bold;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
             cursor: pointer;
             transition: background-color 0.3s;
 
@@ -169,19 +224,21 @@
       }
     }
 
-    .error-message, .success-message {
-      font-size: 0.8em;
-      margin-top: 4px;
-    }
-
-    .error-message {
-      color: red;
-    }
-
-    .success-message {
-      color: green;
-    }
+  .error-message,
+  .success-message {
+    font-size: 0.85rem;
+    margin-top: 4px;
   }
+
+  .error-message {
+    color: #e43f3f;
+  }
+
+  .success-message {
+    color: #28a745;
+  }
+}
+
 
   /* Responsive design */
   @media (min-width: 768px) {

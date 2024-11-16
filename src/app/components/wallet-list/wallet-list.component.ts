@@ -1,6 +1,7 @@
+import { CategorieService } from './../../services/categorie.service';
 import { Component, OnInit } from '@angular/core';
 import { WalletService } from './../../services/wallet.service';
-import { HttpHeaders } from '@angular/common/http'; // Import HttpHeaders if not already
+import { HttpHeaders } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { HeaderComponent } from '../header/header.component';
@@ -15,7 +16,6 @@ import { FormsModule, NgModel, ReactiveFormsModule } from '@angular/forms';
     CommonModule,
     SidebarComponent,
     HeaderComponent,
-    CommonModule,
     ReactiveFormsModule,
     FormsModule,
   ],
@@ -44,35 +44,40 @@ export class WalletListComponent implements OnInit {
 
   walletData = {
     name: '',
-    wallet_number: Math.floor(100000 + Math.random() * 900000), // Generates a random identifier,
+    wallet_number: Math.floor(100000 + Math.random() * 900000),
     identifier: '',
     balance: 0,
   };
   showWalletForm = false;
-
   wallets: any[] = [];
-  walletNames = ['WAVE', 'ORANGE_MONEY', 'FREE_MONEY']; // Options for wallet names
+  walletNames = ['WAVE', 'ORANGE_MONEY', 'FREE_MONEY'];
   message: string = '';
   showSuccessMessage = false;
   isLoggedIn: boolean = false;
 
-  private token: string = ''; // Token variable for authentication
+  // Variables for Category Management
+  public showCategoryForm: boolean = false;
+  public newCategoryLabel: string = '';
+  public categories: any[] = [];
 
-  constructor(private walletService: WalletService) {}
+  private token: string = '';
+
+  constructor(
+    private walletService: WalletService,
+    private categorieService: CategorieService
+  ) {}
 
   ngOnInit(): void {
-
     const token = localStorage.getItem('jwt_token');
-    this.isLoggedIn = !!token; // Met à jour l'état de connexion
-    // Retrieve token from local storage
+    this.isLoggedIn = !!token;
     this.token = localStorage.getItem('jwt_token') || '';
+    this.loadCategories();
 
     if (this.token) {
       const headers = new HttpHeaders({
         Authorization: `Bearer ${this.token}`,
       });
 
-      // Pass the headers with the token to the walletService
       this.walletService.getWallets().subscribe(
         (data) => {
           this.wallets = data;
@@ -88,22 +93,16 @@ export class WalletListComponent implements OnInit {
       console.error('Token JWT non trouvé');
     }
   }
+
   createWallet(): void {
     this.walletService.createWallet(this.walletData).subscribe(
       (response) => {
         this.message = 'Portefeuille créé avec succès';
-        // Après la création réussie du portefeuille
-        console.log('Success', response);
-
-        // Après la création réussie du portefeuille
         this.showSuccessMessage = true;
-
-        // Masquer la modale
         this.showWalletForm = false;
-        // Réinitialiser le message de succès après un certain délai
         setTimeout(() => {
           this.showSuccessMessage = false;
-        }, 3000); // 3 secondes
+        }, 3000);
       },
       (error) => {
         this.message = 'Erreur lors de la création du portefeuille';
@@ -136,5 +135,39 @@ export class WalletListComponent implements OnInit {
       default:
         return 'assets/logos/default-logo.png';
     }
+  }
+
+  // Load existing categories
+  loadCategories(): void {
+    this.categorieService.getCategories().subscribe(
+      (response: any) => {
+        // Vérifiez si la réponse contient un tableau directement ou dans une clé spécifique
+        this.categories = Array.isArray(response) ? response : response.data || [];
+      },
+      (error) => {
+        console.error("Erreur lors de la récupération des catégories", error);
+        this.categories = []; // Définit categories comme tableau vide en cas d'erreur
+      }
+    );
+  }
+
+
+  // Create a new category
+  createCategory(): void {
+    if (this.newCategoryLabel.trim() === '') {
+      return;
+    }
+
+    const categoryData = { label: this.newCategoryLabel };
+    this.categorieService.createCategory(categoryData).subscribe(
+      (response) => {
+        this.categories.push(response);
+        this.newCategoryLabel = '';
+        this.showCategoryForm = false;
+      },
+      (error) => {
+        console.error('Erreur lors de la création de la catégorie', error);
+      }
+    );
   }
 }

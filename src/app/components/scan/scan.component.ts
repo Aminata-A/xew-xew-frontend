@@ -26,6 +26,9 @@ import { CommonModule } from '@angular/common';
   standalone: true,
 })
 export class ScanComponent implements AfterViewInit {
+  private isScanning: boolean = false; // Ajout du drapeau isScanning
+  public qrCodeResult: ScannerQRCodeSelectedFiles[] = [];
+  public responseMessage: string = '';
 
   public config: ScannerQRCodeConfig = {
     constraints: {
@@ -35,8 +38,7 @@ export class ScanComponent implements AfterViewInit {
     },
   };
 
-  public qrCodeResult: ScannerQRCodeSelectedFiles[] = [];
-  public responseMessage: string = '';
+
 
   @ViewChild('action') action!: NgxScannerQrcodeComponent;
   private http = inject(HttpClient);
@@ -45,41 +47,59 @@ export class ScanComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.action.isReady.subscribe((response: any) => {
-      // Vous pouvez démarrer le scanner ici si nécessaire, par exemple avec :
-      // this.handle(this.action, 'start');
+      // Commencez automatiquement le scan si nécessaire
+      this.handle(this.action, 'start');
     });
   }
 
   public onEvent(e: ScannerQRCodeResult[]): void {
-    if (e.length) {
-      const qrCodeData = e[0].value; // Capture le contenu du QR code
-      this.validateTicket(qrCodeData); // Appel de la fonction de validation
+    if (e.length && !this.isScanning) { // Vérifie si isScanning est false
+      const qrCodeData = e[0].value;
+      this.isScanning = true; // Active le drapeau pour bloquer d'autres scans
+      Swal.fire({
+        title: 'Validation du ticket...',
+        text: 'Veuillez patienter pendant la validation.',
+        timer: 2000,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+      this.validateTicket(qrCodeData);
     }
   }
 
   public validateTicket(qrCodeData: string) {
-    // Envoi d'une requête au backend pour validation du ticket
     this.http.post(`http://127.0.0.1:8000/api/tickets/scan/${qrCodeData}`, {})
       .subscribe(
         (response: any) => {
-          this.responseMessage = 'Ticket validé avec succès !'; // Message de succès
-          Swal.fire({
-            title: 'Succès!',
-            text: this.responseMessage,
-            icon: 'success',
-            confirmButtonText: 'OK'
-          });
-          console.log('Response:', response);
+          if (response.ticket.is_paid || response.ticket.price === 0) {
+            this.responseMessage = 'Ticket validé avec succès !';
+            Swal.fire({
+              title: 'Succès!',
+              text: this.responseMessage,
+              icon: 'success',
+              confirmButtonText: 'OK'
+            });
+          } else {
+            this.responseMessage = 'Erreur : ce ticket n\'a pas encore été payé.';
+            Swal.fire({
+              icon: 'warning',
+              title: 'Ticket non payé!',
+              text: this.responseMessage,
+              confirmButtonText: 'Compris'
+            });
+          }
+          this.isScanning = false; // Réinitialise isScanning après la réponse
         },
         (error: any) => {
-          this.responseMessage = 'Erreur : ce ticket a déjà été scanné ou est invalide.'; // Message d'erreur
+          this.responseMessage = 'Erreur : ce ticket a déjà été scanné ou est invalide.';
           Swal.fire({
             icon: 'error',
             title: 'Erreur!',
             text: this.responseMessage,
             footer: '<a href="#">Pourquoi ai-je ce problème?</a>'
           });
-          console.error('Error:', error);
+          this.isScanning = false; // Réinitialise isScanning en cas d'erreur
         }
       );
   }
@@ -112,4 +132,6 @@ export class ScanComponent implements AfterViewInit {
       this.qrCodeResult = res;
     });
   }
+
+
 }
