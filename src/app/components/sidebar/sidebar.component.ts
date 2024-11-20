@@ -22,6 +22,7 @@ export class SidebarComponent implements OnInit {
 
   constructor(private authService: AuthService) {}
 
+  // Méthode d'initialisation
   ngOnInit() {
     const token = localStorage.getItem('jwt_token');
     if (token) {
@@ -38,10 +39,12 @@ export class SidebarComponent implements OnInit {
     }
   }
 
+  // Méthode pour mettre à jour le menu actif
   setActiveMenu(menu: string) {
     this.activeMenu = menu;
   }
 
+  // Méthode pour se déconnecter
   logout() {
     const token = localStorage.getItem('authToken');
     if (token) {

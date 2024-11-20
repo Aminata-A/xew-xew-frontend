@@ -15,6 +15,7 @@ export class HeaderComponent implements OnInit {
   public showProfileMenu: boolean = false;
   public profileImage: string = 'https://img.freepik.com/vecteurs-premium/icone-utilisateur-orange-sans-icone-arriere-plan_1076610-85993.jpg?w=740';
   public isAuthenticated: boolean = false;
+  showSidebar = false; // État de la sidebar
   public user: Register = {
     name: '',
     email: '',
@@ -82,9 +83,18 @@ export class HeaderComponent implements OnInit {
     );
   }
 
-  toggleProfileMenu() {
-    this.showProfileMenu = !this.showProfileMenu;
-    this.cdr.detectChanges(); // Forcer la mise à jour de l'interface
+  navigateTo(path: string) {
+    this.router.navigate([path]).then(() => {
+      window.location.reload();
+    });
+    this.closeSidebar(); // Ferme la sidebar après navigation
+  }
+  toggleSidebar() {
+    this.showSidebar = !this.showSidebar;
+  }
+
+  closeSidebar() {
+    this.showSidebar = false;
   }
 
   logout() {
@@ -108,4 +118,9 @@ export class HeaderComponent implements OnInit {
 
     this.showProfileMenu = false;
   }
+
+  toggleProfileMenu() {
+    this.showProfileMenu = !this.showProfileMenu;
+  }
+
 }

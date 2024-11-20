@@ -42,6 +42,7 @@ export class WalletListComponent implements OnInit {
     },
   ];
 
+  // Variables for Wallet Management
   walletData = {
     name: '',
     wallet_number: Math.floor(100000 + Math.random() * 900000),
@@ -67,6 +68,7 @@ export class WalletListComponent implements OnInit {
     private categorieService: CategorieService
   ) {}
 
+  // Méthode d'initialisation
   ngOnInit(): void {
     const token = localStorage.getItem('jwt_token');
     this.isLoggedIn = !!token;
@@ -94,6 +96,7 @@ export class WalletListComponent implements OnInit {
     }
   }
 
+  // Méthode pour créer un portefeuille
   createWallet(): void {
     this.walletService.createWallet(this.walletData).subscribe(
       (response) => {
@@ -111,6 +114,7 @@ export class WalletListComponent implements OnInit {
     );
   }
 
+  // Méthode pour obtenir la classe CSS du portefeuille en fonction de son nom
   getWalletClass(name: string): string {
     switch (name) {
       case 'WAVE':
@@ -124,6 +128,7 @@ export class WalletListComponent implements OnInit {
     }
   }
 
+  // Méthode pour obtenir l'image de logo du portefeuille en fonction de son nom
   getWalletLogo(name: string): string {
     switch (name) {
       case 'WAVE':
@@ -137,7 +142,7 @@ export class WalletListComponent implements OnInit {
     }
   }
 
-  // Load existing categories
+  // Méthode pour charger les catégories
   loadCategories(): void {
     this.categorieService.getCategories().subscribe(
       (response: any) => {
@@ -152,7 +157,7 @@ export class WalletListComponent implements OnInit {
   }
 
 
-  // Create a new category
+  // Créer une nouvelle catégorie
   createCategory(): void {
     if (this.newCategoryLabel.trim() === '') {
       return;

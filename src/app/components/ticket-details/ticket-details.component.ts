@@ -24,11 +24,13 @@ export class TicketDetailsComponent implements OnInit {
     private router: Router
   ) {}
 
+  // Méthode d'initialisation
   ngOnInit(): void {
     this.ticketId = +this.route.snapshot.paramMap.get('id')!;
     this.loadTicketDetails();
   }
 
+  // Fonction pour charger les détails du ticket
   loadTicketDetails(): void {
     this.ticketService.getTicket(this.ticketId).subscribe(
       (response) => {

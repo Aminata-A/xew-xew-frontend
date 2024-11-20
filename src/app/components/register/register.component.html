@@ -23,6 +23,8 @@
       <button type="submit" class="btn btn-primary w-100">Envoyer le code de vérification</button>
     </form>
 
+    <p class="text-center mt-3 login">Si vous avez deja un compte, <a [href]="'/login'">connectez-vous ici</a>.</p>
+
     <!-- Step 2: Code Verification -->
     <form *ngIf="emailSent && !emailVerified" #codeForm="ngForm" (ngSubmit)="verifyCode(codeForm)" class="mt-4">
       <h5>Vérification email</h5>

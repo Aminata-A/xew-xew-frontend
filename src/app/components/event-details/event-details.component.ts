@@ -17,7 +17,15 @@ import { TicketType } from 'src/app/services/interfaces';
   templateUrl: './event-details.component.html',
   styleUrls: ['./event-details.component.scss'],
   standalone: true,
-  imports: [NgIf, CommonModule, IonicModule, PurchaseModalComponent, FormsModule, NgIf, RouterLink],
+  imports: [
+    NgIf,
+    CommonModule,
+    IonicModule,
+    PurchaseModalComponent,
+    FormsModule,
+    NgIf,
+    RouterLink,
+  ],
 })
 export class EventDetailsComponent implements OnInit {
   // Propriétés principales du composant
@@ -56,11 +64,12 @@ export class EventDetailsComponent implements OnInit {
 
     if (this.isAuthenticated) {
       this.loadUserInfo();
-      this.presentAlert(`Bienvenue ${this.userName} (${this.userEmail})`);
     } else {
       this.userName = '';
       this.userEmail = '';
-      this.presentAlert("Vous n'êtes pas connecté, veuillez remplir le formulaire.");
+      this.presentAlert(
+        "Vous n'êtes pas connecté, veuillez remplir le formulaire."
+      );
     }
 
     if (this.pageWidth >= 768) {
@@ -70,6 +79,12 @@ export class EventDetailsComponent implements OnInit {
     if (eventId) {
       this.fetchEvent(Number(eventId));
     }
+  }
+
+  getValidTicketTypes() {
+    return this.event.ticket_types.filter(
+      (ticketType) => (this.quantities[ticketType.id] || 0) > 0
+    );
   }
 
   /**
@@ -87,23 +102,31 @@ export class EventDetailsComponent implements OnInit {
     this.eventService.getEvent(id).subscribe(
       (response: {
         event: Event;
-        ticket_types: { id: string; type: string; price: number; quantity: number }[];
+        ticket_types: {
+          id: string;
+          type: string;
+          price: number;
+          quantity: number;
+        }[];
         tickets_remaining: number;
       }) => {
         this.event = response.event;
-        this.event.ticket_types = response.ticket_types.map(ticketType => ({
+        this.event.ticket_types = response.ticket_types.map((ticketType) => ({
           ...ticketType,
           tickets_available: ticketType.quantity, // Ajout des tickets disponibles
         }));
         this.ticketsRemaining = response.tickets_remaining;
 
-        // Initialiser les quantités de tickets à 1 par défaut
-        this.event.ticket_types.forEach(ticketType => {
-          this.quantities[ticketType.id] = 1;
+        // Initialiser les quantités de tickets à 0 par défaut
+        this.event.ticket_types.forEach((ticketType) => {
+          this.quantities[ticketType.id] = 0;
         });
       },
-      error => {
-        console.error("Erreur lors de la récupération des détails de l'événement :", error);
+      (error) => {
+        console.error(
+          "Erreur lors de la récupération des détails de l'événement :",
+          error
+        );
       }
     );
   }
@@ -116,8 +139,11 @@ export class EventDetailsComponent implements OnInit {
       (events: Event[]) => {
         this.similarEvents = events;
       },
-      error => {
-        console.error("Erreur lors de la récupération des événements similaires :", error);
+      (error) => {
+        console.error(
+          'Erreur lors de la récupération des événements similaires :',
+          error
+        );
       }
     );
   }
@@ -134,7 +160,7 @@ export class EventDetailsComponent implements OnInit {
         // Vérification simple si le token contient une expiration
         const currentTime = Math.floor(Date.now() / 1000);
         if (decodedToken.exp && decodedToken.exp < currentTime) {
-          console.error("Le token a expiré");
+          console.error('Le token a expiré');
           this.isAuthenticated = false;
           localStorage.removeItem('jwt_token');
         } else {
@@ -146,12 +172,10 @@ export class EventDetailsComponent implements OnInit {
         this.isAuthenticated = false;
         localStorage.removeItem('jwt_token');
       }
-
     } else {
       this.isAuthenticated = false;
     }
   }
-
 
   /**
    * Calcul du montant total
@@ -164,16 +188,15 @@ export class EventDetailsComponent implements OnInit {
     }, 0);
   }
 
-
   /**
    * Modification de la quantité de tickets
    */
   changeQuantity(ticketType: { id: string; price: number }, change: number) {
     // Mise à jour des quantités avec limites (1 à 10 tickets)
-    const currentQuantity = this.quantities[ticketType.id] || 1;
+    const currentQuantity = this.quantities[ticketType.id] || 0;
     const newQuantity = currentQuantity + change;
 
-    if (newQuantity >= 1 && newQuantity <= 10) {
+    if (newQuantity >= 1 && newQuantity <= 5) {
       this.quantities[ticketType.id] = newQuantity;
       this.calculateTotalAmount(); // Recalculer le total
     }
@@ -184,7 +207,7 @@ export class EventDetailsComponent implements OnInit {
    */
   async openPurchaseModal() {
     if (!this.isAuthenticated && (!this.userName || !this.userEmail)) {
-      alert("Veuillez renseigner votre nom et votre email pour continuer.");
+      alert('Veuillez renseigner votre nom et votre email pour continuer.');
       return;
     }
 
@@ -213,39 +236,50 @@ export class EventDetailsComponent implements OnInit {
    */
   purchaseTicket() {
     if (!this.isAuthenticated && (!this.userName || !this.userEmail)) {
-      alert("Veuillez renseigner votre nom et votre email pour continuer.");
+      alert('Veuillez renseigner votre nom et votre email pour continuer.');
       return;
     }
 
     const token = localStorage.getItem('jwt_token');
 
+    // Filtrer les types de tickets avec une quantité supérieure à 0
     const ticketData = {
       event_id: this.event.id,
-      tickets: this.event.ticket_types.map(ticketType => ({
-        ticket_type: ticketType.type,
-        quantity: this.quantities[ticketType.id] || 1,
-      })),
+      tickets: this.event.ticket_types
+        .filter((ticketType) => (this.quantities[ticketType.id] || 0) > 0)
+        .map((ticketType) => ({
+          ticket_type: ticketType.type,
+          quantity: this.quantities[ticketType.id],
+        })),
       name: this.userName,
       email: this.userEmail,
     };
 
-    const headers = token ? new HttpHeaders({ Authorization: `Bearer ${token}` }) : new HttpHeaders();
+    const headers = token
+      ? new HttpHeaders({ Authorization: `Bearer ${token}` })
+      : new HttpHeaders();
 
-    this.http.post('http://127.0.0.1:8000/api/tickets', ticketData, { headers }).subscribe(
-      (response: any) => {
-        if (response.payment_url) {
-          this.paymentUrl = response.payment_url;
-        } else {
-          alert('Billet(s) acheté(s) avec succès.');
-          this.router.navigate(['/tickets']);
+    this.http
+      .post('http://127.0.0.1:8000/api/tickets', ticketData, { headers })
+      .subscribe(
+        (response: any) => {
+          if (response.payment_url) {
+            // Redirection après succès
+            window.location.href = response.payment_url;
+          } else {
+            alert('Billet(s) acheté(s) avec succès.');
+            this.router.navigate(['/tickets']).then(() => {
+              window.location.reload();
+            });
+          }
+        },
+        (error) => {
+          console.error("Erreur lors de l'achat", error);
+          alert("Une erreur est survenue lors de l'achat du billet.");
         }
-      },
-      error => {
-        console.error("Erreur lors de l'achat", error);
-        alert("Une erreur est survenue lors de l'achat du billet.");
-      }
-    );
+      );
   }
+
 
   /**
    * Afficher une alerte

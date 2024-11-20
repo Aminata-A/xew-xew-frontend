@@ -87,79 +87,12 @@
     }
 }
 
-/* -------- Version Mobile -------- */
-@media (max-width: 576px) {
-  .container {
-    flex-direction: column;
+.logo-container{
+  display: none;
+}
+
+@media (max-width: 768px){
+  .container{
     display: none;
   }
-
-  .sidebar {
-    width: 100%;
-    height: auto;
-    flex-direction: row;
-    justify-content: space-around;
-    position: static;
-    border-right: none;
-    border-top: 2px solid #EEEEEE;
-  }
-
-  .sidebar .menu {
-    display: flex;
-    justify-content: space-around;
-  }
-
-  .main-content {
-    margin-left: 0;
-    padding: 5px;
-  }
-
-  header {
-    flex-direction: column;
-    padding-bottom: 10px;
-  }
-
-  header .search-bar {
-    width: 100%;
-  }
-
-  header .search-bar input[type="text"] {
-    width: 100%;
-  }
-}
-
-/* Menu fixed at the bottom in mobile */
-@media (max-width: 576px) {
-  .menu {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background-color: rgba(255, 255, 255, 0.619);
-    opacity: 90%;
-    display: flex;
-    justify-content: space-around;
-    padding: 20px 0;
-    border-top: 1px solid #eaeaea;
-    border-radius: 25px;
-  }
-
-  .menu li {
-    list-style-type: none;
-  }
-
-  .menu li a {
-    color: #ff4b2b;
-    font-size: 1rem;
-  }
-}
-.menu li a.active {
-  color: #FF773D; // Couleur orange pour l'élément actif
-}
-
-.menu li a svg {
-  transition: color 0.3s ease;
-}
-
-.menu li a.active svg {
-  color: #FF773D; // Appliquer la couleur orange à l'icône SVG de l'élément actif
 }

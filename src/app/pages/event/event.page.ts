@@ -14,36 +14,41 @@ import { Chart } from 'chart.js/auto';
   templateUrl: './event.page.html',
   styleUrls: ['./event.page.scss'],
   standalone: true,
-  imports: [SidebarComponent, EventCardComponent, CategoryComponent, NgFor, HeaderComponent, NgIf],
+  imports: [
+    SidebarComponent,
+    EventCardComponent,
+    CategoryComponent,
+    NgFor,
+    HeaderComponent,
+    NgIf,
+  ],
 })
 export class EventPage implements OnInit {
-  featuredEvents: Event[] = [];  // À la une
-  newEvents: Event[] = [];       // Nouveaux événements
-  allEvents: Event[] = [];       // Tous les événements
-  categories: any[] = [];        // Ajout pour les catégories
-  token: string | null = null;   // Variable pour le token
+  featuredEvents: Event[] = []; // À la une
+  newEvents: Event[] = []; // Nouveaux événements
+  allEvents: Event[] = []; // Tous les événements
+  categories: any[] = []; // Ajout pour les catégories
+  token: string | null = null; // Variable pour le token
   isLoggedIn: boolean = false;
 
   // public isAuthenticated: boolean = false;
-
 
   constructor(
     private eventService: EventService,
     private categoryService: CategoryService
   ) {}
 
+  // Méthode d'initialisation
   ngOnInit(): void {
     // Vérifier la connexion de l'utilisateur
     const token = localStorage.getItem('jwt_token');
     this.isLoggedIn = !!token; // Met à jour l'état de connexion
 
-      this.loadEvents();
-      this.loadCategories();
-
+    this.loadEvents();
+    this.loadCategories();
   }
 
-
-
+  // Méthode pour charger les événements
   loadEvents() {
     // console.log('Chargement des événements...');
     this.eventService.getEvents().subscribe(
@@ -55,8 +60,10 @@ export class EventPage implements OnInit {
 
         // Filtrer les événements à venir
         const upcomingEvents = events
-          .filter(event => new Date(event.date) >= today) // Ne garder que les événements futurs
-          .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()); // Trier par date croissante
+          .filter((event) => new Date(event.date) >= today) // Ne garder que les événements futurs
+          .sort(
+            (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+          ); // Trier par date croissante
 
         // Section des événements à la une (3 premiers)
         this.featuredEvents = upcomingEvents.slice(0, 3);
@@ -66,8 +73,8 @@ export class EventPage implements OnInit {
         oneWeekAgo.setDate(today.getDate() - 7);
 
         this.newEvents = upcomingEvents
-          .filter(event => new Date(event.date) >= oneWeekAgo)
-          .slice(0, 8); // Limite de 8 nouveaux événements
+          .filter((event) => new Date(event.date) >= oneWeekAgo)
+          .slice(0, 10); // Limite de 8 nouveaux événements
 
         // Tous les événements à venir
         this.allEvents = upcomingEvents;
@@ -77,9 +84,9 @@ export class EventPage implements OnInit {
         console.error('Erreur lors de la récupération des événements', error);
       }
     );
-}
+  }
 
-
+  // Charger les catégories
   loadCategories() {
     // console.log('Chargement des catégories...');
     this.categoryService.getCategories().subscribe(
@@ -92,6 +99,8 @@ export class EventPage implements OnInit {
       }
     );
   }
+
+  // Filtrer les événements par catégorie
   filterEvents(categoryId: any): void {
     if (categoryId === 'all') {
       this.loadEvents();
@@ -99,18 +108,24 @@ export class EventPage implements OnInit {
       this.eventService.getEventsByCategory(categoryId).subscribe(
         (events: Event[]) => {
           const today = new Date();
-          const upcomingEvents = events.filter(event => new Date(event.date) >= today);
+          const upcomingEvents = events.filter(
+            (event) => new Date(event.date) >= today
+          );
           this.allEvents = upcomingEvents;
           this.featuredEvents = upcomingEvents.slice(0, 3);
           const oneWeekAgo = new Date(today);
           oneWeekAgo.setDate(today.getDate() - 7);
-          this.newEvents = upcomingEvents.filter(event => new Date(event.date) >= oneWeekAgo).slice(0, 8);
+          this.newEvents = upcomingEvents
+            .filter((event) => new Date(event.date) >= oneWeekAgo)
+            .slice(0, 8);
         },
         (error) => {
-          console.error('Erreur lors du filtrage des événements par catégorie', error);
+          console.error(
+            'Erreur lors du filtrage des événements par catégorie',
+            error
+          );
         }
       );
     }
   }
-
 }

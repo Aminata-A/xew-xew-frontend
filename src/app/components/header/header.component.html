@@ -1,5 +1,8 @@
 <header class="header-container">
-  <img src="../../../assets/images/logo.png" class="logo" alt="Logo" />
+  <!-- Logo qui agit comme un bouton pour afficher la sidebar -->
+  <div class="logo-container" (click)="toggleSidebar()">
+    <img src="../../../assets/images/logo.png" class="logo" alt="Logo" />
+  </div>
 
   <h1>{{ title }}</h1>
 
@@ -10,6 +13,20 @@
     </div>
   </div>
 
+  <!-- Sidebar -->
+  <div class="sidebar-overlay" *ngIf="showSidebar" (click)="closeSidebar()">
+    <div class="sidebar" (click)="$event.stopPropagation()">
+      <ul>
+        <li (click)="navigateTo('/events')">Home</li>
+        <li (click)="navigateTo('/tickets')">Tickets</li>
+        <li (click)="navigateTo('/form-event')">Creation d'evenement</li>
+        <li (click)="navigateTo('/my-events')">Mes Evenements</li>
+        <li (click)="navigateTo('/wallet')">Portefeuille</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Menu déroulant du profil -->
   <div class="profile-menu" *ngIf="showProfileMenu">
     <ul *ngIf="isAuthenticated; else notLoggedIn">
       <li (click)="viewProfile()">Voir mon profil</li>

@@ -28,7 +28,8 @@ export class LoginComponent {
       form.controls['password'].markAsTouched();
       return;
     }
-    // Réinitialisation du message d'erreur avant la tentative de connexion
+
+    // Réinitialisation des messages d'erreur
     this.errorMessage = null;
 
     this.authService.login(this.loginData).subscribe(
@@ -39,21 +40,31 @@ export class LoginComponent {
           this.router.navigate(['/events']).then(() => {
             console.log('Redirection réussie vers /events');
             window.location.reload(); // Rechargement de la page après redirection
-          }).catch(err => {
-            console.error('Erreur lors de la redirection:', err);
           });
-        } else {
-          this.errorMessage = 'Connexion échouée, aucun token reçu.';
         }
       },
       (error) => {
         console.error('Erreur de connexion', error);
-        if (error.status === 401) {
-          this.errorMessage = 'Email ou mot de passe incorrect.';
-        } else {
-          this.errorMessage = 'Erreur de connexion. Veuillez réessayer plus tard.';
+
+        // Gérer les erreurs de validation (422)
+        if (error.status === 422) {
+          const validationErrors = error.error.erreurs;
+          if (validationErrors.email) {
+            this.errorMessage = validationErrors.email;
+          } else if (validationErrors.password) {
+            this.errorMessage = validationErrors.password;
+          }
         }
+
+        // Gérer les autres erreurs (401, etc.)
+        if (error.status ) {
+          this.errorMessage = error.error.erreur || 'Email ou mot de passe incorrect.';
+        }
+        // } else {
+        //   this.errorMessage = 'Erreur de connexion. Veuillez réessayer plus tard.';
+        // }
       }
     );
   }
+
 }

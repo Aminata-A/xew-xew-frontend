@@ -32,6 +32,7 @@ export class TicketsComponent implements OnInit {
     private router: Router
   ) {}
 
+  // Méthode d'initialisation
   ngOnInit(): void {
     const token = localStorage.getItem('jwt_token'); // Récupérer le token JWT depuis le localStorage
     this.isLoggedIn = !!token; // Met à jour l'état de connexion

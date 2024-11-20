@@ -59,7 +59,7 @@
               <!-- Sélecteur de quantité -->
               <div class="ticket-quantity">
                 <button (click)="changeQuantity(ticketType, -1)">-</button>
-                <p>{{ quantities[ticketType.id] || 1 }}</p>
+                <p>{{ quantities[ticketType.id] || 0 }}</p>
                 <button (click)="changeQuantity(ticketType, 1)">+</button>
               </div>
             </div>
@@ -110,13 +110,14 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let ticketType of event.ticket_types">
+                <tr *ngFor="let ticketType of getValidTicketTypes()">
                   <td>{{ ticketType.type }}</td>
                   <td>{{ ticketType.price === 0 ? 'Gratuit' : (ticketType.price | currency: 'XOF') }}</td>
-                  <td>{{ quantities[ticketType.id] || 0 }}</td>
-                  <td>{{ ticketType.price * (quantities[ticketType.id] || 0) | currency: 'XOF' }}</td>
+                  <td>{{ quantities[ticketType.id] }}</td>
+                  <td>{{ ticketType.price * quantities[ticketType.id] | currency: 'XOF' }}</td>
                 </tr>
               </tbody>
+
             </table>
           </div>
 

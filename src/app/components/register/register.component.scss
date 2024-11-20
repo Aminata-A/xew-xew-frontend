@@ -127,6 +127,20 @@ $font-family: 'Cabinet Grotesk', sans-serif;
       color: $primary-color;
       font-size: 0.8rem; /* Reduced font size */
     }
+
+    .login{
+      color: $font-color;
+      text-decoration: none;
+      font-size: 0.9rem; /* Reduced font size */
+
+      a{
+        color: $primary-color;
+        cursor: pointer;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
   }
 }
 

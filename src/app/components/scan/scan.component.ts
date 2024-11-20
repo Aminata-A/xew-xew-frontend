@@ -45,6 +45,7 @@ export class ScanComponent implements AfterViewInit {
 
   constructor(private qrcode: NgxScannerQrcodeService) {}
 
+  // Fonction appelée lorsque le composant est chargé
   ngAfterViewInit(): void {
     this.action.isReady.subscribe((response: any) => {
       // Commencez automatiquement le scan si nécessaire
@@ -52,6 +53,7 @@ export class ScanComponent implements AfterViewInit {
     });
   }
 
+  // Fonction appelée lorsque le composant est deconnecté
   public onEvent(e: ScannerQRCodeResult[]): void {
     if (e.length && !this.isScanning) { // Vérifie si isScanning est false
       const qrCodeData = e[0].value;
@@ -68,6 +70,7 @@ export class ScanComponent implements AfterViewInit {
     }
   }
 
+  
   public validateTicket(qrCodeData: string) {
     this.http.post(`http://127.0.0.1:8000/api/tickets/scan/${qrCodeData}`, {})
       .subscribe(
